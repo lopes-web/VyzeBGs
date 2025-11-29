@@ -8,6 +8,16 @@
     background: #141414;
 }
 
+/* Custom Scrollbar for Glassmorphism */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #141414;
+}
+
 ::-webkit-scrollbar-thumb {
     background: #333333;
     border-radius: 4px;
@@ -15,4 +25,15 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: #444444;
+}
+
+.shadow-black\/40 {
+    --tw-shadow-color: rgb(0 0 0 / 0.4);
+    --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-inner-custom {
+    --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }

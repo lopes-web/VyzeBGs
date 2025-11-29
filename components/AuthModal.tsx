@@ -39,29 +39,29 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0a0a0a] p-4 font-sans">
-            <div className="w-full max-w-[400px] p-8 relative">
-                <button onClick={onClose} className="absolute top-0 right-0 text-gray-600 hover:text-gray-400 transition-colors">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#141414] p-4 font-sans">
+            <div className="w-full max-w-[400px] p-8 relative bg-[#1a1a1a] rounded-2xl shadow-2xl border border-white/5">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-400 transition-colors">
                     <i className="fas fa-times text-xl"></i>
                 </button>
 
                 {/* Header */}
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center mb-6 border border-white/5">
-                        <img src="/logo.webp" alt="Logo" className="w-6 h-auto" />
+                    <div className="w-16 h-16 bg-[#141414] rounded-2xl flex items-center justify-center mb-6 border border-white/5 shadow-inner-custom shadow-black/40">
+                        <img src="/logo.webp" alt="Logo" className="w-8 h-auto" />
                     </div>
                     <h2 className="text-2xl font-bold text-white mb-2">
-                        {isSignUp ? 'Create an account' : 'Sign in to Design Builder'}
+                        {isSignUp ? 'Criar uma conta' : 'Entrar no Design Builder'}
                     </h2>
                     <div className="flex items-center gap-1 text-sm">
                         <span className="text-gray-500">
-                            {isSignUp ? 'Already have an account?' : 'New to the workspace?'}
+                            {isSignUp ? 'Já tem uma conta?' : 'Novo no workspace?'}
                         </span>
                         <button
                             onClick={() => setIsSignUp(!isSignUp)}
                             className="text-[#039E73] hover:text-[#04d49b] font-medium transition-colors"
                         >
-                            {isSignUp ? 'Sign in' : 'Create an account'}
+                            {isSignUp ? 'Entrar' : 'Criar uma conta'}
                         </button>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <form onSubmit={handleAuth} className="space-y-5">
                     {/* Email Input */}
                     <div className="space-y-1.5">
-                        <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">Work Email</label>
+                        <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">E-mail de Trabalho</label>
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i className="fas fa-envelope text-gray-600 group-focus-within:text-gray-400 transition-colors"></i>
@@ -84,8 +84,8 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="you@company.com"
-                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all"
+                                placeholder="voce@empresa.com"
+                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/40"
                                 required
                             />
                         </div>
@@ -94,10 +94,10 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     {/* Password Input */}
                     <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                            <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">Password</label>
+                            <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">Senha</label>
                             {!isSignUp && (
                                 <button type="button" className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors">
-                                    Forgot?
+                                    Esqueceu?
                                 </button>
                             )}
                         </div>
@@ -109,8 +109,8 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
-                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all"
+                                placeholder="Digite sua senha"
+                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/40"
                                 required
                             />
                             <button
@@ -118,7 +118,7 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-gray-600 hover:text-gray-400 transition-colors font-medium"
                             >
-                                {showPassword ? 'Hide' : 'Show'}
+                                {showPassword ? 'Ocultar' : 'Mostrar'}
                             </button>
                         </div>
                     </div>
@@ -130,16 +130,16 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     >
                         {loading ? (
                             <span className="flex items-center justify-center gap-2">
-                                <i className="fas fa-circle-notch fa-spin"></i> Processing...
+                                <i className="fas fa-circle-notch fa-spin"></i> Processando...
                             </span>
                         ) : (
-                            isSignUp ? 'Create account' : 'Continue to dashboard'
+                            isSignUp ? 'Criar conta' : 'Continuar para o dashboard'
                         )}
                     </button>
                 </form>
 
                 <p className="mt-8 text-center text-[10px] text-gray-600 leading-relaxed">
-                    By continuing, you agree to the Design Builder <a href="#" className="text-gray-500 hover:text-gray-400">Terms</a> and <a href="#" className="text-gray-500 hover:text-gray-400">Privacy Policy</a>.
+                    Ao continuar, você concorda com os <a href="#" className="text-gray-500 hover:text-gray-400">Termos</a> e <a href="#" className="text-gray-500 hover:text-gray-400">Política de Privacidade</a> do Design Builder.
                 </p>
             </div>
         </div>
