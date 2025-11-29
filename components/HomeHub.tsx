@@ -266,6 +266,42 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                             </div>
                                         </div>
 
+                                        {/* REFERENCE IMAGE UPLOAD */}
+                                        <div className="mb-4">
+                                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                                                Imagem de Referência (Principal)
+                                            </label>
+                                            <div className="flex gap-2 items-start">
+                                                <button
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                    className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center text-gray-400 hover:text-lime-500 hover:border-lime-500 hover:bg-lime-50 dark:hover:bg-lime-500/10 transition-all"
+                                                    title="Adicionar Referência"
+                                                >
+                                                    <i className="fas fa-plus text-lg mb-1"></i>
+                                                </button>
+
+                                                {selectedFile && (
+                                                    <div className="relative group w-16 h-16">
+                                                        <img
+                                                            src={URL.createObjectURL(selectedFile)}
+                                                            alt="Ref"
+                                                            className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                                                        />
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedFile(null);
+                                                                if (fileInputRef.current) fileInputRef.current.value = '';
+                                                            }}
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition-colors"
+                                                        >
+                                                            <i className="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
                                         {/* Secondary Elements */}
                                         <div>
                                             <label className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-2 block">
@@ -304,7 +340,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 )}
                             </div>
 
-                            {/* Reference Upload Button */}
+                            {/* Reference Upload Button (Paperclip) - Keeping it for quick access too */}
                             <div className="relative">
                                 <input
                                     type="file"

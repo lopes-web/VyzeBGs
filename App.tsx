@@ -25,6 +25,7 @@ const AppContent: React.FC = () => {
     const [initialReference, setInitialReference] = useState<File | undefined>(undefined);
     const [initialGeneratorMode, setInitialGeneratorMode] = useState<GeneratorMode | undefined>(undefined);
     const [initialSecondaryElements, setInitialSecondaryElements] = useState<File[] | undefined>(undefined);
+    const [shouldAutoGenerate, setShouldAutoGenerate] = useState(false);
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -200,6 +201,7 @@ const AppContent: React.FC = () => {
                     setInitialReference(referenceFile);
                     setInitialGeneratorMode(generatorMode);
                     setInitialSecondaryElements(secondaryFiles);
+                    setShouldAutoGenerate(true);
                     setCurrentSection(section);
                 }}
                 userEmail={user.email}
@@ -332,6 +334,7 @@ const AppContent: React.FC = () => {
                             initialReference={initialReference}
                             initialGeneratorMode={initialGeneratorMode}
                             initialSecondaryElements={initialSecondaryElements}
+                            shouldAutoGenerate={shouldAutoGenerate}
                             isActive={activeTabId === tab.id}
                             setHasKey={setHasKey}
                             onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
