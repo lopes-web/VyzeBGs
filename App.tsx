@@ -264,6 +264,9 @@ const AppContent: React.FC = () => {
                                 setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
                             }
                         }
+                        } catch (error) {
+                        console.error("Failed to create project:", error);
+                    }
                 }
                 }
                 userEmail={user.email}
