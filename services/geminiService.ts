@@ -39,10 +39,23 @@ export const promptApiKeySelection = async (): Promise<void> => {
 
 const getClosestAspectRatio = (width: number, height: number): string => {
   const ratio = width / height;
-  if (ratio > 1.5) return "16:9";
+
+  // Ultra Wide
+  if (ratio > 2.0) return "21:9";
+
+  // Standard Landscape
+  if (ratio > 1.6) return "16:9";
+  if (ratio > 1.4) return "3:2";
   if (ratio > 1.2) return "4:3";
-  if (ratio > 0.9) return "1:1";
+
+  // Square-ish
+  if (ratio >= 0.9 && ratio <= 1.1) return "1:1";
+
+  // Portrait
   if (ratio > 0.7) return "3:4";
+  if (ratio > 0.6) return "2:3";
+
+  // Tall
   return "9:16";
 };
 
@@ -102,9 +115,10 @@ export const generateBackground = async (
   });
 
   // Construct the text prompt
-  let finalPrompt = `Task: Generate a high-resolution horizontal image.\n`;
+  const aspectRatio = getClosestAspectRatio(targetWidth, targetHeight);
+  let finalPrompt = `Task: Generate a high-resolution image.\n`;
   finalPrompt += `Application Context: ${section === 'LANDING_PAGES' ? 'Web Landing Page Background' : 'Graphic Design / Marketing Asset'}.\n`;
-  finalPrompt += `Target Resolution: ${targetWidth}x${targetHeight} pixels.\n\n`;
+  finalPrompt += `Target Resolution: ${targetWidth}x${targetHeight} pixels (Aspect Ratio: ${aspectRatio}).\n\n`;
 
   if (userImagesBase64.length > 0) {
     if (mode === 'HUMAN') {
@@ -174,8 +188,6 @@ export const generateBackground = async (
   }
 
   parts.push({ text: finalPrompt });
-
-  const aspectRatio = getClosestAspectRatio(targetWidth, targetHeight);
 
   try {
     const response = await ai.models.generateContent({
