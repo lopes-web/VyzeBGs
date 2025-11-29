@@ -59,6 +59,10 @@ const getClosestAspectRatio = (width: number, height: number): string => {
   return "9:16";
 };
 
+const cleanBase64 = (data: string) => {
+  return data.replace(/^data:image\/\w+;base64,/, "");
+};
+
 export const generateBackground = async (
   section: AppSection,
   mode: GeneratorMode,
@@ -83,7 +87,7 @@ export const generateBackground = async (
   userImagesBase64.forEach((img) => {
     parts.push({
       inlineData: {
-        data: img,
+        data: cleanBase64(img),
         mimeType: 'image/png',
       },
     });
@@ -95,25 +99,25 @@ export const generateBackground = async (
     referenceItems.forEach((item, index) => {
       parts.push({
         inlineData: {
-          data: item.image,
+          data: cleanBase64(item.image),
           mimeType: 'image/png',
         },
       });
-      const desc = item.description ? `(User Requirement: "${item.description}")` : "(User Requirement: Extract general style)";
-      refPromptAccumulator += `Reference Image ${index + 1} Context: ${desc}.\n`;
+      refPromptAccumulator += `[Ref ${index + 1}: ${item.description}] `;
     });
   }
 
-  // 3. Asset Images (Secondary Logos/Objects)
-  assetImagesBase64.forEach((img) => {
-    parts.push({
-      inlineData: {
-        data: img,
-        mimeType: 'image/png',
-      },
+  // 3. Asset Images (Secondary Elements)
+  if (assetImagesBase64.length > 0) {
+    assetImagesBase64.forEach((img) => {
+      parts.push({
+        inlineData: {
+          data: cleanBase64(img),
+          mimeType: 'image/png',
+        },
+      });
     });
-  });
-
+  }
   // Construct the text prompt
   const aspectRatio = getClosestAspectRatio(targetWidth, targetHeight);
   let finalPrompt = `Task: Generate a high-resolution image.\n`;
@@ -235,7 +239,7 @@ export const refineImage = async (
   const parts: any[] = [
     {
       inlineData: {
-        data: originalImageBase64.split(',')[1],
+        data: cleanBase64(originalImageBase64),
         mimeType: 'image/png',
       },
     },
@@ -245,7 +249,7 @@ export const refineImage = async (
     refineReferenceImages.forEach(img => {
       parts.push({
         inlineData: {
-          data: img,
+          data: cleanBase64(img),
           mimeType: 'image/png'
         }
       });
@@ -298,7 +302,7 @@ export const reframeImageForTextLayout = async (
   const parts = [
     {
       inlineData: {
-        data: currentImageBase64.split(',')[1],
+        data: cleanBase64(currentImageBase64),
         mimeType: 'image/png',
       },
     },
