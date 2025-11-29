@@ -26,15 +26,15 @@ const compressImage = (base64Str: string, maxWidth = 2048, quality = 0.8): Promi
             }
 
             // Draw white background for transparent PNGs converting to JPEG
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(0, 0, width, height);
+            // ctx.fillStyle = '#FFFFFF';
+            // ctx.fillRect(0, 0, width, height);
 
             ctx.drawImage(img, 0, 0, width, height);
 
             canvas.toBlob((blob) => {
                 if (blob) resolve(blob);
                 else reject(new Error("Compression failed"));
-            }, 'image/jpeg', quality);
+            }, 'image/webp', quality);
         };
         img.onerror = (err) => reject(err);
     });
@@ -42,16 +42,15 @@ const compressImage = (base64Str: string, maxWidth = 2048, quality = 0.8): Promi
 
 export const uploadImageToStorage = async (base64Image: string, userId: string): Promise<string | null> => {
     try {
-        // Compress image before upload (PNG -> JPEG 80%)
-        // This reduces 4MB -> ~300-500KB
+        // Compress image before upload (PNG -> WebP 80%)
         const blob = await compressImage(base64Image);
 
-        const fileName = `${userId}/${Date.now()}.jpg`;
+        const fileName = `${userId}/${Date.now()}.webp`;
 
         const { data, error } = await supabase.storage
             .from('generated-images')
             .upload(fileName, blob, {
-                contentType: 'image/jpeg',
+                contentType: 'image/webp',
                 upsert: false
             });
 
