@@ -114,6 +114,18 @@ export const getProjects = async (userId: string) => {
 };
 
 export const deleteProject = async (projectId: string) => {
+    // 1. Delete related generations first (Cascade Delete manually)
+    const { error: genError } = await supabase
+        .from('generations')
+        .delete()
+        .eq('project_id', projectId);
+
+    if (genError) {
+        console.error('Error deleting project generations:', genError);
+        return false;
+    }
+
+    // 2. Delete the project
     const { error } = await supabase
         .from('projects')
         .delete()
