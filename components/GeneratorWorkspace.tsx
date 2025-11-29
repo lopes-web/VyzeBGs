@@ -203,6 +203,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     for (const res of successResults) {
                         const publicUrl = await uploadImageToStorage(res.value.image, user.id);
                         if (publicUrl) {
+                            // Update Main View to WebP if this is the first image
+                            if (res === successResults[0]) {
+                                setGeneratedImage(publicUrl);
+                            }
+
                             const savedItem = await saveGeneration(
                                 user.id,
                                 publicUrl,
@@ -212,7 +217,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 projectId
                             );
                             if (savedItem) {
-                                addToHistory(res.value.image, res.value.finalPrompt);
+                                addToHistory(publicUrl, res.value.finalPrompt);
                             }
                         } else {
                             // Fallback local
