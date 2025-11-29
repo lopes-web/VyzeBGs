@@ -5,11 +5,12 @@ import { isSupabaseConfigured } from './services/supabaseClient';
 import GeneratorWorkspace from './components/GeneratorWorkspace';
 import ChatWidget from './components/ChatWidget';
 import AuthModal from './components/AuthModal';
+import ApiKeyInput from './components/ApiKeyInput';
 import { useAuth } from './components/AuthContext';
 import { GeneratorMode, ProjectTab, HistoryItem, AppSection } from './types';
 
 const App: React.FC = () => {
-    const { user, signOut } = useAuth();
+    const { user, signOut, loading } = useAuth();
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [hasKey, setHasKey] = useState(false);
 
@@ -108,7 +109,17 @@ const App: React.FC = () => {
         );
     }
 
-    if (!hasKey) {
+    // 1. Loading State
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
+            </div>
+        );
+    }
+
+    // 2. Auth Check (Login Required)
+    if (!user) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 to-black text-white p-4">
                 <div className="max-w-md w-full text-center space-y-8 p-8 bg-gray-900/40 rounded-3xl border border-white/5 backdrop-blur-xl shadow-2xl relative overflow-hidden">
@@ -121,15 +132,21 @@ const App: React.FC = () => {
                         <p className="text-gray-400">Plataforma de criação de assets para Landing Pages.</p>
 
                         <button
-                            onClick={handleConnect}
+                            onClick={() => setShowAuthModal(true)}
                             className="mt-8 w-full py-4 px-6 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-lime-50 transition-all shadow-xl"
                         >
-                            Iniciar Sessão
+                            Entrar na Plataforma
                         </button>
                     </div>
                 </div>
+                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
             </div>
         );
+    }
+
+    // 3. API Key Check (After Login)
+    if (!hasKey) {
+        return <ApiKeyInput onKeySet={() => setHasKey(true)} />;
     }
 
 
