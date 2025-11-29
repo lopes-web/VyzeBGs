@@ -41,6 +41,10 @@ const App: React.FC = () => {
     // Load Projects and History on Auth
     useEffect(() => {
         if (user) {
+            // Force Hub view on login
+            setCurrentSection(null);
+            setActiveTabId(null);
+
             const loadData = async () => {
                 // Projects
                 const userProjects = await getProjects(user.id);
@@ -63,6 +67,7 @@ const App: React.FC = () => {
         } else {
             setTabs([]);
             setGlobalHistory([]);
+            setCurrentSection(null); // Also reset on logout
         }
     }, [user]);
 
