@@ -199,7 +199,7 @@ const App: React.FC = () => {
     // --- MAIN APP HUB (SELECTION SCREEN) ---
     if (!currentSection) {
         return (
-            <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+            <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden">
                 <div className="flex items-center justify-between px-8 py-6">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-lime-400 to-lime-600 rounded-xl flex items-center justify-center shadow-lg shadow-lime-500/20">
@@ -254,7 +254,7 @@ const App: React.FC = () => {
 
     // --- WORKSPACE VIEW (EXISTING LOGIC) ---
     return (
-        <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+        <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden">
 
             {/* HEADER & TABS BAR */}
             <div className="bg-gray-900/80 backdrop-blur-md border-b border-white/5 flex flex-col z-50">
