@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
-import { createProject, getProjects, deleteProject } from './services/databaseService';
+import { createProject, getProjects, deleteProject, getUserHistory } from './services/databaseService';
 import GeneratorWorkspace from './components/GeneratorWorkspace';
 import ChatWidget from './components/ChatWidget';
 import AuthModal from './components/AuthModal';
@@ -38,10 +38,11 @@ const App: React.FC = () => {
         verifyKey();
     }, []);
 
-    // Load Projects on Auth
+    // Load Projects and History on Auth
     useEffect(() => {
         if (user) {
-            const loadProjects = async () => {
+            const loadData = async () => {
+                // Projects
                 const userProjects = await getProjects(user.id);
                 if (userProjects) {
                     const loadedTabs: ProjectTab[] = userProjects.map((p: any) => ({
@@ -53,10 +54,15 @@ const App: React.FC = () => {
                     }));
                     setTabs(loadedTabs);
                 }
+
+                // Global History
+                const history = await getUserHistory(user.id);
+                setGlobalHistory(history);
             };
-            loadProjects();
+            loadData();
         } else {
             setTabs([]);
+            setGlobalHistory([]);
         }
     }, [user]);
 
