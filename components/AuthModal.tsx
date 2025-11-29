@@ -34,25 +34,6 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             setError(err.message);
         } finally {
             setLoading(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-gray-900 border border-white/10 w-full max-w-md p-8 rounded-3xl shadow-2xl relative">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
-                    <i className="fas fa-times"></i>
-                </button>
-
-                <h2 className="text-2xl font-bold text-white mb-6 text-center">
-                    {isSignUp ? 'Criar Conta' : 'Entrar'}
-                </h2>
-
-                {error && (
-                    <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-4 text-sm">
-                        {error}
-                    </div>
-                )}
 
                 <form onSubmit={handleAuth} className="space-y-4">
                     <div>
@@ -93,8 +74,8 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         {isSignUp ? 'Já tem uma conta? Entrar' : 'Não tem conta? Cadastrar'}
                     </button>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

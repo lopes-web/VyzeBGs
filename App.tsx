@@ -171,8 +171,8 @@ const App: React.FC = () => {
                 <div className="max-w-md w-full text-center space-y-8 p-8 bg-gray-900/40 rounded-3xl border border-white/5 backdrop-blur-xl shadow-2xl relative overflow-hidden">
                     <div className="absolute inset-0 bg-lime-500/5 blur-3xl rounded-full transform scale-150"></div>
                     <div className="relative z-10">
-                        <div className="mx-auto w-24 h-24 bg-gradient-to-br from-lime-400 to-lime-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-lime-500/20 mb-6 rotate-3 transform hover:rotate-6 transition-transform">
-                            <i className="fas fa-layer-group text-4xl text-black"></i>
+                        <div className="flex justify-center mb-6">
+                            <img src="/logo.webp" alt="Vyze Logo" className="h-24 w-auto" />
                         </div>
                         <h1 className="text-4xl font-bold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Design Builder IA</h1>
                         <p className="text-gray-400">Plataforma de criação de assets para Landing Pages.</p>
@@ -202,10 +202,7 @@ const App: React.FC = () => {
             <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden">
                 <div className="flex items-center justify-between px-8 py-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-lime-400 to-lime-600 rounded-xl flex items-center justify-center shadow-lg shadow-lime-500/20">
-                            <i className="fas fa-layer-group text-black text-lg"></i>
-                        </div>
-                        <span className="font-bold text-2xl tracking-tight text-white">Design Builder <span className="text-lime-400 font-light">IA</span></span>
+                        <img src="/logo.webp" alt="Vyze Logo" className="h-10 w-auto" />
                     </div>
                 </div>
 
@@ -269,6 +266,7 @@ const App: React.FC = () => {
                         >
                             <i className="fas fa-th"></i>
                         </button>
+                        <img src="/logo.webp" alt="Vyze Logo" className="h-8 w-auto" />
                         <div className="h-6 w-px bg-white/10 mx-1"></div>
                         <div className="flex flex-col">
                             <span className="font-bold text-lg tracking-tight text-white leading-none">
