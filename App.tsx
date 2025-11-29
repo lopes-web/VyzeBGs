@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
+import { createProject, getProjects, deleteProject } from './services/databaseService';
 import GeneratorWorkspace from './components/GeneratorWorkspace';
 import ChatWidget from './components/ChatWidget';
 import AuthModal from './components/AuthModal';
@@ -37,6 +38,28 @@ const App: React.FC = () => {
         verifyKey();
     }, []);
 
+    // Load Projects on Auth
+    useEffect(() => {
+        if (user) {
+            const loadProjects = async () => {
+                const userProjects = await getProjects(user.id);
+                if (userProjects) {
+                    const loadedTabs: ProjectTab[] = userProjects.map((p: any) => ({
+                        id: p.id,
+                        title: p.title,
+                        mode: p.mode as GeneratorMode,
+                        section: p.section as AppSection,
+                        createdAt: new Date(p.created_at).getTime()
+                    }));
+                    setTabs(loadedTabs);
+                }
+            };
+            loadProjects();
+        } else {
+            setTabs([]);
+        }
+    }, [user]);
+
     const handleConnect = async () => {
         try {
             await promptApiKeySelection();
@@ -46,8 +69,8 @@ const App: React.FC = () => {
         }
     };
 
-    const createTab = (mode: GeneratorMode) => {
-        if (!currentSection) return;
+    const createTab = async (mode: GeneratorMode) => {
+        if (!currentSection || !user) return;
 
         const titleMap: Record<string, string> = {
             'HUMAN': 'Pessoa',
@@ -56,19 +79,33 @@ const App: React.FC = () => {
             'INFOPRODUCT': 'Expert'
         };
 
+        const title = `Projeto ${tabs.filter(t => t.section === currentSection).length + 1} (${titleMap[mode] || 'Novo'})`;
+
+        // Optimistic UI update
+        const tempId = Date.now().toString();
         const newTab: ProjectTab = {
-            id: Date.now().toString(),
-            title: `Projeto ${tabs.filter(t => t.section === currentSection).length + 1} (${titleMap[mode] || 'Novo'})`,
+            id: tempId,
+            title: title,
             mode: mode,
             section: currentSection,
             createdAt: Date.now()
         };
         setTabs([...tabs, newTab]);
         setActiveTabId(newTab.id);
+
+        // Save to DB
+        const savedProject = await createProject(user.id, title, mode, currentSection);
+        if (savedProject) {
+            // Update ID with real DB ID
+            setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
+            setActiveTabId(savedProject.id);
+        }
     };
 
-    const closeTab = (e: React.MouseEvent, id: string) => {
+    const closeTab = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation();
+
+        // Optimistic UI update
         const newTabs = tabs.filter(t => t.id !== id);
         setTabs(newTabs);
         if (activeTabId === id) {
@@ -76,6 +113,9 @@ const App: React.FC = () => {
             const sectionTabs = newTabs.filter(t => t.section === currentSection);
             setActiveTabId(sectionTabs.length > 0 ? sectionTabs[sectionTabs.length - 1].id : null);
         }
+
+        // Delete from DB
+        await deleteProject(id);
     };
 
     const checkConcurrencyLimit = () => {

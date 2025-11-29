@@ -52,3 +52,54 @@ export const getUserHistory = async (userId: string) => {
         section: item.section
     }));
 };
+export const createProject = async (
+    userId: string,
+    title: string,
+    mode: GeneratorMode,
+    section: AppSection
+) => {
+    const { data, error } = await supabase
+        .from('projects')
+        .insert([
+            {
+                user_id: userId,
+                title: title,
+                mode: mode,
+                section: section
+            }
+        ])
+        .select();
+
+    if (error) {
+        console.error('Error creating project:', error);
+        return null;
+    }
+    return data ? data[0] : null;
+};
+
+export const getProjects = async (userId: string) => {
+    const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching projects:', error);
+        return [];
+    }
+    return data;
+};
+
+export const deleteProject = async (projectId: string) => {
+    const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', projectId);
+
+    if (error) {
+        console.error('Error deleting project:', error);
+        return false;
+    }
+    return true;
+};
