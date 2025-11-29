@@ -66,7 +66,10 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
             const reader = new FileReader();
             reader.onloadend = () => {
-                const base64 = reader.result as string;
+                // Fix: Remove data:image prefix to avoid double prefixing in ImageUpload
+                const result = reader.result as string;
+                const base64 = result.includes(',') ? result.split(',')[1] : result;
+
                 setUserImages(prev => {
                     // Check if this specific base64 is already in the list to avoid duplicates
                     if (!prev.includes(base64)) {
@@ -84,7 +87,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         if (initialStyleReference) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                const base64 = reader.result as string;
+                const result = reader.result as string;
+                const base64 = result.includes(',') ? result.split(',')[1] : result;
                 const newItem: ReferenceItem = {
                     id: Date.now().toString(),
                     image: base64,
@@ -108,7 +112,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             initialSecondaryElements.forEach(file => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    const base64 = reader.result as string;
+                    const result = reader.result as string;
+                    const base64 = result.includes(',') ? result.split(',')[1] : result;
                     setAssetImages(prev => {
                         if (!prev.includes(base64)) {
                             return [...prev, base64];
@@ -159,6 +164,20 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    // Safety cleanup for processing count
+    const isGeneratingRef = React.useRef(false);
+    useEffect(() => {
+        isGeneratingRef.current = isGenerating;
+    }, [isGenerating]);
+
+    useEffect(() => {
+        return () => {
+            if (isGeneratingRef.current) {
+                onGenerationEnd();
+            }
+        };
+    }, []);
 
     // Edit
     const [refinePrompt, setRefinePrompt] = useState('');
@@ -586,12 +605,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* BATCH SELECTOR */}
                     <div className="flex items-center justify-between mb-4 px-1">
                         <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                        <div className="flex gap-2 bg-gray-100 dark:bg-black/40 p-1 rounded-lg border border-gray-300 dark:border-gray-700">
+                        <div className="flex gap-3 bg-gray-100 dark:bg-black/40 p-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
                             {[1, 2, 3, 4].map(num => (
                                 <button
                                     key={num}
                                     onClick={() => setBatchSize(num)}
-                                    className={`w - 8 h - 8 rounded text - sm font - bold transition - all ${batchSize === num ? 'bg-lime-500 text-black shadow' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+                                    className={`w-10 h-10 rounded-lg text-base font-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow-lg scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'
                                         } `}
                                 >
                                     {num}x

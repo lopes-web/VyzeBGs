@@ -106,7 +106,7 @@ const AppContent: React.FC = () => {
         const title = `Projeto ${tabs.filter(t => t.section === currentSection).length + 1} (${titleMap[mode] || 'Novo'})`;
 
         // Optimistic UI update
-        const tempId = Date.now().toString();
+        const tempId = crypto.randomUUID();
         const newTab: ProjectTab = {
             id: tempId,
             title: title,
@@ -216,7 +216,7 @@ const AppContent: React.FC = () => {
                     const sectionTabs = tabs.filter(t => t.section === section);
                     const title = `Projeto ${sectionTabs.length + 1} (${titleMap[mode] || 'Novo'})`;
 
-                    const tempId = Date.now().toString();
+                    const tempId = crypto.randomUUID();
                     const newTab: ProjectTab = {
                         id: tempId,
                         title: title,
