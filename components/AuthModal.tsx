@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../services/supabaseClient';
 
-const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onClose, canClose = true }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSignUp, setIsSignUp] = useState(false);
@@ -41,9 +41,11 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#141414] p-4 font-sans">
             <div className="w-full max-w-[400px] p-8 relative bg-[#1a1a1a] rounded-2xl shadow-2xl border border-white/5">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-400 transition-colors">
-                    <i className="fas fa-times text-xl"></i>
-                </button>
+                {canClose && (
+                    <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-400 transition-colors">
+                        <i className="fas fa-times text-xl"></i>
+                    </button>
+                )}
 
                 {/* Header */}
                 <div className="flex flex-col items-center mb-8">

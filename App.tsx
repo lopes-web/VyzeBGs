@@ -167,26 +167,7 @@ const App: React.FC = () => {
     // 2. Auth Check (Login Required)
     if (!user) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 to-black text-white p-4">
-                <div className="max-w-md w-full text-center space-y-8 p-8 bg-gray-900/40 rounded-3xl border border-white/5 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-                    <div className="absolute inset-0 bg-lime-500/5 blur-3xl rounded-full transform scale-150"></div>
-                    <div className="relative z-10">
-                        <div className="flex justify-center mb-6">
-                            <img src="/logo.webp" alt="Vyze Logo" className="h-24 w-auto" />
-                        </div>
-                        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Design Builder IA</h1>
-                        <p className="text-gray-400">Plataforma de criação de assets para Landing Pages.</p>
-
-                        <button
-                            onClick={() => setShowAuthModal(true)}
-                            className="mt-8 w-full py-4 px-6 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-lime-50 transition-all shadow-xl"
-                        >
-                            Entrar na Plataforma
-                        </button>
-                    </div>
-                </div>
-                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-            </div>
+            <AuthModal onClose={() => { }} canClose={false} />
         );
     }
 
