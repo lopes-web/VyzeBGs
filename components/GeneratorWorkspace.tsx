@@ -6,7 +6,7 @@ import ReferenceManager from './ReferenceManager';
 import { SubjectPosition, HistoryItem, ReferenceItem, GenerationAttributes, GeneratorMode, AppSection, ColorPalette } from '../types';
 import { generateBackground, refineImage, reframeImageForTextLayout } from '../services/geminiService';
 import { uploadImageToStorage } from '../services/storageService';
-import { saveGeneration } from '../services/databaseService';
+import { saveGeneration, getProjectHistory } from '../services/databaseService';
 import { useAuth } from './AuthContext';
 
 interface GeneratorWorkspaceProps {
@@ -18,6 +18,7 @@ interface GeneratorWorkspaceProps {
     checkConcurrencyLimit: () => boolean;
     onGenerationStart: () => void;
     onGenerationEnd: () => void;
+    projectId?: string;
 }
 
 const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
@@ -28,9 +29,23 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     onAddToGlobalHistory,
     checkConcurrencyLimit,
     onGenerationStart,
-    onGenerationEnd
+    onGenerationEnd,
+    projectId
 }) => {
     const { user } = useAuth();
+
+    // Load Project History
+    React.useEffect(() => {
+        if (projectId) {
+            const loadHistory = async () => {
+                const history = await getProjectHistory(projectId);
+                setLocalHistory(history);
+            };
+            loadHistory();
+        } else {
+            setLocalHistory([]);
+        }
+    }, [projectId]);
 
     // Inputs
     const [userImages, setUserImages] = useState<string[]>([]);
@@ -193,7 +208,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 publicUrl,
                                 res.value.finalPrompt,
                                 mode,
-                                section
+                                section,
+                                projectId
                             );
                             if (savedItem) {
                                 addToHistory(res.value.image, res.value.finalPrompt);
@@ -370,8 +386,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-400'
-                                        : 'bg-black/40 border-gray-700 text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-400'
+                                    : 'bg-black/40 border-gray-700 text-gray-400'
                                     }`}
                             >
                                 <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-square'}`}></i>
@@ -380,8 +396,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-400'
-                                        : 'bg-black/40 border-gray-700 text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-400'
+                                    : 'bg-black/40 border-gray-700 text-gray-400'
                                     }`}
                             >
                                 <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'}`}></i>

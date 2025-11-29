@@ -369,6 +369,7 @@ const App: React.FC = () => {
                             checkConcurrencyLimit={checkConcurrencyLimit}
                             onGenerationStart={() => setGeneratingCount(c => c + 1)}
                             onGenerationEnd={() => setGeneratingCount(c => c - 1)}
+                            projectId={tab.id}
                         />
                     </div>
                 ))}

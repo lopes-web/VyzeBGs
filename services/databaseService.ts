@@ -52,6 +52,28 @@ export const getUserHistory = async (userId: string) => {
         section: item.section
     }));
 };
+
+export const getProjectHistory = async (projectId: string) => {
+    const { data, error } = await supabase
+        .from('generations')
+        .select('*')
+        .eq('project_id', projectId)
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching project history:', error);
+        return [];
+    }
+
+    return data.map(item => ({
+        id: item.id,
+        url: item.image_url,
+        prompt: item.prompt,
+        timestamp: new Date(item.created_at).getTime(),
+        mode: item.mode,
+        section: item.section
+    }));
+};
 export const createProject = async (
     userId: string,
     title: string,
