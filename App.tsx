@@ -21,7 +21,7 @@ const AppContent: React.FC = () => {
 
     // App Navigation State
     const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
-    const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
+
 
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
