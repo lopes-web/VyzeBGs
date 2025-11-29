@@ -1,7 +1,7 @@
 
 import { supabase } from './supabaseClient';
 
-const compressImage = (base64Str: string, maxWidth = 2048, quality = 0.8): Promise<Blob> => {
+const compressImage = (base64Str: string, maxWidth = 2048, quality = 0.95): Promise<Blob> => {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.src = base64Str;
@@ -42,7 +42,7 @@ const compressImage = (base64Str: string, maxWidth = 2048, quality = 0.8): Promi
 
 export const uploadImageToStorage = async (base64Image: string, userId: string): Promise<string | null> => {
     try {
-        // Compress image before upload (PNG -> WebP 80%)
+        // Compress image before upload (PNG -> WebP 95%)
         const blob = await compressImage(base64Image);
 
         const fileName = `${userId}/${Date.now()}.webp`;
