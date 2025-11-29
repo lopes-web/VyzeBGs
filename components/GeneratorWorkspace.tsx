@@ -458,7 +458,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* Image Inputs */}
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - lime - 600 dark: text - lime - 400`}></i>
+                            <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
                             {getModeLabel()}
                         </h2>
                         <ImageUpload
@@ -533,7 +533,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-6 grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
-                                className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useGradient
+                                className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
                                     ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
                                     : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
@@ -543,7 +543,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             </button>
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
-                                className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useBlur
+                                className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
                                     ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
                                     : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
@@ -623,8 +623,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         onClick={handleGenerate}
                         disabled={isGenerating || userImages.length === 0}
                         className={`
-w - full py - 4 px - 6 rounded - xl font - bold text - lg shadow - xl flex items - center justify - center gap - 2
-transition - all duration - 300 transform hover: scale - [1.01] active: scale - 95
+w-full py-4 px-6 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center gap-2
+transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                         ${isGenerating || userImages.length === 0
                                 ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-700'
                                 : 'bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-white dark:text-gray-900 border border-lime-400'
@@ -714,7 +714,7 @@ transition - all duration - 300 transform hover: scale - [1.01] active: scale - 
                                 </div>
                             ) : (
                                 <div className="text-center p-8">
-                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - 6xl mb - 4 text - gray - 300 dark: text - gray - 800`}></i>
+                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
                                     <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
                                         {currentMode === 'ENHANCE' ? 'Melhorar Imagem' : currentMode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${currentMode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
                                     </p>
@@ -785,7 +785,7 @@ transition - all duration - 300 transform hover: scale - [1.01] active: scale - 
                                 return (
                                     <div
                                         key={item.id}
-                                        className={`relative flex - shrink - 0 h - 24 aspect - [16 / 9] rounded - lg overflow - hidden border - 2 cursor - pointer transition - all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'} `}
+                                        className={`relative flex-shrink-0 h-24 aspect-[16/9] rounded-lg overflow-hidden border-2 cursor-pointer transition-all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'} `}
                                         onClick={() => restoreFromHistory(item)}
                                     >
                                         <img src={item.url} alt="Histórico" className="w-full h-full object-cover" />
@@ -801,7 +801,7 @@ transition - all duration - 300 transform hover: scale - [1.01] active: scale - 
                                             className="absolute top-1 left-1 z-10"
                                             onClick={(e) => { e.stopPropagation(); toggleHistorySelection(item.id); }}
                                         >
-                                            <div className={`w - 4 h - 4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items - center justify - center`}>
+                                            <div className={`w-4 h-4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items-center justify-center`}>
                                                 {isSelected && <i className="fas fa-check text-[10px] text-black"></i>}
                                             </div>
                                         </div>

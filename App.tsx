@@ -129,6 +129,9 @@ const AppContent: React.FC = () => {
     const closeTab = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation();
 
+        const tabToDelete = tabs.find(t => t.id === id);
+        if (!tabToDelete) return;
+
         // Optimistic UI update
         const newTabs = tabs.filter(t => t.id !== id);
         setTabs(newTabs);
@@ -139,7 +142,17 @@ const AppContent: React.FC = () => {
         }
 
         // Delete from DB
-        await deleteProject(id);
+        const success = await deleteProject(id);
+        if (!success) {
+            // Revert if failed
+            console.error("Failed to delete project from DB, reverting UI");
+            setTabs(prev => {
+                // Check if already added back (race condition safety)
+                if (prev.find(t => t.id === id)) return prev;
+                return [...prev, tabToDelete];
+            });
+            // Optional: Show error toast here
+        }
     };
 
     const checkConcurrencyLimit = () => {
