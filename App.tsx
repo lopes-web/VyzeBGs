@@ -242,7 +242,7 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => { setCurrentSection(null); setActiveTabId(null); }}
-                            className="w-8 h-8 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-gray-400 transition-colors"
+                            className="w-8 h-8 bg-black/20 hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-lime-400 transition-colors border border-transparent hover:border-white/5"
                             title="Voltar para Apps"
                         >
                             <i className="fas fa-th"></i>
