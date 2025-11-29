@@ -135,6 +135,10 @@ const AppContent: React.FC = () => {
         // Optimistic UI update
         const newTabs = tabs.filter(t => t.id !== id);
         setTabs(newTabs);
+
+        // Remove history items associated with this project
+        setGlobalHistory(prev => prev.filter(h => h.projectId !== id));
+
         if (activeTabId === id) {
             // Find last active tab in CURRENT section
             const sectionTabs = newTabs.filter(t => t.section === currentSection);
@@ -400,7 +404,7 @@ const AppContent: React.FC = () => {
                             onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
                             checkConcurrencyLimit={checkConcurrencyLimit}
                             onGenerationStart={() => setGeneratingCount(c => c + 1)}
-                            onGenerationEnd={() => setGeneratingCount(c => c - 1)}
+                            onGenerationEnd={() => setGeneratingCount(c => Math.max(0, c - 1))}
                             projectId={tab.id}
                         />
                     </div>

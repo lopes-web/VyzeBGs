@@ -49,7 +49,8 @@ export const getUserHistory = async (userId: string) => {
         prompt: item.prompt,
         timestamp: new Date(item.created_at).getTime(),
         mode: item.mode,
-        section: item.section
+        section: item.section,
+        projectId: item.project_id
     }));
 };
 

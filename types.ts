@@ -27,6 +27,7 @@ export interface HistoryItem {
   timestamp: number;
   mode: GeneratorMode;
   section: AppSection;
+  projectId?: string;
 }
 
 export interface ReferenceItem {
