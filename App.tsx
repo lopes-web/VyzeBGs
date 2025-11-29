@@ -13,10 +13,12 @@ import { GeneratorMode, ProjectTab, HistoryItem, AppSection } from './types';
 import { ThemeProvider } from './components/ThemeContext';
 import ThemeToggle from './components/ThemeToggle';
 import HomeHub from './components/HomeHub';
+import ProfileModal from './components/ProfileModal';
 
 const AppContent: React.FC = () => {
     const { user, signOut, loading } = useAuth();
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false);
     const [hasKey, setHasKey] = useState(false);
 
     // App Navigation State
@@ -315,15 +317,19 @@ const AppContent: React.FC = () => {
 
                         {user ? (
                             <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-white/10">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs">
-                                    {user.email?.substring(0, 2).toUpperCase()}
-                                </div>
                                 <button
-                                    onClick={() => signOut()}
-                                    className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                    title="Sair"
+                                    onClick={() => setShowProfileModal(true)}
+                                    className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-lime-500/20"
+                                    title="Meu Perfil"
                                 >
-                                    <i className="fas fa-sign-out-alt"></i>
+                                    {user.email?.substring(0, 2).toUpperCase()}
+                                </button>
+                                <button
+                                    onClick={() => setShowProfileModal(true)}
+                                    className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                    title="Configurações"
+                                >
+                                    <i className="fas fa-cog"></i>
                                 </button>
                             </div>
                         ) : (
@@ -547,6 +553,18 @@ const AppContent: React.FC = () => {
             {/* AUTH MODAL */}
             {showAuthModal && (
                 <AuthModal onClose={() => setShowAuthModal(false)} />
+            )}
+
+            {/* PROFILE MODAL */}
+            {showProfileModal && user && (
+                <ProfileModal
+                    user={user}
+                    onClose={() => setShowProfileModal(false)}
+                    onLogout={() => {
+                        setShowProfileModal(false);
+                        signOut();
+                    }}
+                />
             )}
 
         </div>
