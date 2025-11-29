@@ -14,6 +14,8 @@ interface GeneratorWorkspaceProps {
     section: AppSection;
     initialPrompt?: string;
     initialReference?: File;
+    initialGeneratorMode?: GeneratorMode;
+    initialSecondaryElements?: File[];
     isActive: boolean;
     setHasKey: (hasKey: boolean) => void;
     onAddToGlobalHistory: (item: HistoryItem) => void;
@@ -24,10 +26,12 @@ interface GeneratorWorkspaceProps {
 }
 
 const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
-    mode,
+    mode: defaultMode,
     section,
     initialPrompt,
     initialReference,
+    initialGeneratorMode,
+    initialSecondaryElements,
     isActive,
     setHasKey,
     onAddToGlobalHistory,
@@ -37,6 +41,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     projectId
 }) => {
     const { user } = useAuth();
+
+    // Initialize mode from prop if available, otherwise default
+    const [currentMode, setCurrentMode] = useState<GeneratorMode>(initialGeneratorMode || defaultMode);
 
     const [userPrompt, setUserPrompt] = useState(initialPrompt || '');
 
@@ -54,14 +61,35 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             reader.onloadend = () => {
                 const base64 = reader.result as string;
                 setUserImages(prev => {
-                    // Avoid duplicates if possible, though simple check might be hard with base64
-                    // Just adding it for now
-                    return [...prev, base64]; // Assuming userImages is string[]
+                    // Simple duplicate check
+                    if (!prev.includes(base64)) {
+                        return [...prev, base64];
+                    }
+                    return prev;
                 });
             };
             reader.readAsDataURL(initialReference);
         }
     }, [initialReference]);
+
+    // Handle initial secondary elements
+    useEffect(() => {
+        if (initialSecondaryElements && initialSecondaryElements.length > 0) {
+            initialSecondaryElements.forEach(file => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64 = reader.result as string;
+                    setAssetImages(prev => {
+                        if (!prev.includes(base64)) {
+                            return [...prev, base64];
+                        }
+                        return prev;
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }, [initialSecondaryElements]);
 
     // Load Project History
     useEffect(() => {
@@ -116,7 +144,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             url,
             prompt: promptUsed,
             timestamp: Date.now(),
-            mode: mode,
+            mode: currentMode,
             section: section
         };
         setLocalHistory(prev => [newItem, ...prev]);
@@ -151,7 +179,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     };
 
     const getModeLabel = () => {
-        switch (mode) {
+        switch (currentMode) {
             case 'HUMAN': return 'Pessoas (Sujeito)';
             case 'OBJECT': return 'Objeto/Produto';
             case 'ENHANCE': return 'Imagem Original';
@@ -161,7 +189,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     };
 
     const getUploadLabel = () => {
-        switch (mode) {
+        switch (currentMode) {
             case 'HUMAN': return 'Fotos da Pessoa';
             case 'OBJECT': return 'Fotos do Objeto';
             case 'ENHANCE': return 'Imagem Base para Melhorar';
@@ -171,7 +199,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     };
 
     const getUploadDesc = () => {
-        switch (mode) {
+        switch (currentMode) {
             case 'HUMAN': return "Envie fotos para fidelidade facial.";
             case 'OBJECT': return "Envie fotos do produto em alta resolução.";
             case 'ENHANCE': return "A imagem original será mantida, mas enriquecida.";
@@ -182,7 +210,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     const handleGenerate = async () => {
         if (userImages.length === 0) {
-            setError(mode === 'ENHANCE' ? "Envie a imagem que deseja melhorar." : "Por favor, envie pelo menos uma foto do sujeito.");
+            setError(currentMode === 'ENHANCE' ? "Envie a imagem que deseja melhorar." : "Por favor, envie pelo menos uma foto do sujeito.");
             return;
         }
 
@@ -206,7 +234,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                 requests.push(
                     generateBackground(
                         section,
-                        mode,
+                        currentMode,
                         userImages,
                         referenceItems,
                         assetImages,
@@ -214,7 +242,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         position,
                         attributes,
                         customHeight,
-                        mode === 'INFOPRODUCT' ? colorPalette : undefined
+                        currentMode === 'INFOPRODUCT' ? colorPalette : undefined
                     )
                 );
             }
@@ -241,7 +269,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 user.id,
                                 publicUrl,
                                 res.value.finalPrompt,
-                                mode,
+                                currentMode,
                                 section,
                                 projectId
                             );
@@ -363,7 +391,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* Image Inputs */}
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className={`fas ${mode === 'HUMAN' ? 'fa-user' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - lime - 600 dark: text - lime - 400`}></i>
+                            <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - lime - 600 dark: text - lime - 400`}></i>
                             {getModeLabel()}
                         </h2>
                         <ImageUpload
@@ -380,11 +408,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         />
 
                         <ImageUpload
-                            label={mode === 'INFOPRODUCT' ? "Elementos 3D / Ícones (Flutuantes)" : "Elementos Secundários"}
+                            label={currentMode === 'INFOPRODUCT' ? "Elementos 3D / Ícones (Flutuantes)" : "Elementos Secundários"}
                             value={assetImages}
                             onChange={setAssetImages}
                             multiple={true}
-                            description={mode === 'INFOPRODUCT' ? "Serão desfocados no fundo (Ex: moedas, gráficos)." : "Logotipos ou elementos extras."}
+                            description={currentMode === 'INFOPRODUCT' ? "Serão desfocados no fundo (Ex: moedas, gráficos)." : "Logotipos ou elementos extras."}
                         />
                     </div>
 
@@ -397,7 +425,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <PositionSelector value={position} onChange={setPosition} />
 
                         {/* INFOPRODUCT COLOR PALETTE */}
-                        {mode === 'INFOPRODUCT' && (
+                        {currentMode === 'INFOPRODUCT' && (
                             <div className="mb-6 space-y-3 border-t border-gray-200 dark:border-white/5 py-4">
                                 <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Paleta de Cores e Luz</h3>
 
@@ -439,8 +467,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
                                 className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useGradient
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                        : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
                                 <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-square'} `}></i>
@@ -449,8 +477,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
                                 className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useBlur
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                        : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
                                 <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'} `}></i>
@@ -484,15 +512,15 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                {mode === 'ENHANCE' ? 'Instruções de Melhoria' : 'Prompt do Cenário'}
+                                {currentMode === 'ENHANCE' ? 'Instruções de Melhoria' : 'Prompt do Cenário'}
                             </label>
                             <textarea
                                 value={userPrompt}
                                 onChange={(e) => setUserPrompt(e.target.value)}
                                 placeholder={
-                                    mode === 'ENHANCE'
+                                    currentMode === 'ENHANCE'
                                         ? "Descreva o que melhorar..."
-                                        : mode === 'INFOPRODUCT'
+                                        : currentMode === 'INFOPRODUCT'
                                             ? "Descreva o nicho (ex: Mentor financeiro, Curso de inglês) e a atmosfera desejada..."
                                             : "Descreva o cenário..."
                                 }
@@ -542,7 +570,7 @@ transition - all duration - 300 transform hover: scale - [1.01] active: scale - 
                             </>
                         ) : (
                             <>
-                                <i className="fas fa-wand-magic-sparkles"></i> {mode === 'ENHANCE' ? 'Melhorar' : 'Gerar'}
+                                <i className="fas fa-wand-magic-sparkles"></i> {currentMode === 'ENHANCE' ? 'Melhorar' : 'Gerar'}
                             </>
                         )}
                     </button>
@@ -619,9 +647,9 @@ transition - all duration - 300 transform hover: scale - [1.01] active: scale - 
                                 </div>
                             ) : (
                                 <div className="text-center p-8">
-                                    <i className={`fas ${mode === 'HUMAN' ? 'fa-user-circle' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - 6xl mb - 4 text - gray - 300 dark: text - gray - 800`}></i>
+                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - 6xl mb - 4 text - gray - 300 dark: text - gray - 800`}></i>
                                     <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
-                                        {mode === 'ENHANCE' ? 'Melhorar Imagem' : mode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${mode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
+                                        {currentMode === 'ENHANCE' ? 'Melhorar Imagem' : currentMode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${currentMode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
                                     </p>
                                 </div>
                             )}

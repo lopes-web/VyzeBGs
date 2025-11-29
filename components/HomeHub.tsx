@@ -1,10 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { AppSection } from '../types';
+import { AppSection, GeneratorMode } from '../types';
 import ThemeToggle from './ThemeToggle';
 
 interface HomeHubProps {
     onSelectSection: (section: AppSection) => void;
-    onPromptSubmit: (prompt: string, section: AppSection, referenceFile?: File) => void;
+    onPromptSubmit: (
+        prompt: string,
+        section: AppSection,
+        referenceFile?: File,
+        generatorMode?: GeneratorMode,
+        secondaryFiles?: File[]
+    ) => void;
     userEmail?: string;
     onLogout: () => void;
 }
@@ -13,19 +19,26 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     const [prompt, setPrompt] = useState('');
     const [selectedMode, setSelectedMode] = useState<AppSection>('LANDING_PAGES');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isConfigOpen, setIsConfigOpen] = useState(false);
+
+    // Generator Configuration
+    const [generatorMode, setGeneratorMode] = useState<GeneratorMode>('HUMAN');
+    const [secondaryFiles, setSecondaryFiles] = useState<File[]>([]);
 
     // Reference Upload State
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const secondaryInputRef = useRef<HTMLInputElement>(null);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && prompt.trim()) {
-            onPromptSubmit(prompt, selectedMode, selectedFile || undefined);
+            onPromptSubmit(prompt, selectedMode, selectedFile || undefined, generatorMode, secondaryFiles);
         }
     };
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+    const toggleConfig = () => setIsConfigOpen(!isConfigOpen);
 
     const selectMode = (mode: AppSection) => {
         setSelectedMode(mode);
@@ -44,11 +57,42 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
         }
     };
 
+    const handleSecondarySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const files = Array.from(e.target.files);
+            setSecondaryFiles(prev => [...prev, ...files]);
+        }
+    };
+
+    const removeSecondaryFile = (index: number) => {
+        setSecondaryFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
     const clearReference = () => {
         setSelectedFile(null);
         setPreviewUrl(null);
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
+        }
+    };
+
+    const getModeIcon = (mode: GeneratorMode) => {
+        switch (mode) {
+            case 'HUMAN': return 'fa-user';
+            case 'OBJECT': return 'fa-cube';
+            case 'INFOPRODUCT': return 'fa-chalkboard-teacher';
+            case 'ENHANCE': return 'fa-wand-magic';
+            default: return 'fa-user';
+        }
+    };
+
+    const getModeLabel = (mode: GeneratorMode) => {
+        switch (mode) {
+            case 'HUMAN': return 'Pessoa';
+            case 'OBJECT': return 'Objeto';
+            case 'INFOPRODUCT': return 'Infoproduto';
+            case 'ENHANCE': return 'Enhance';
+            default: return 'Pessoa';
         }
     };
 
@@ -185,6 +229,81 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                             <div className="w-px h-8 bg-gray-200 dark:bg-white/10 mx-2"></div>
 
+                            {/* Config Button (New) */}
+                            <div className="relative">
+                                <button
+                                    onClick={toggleConfig}
+                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isConfigOpen ? 'bg-lime-100 dark:bg-lime-500/20 text-lime-600 dark:text-lime-400' : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                                    title="Configurações de Geração"
+                                >
+                                    <i className="fas fa-sliders-h"></i>
+                                </button>
+
+                                {/* Config Dropdown */}
+                                {isConfigOpen && (
+                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-white dark:bg-[#262626] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                            <i className="fas fa-cog text-lime-500"></i> Configuração
+                                        </h3>
+
+                                        {/* Mode Selector */}
+                                        <div className="mb-4">
+                                            <label className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-2 block">Modo</label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {(['HUMAN', 'OBJECT', 'INFOPRODUCT', 'ENHANCE'] as GeneratorMode[]).map(mode => (
+                                                    <button
+                                                        key={mode}
+                                                        onClick={() => setGeneratorMode(mode)}
+                                                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-all ${generatorMode === mode
+                                                            ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                                            : 'bg-gray-50 dark:bg-white/5 border-transparent hover:bg-gray-100 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300'
+                                                            }`}
+                                                    >
+                                                        <i className={`fas ${getModeIcon(mode)}`}></i>
+                                                        {getModeLabel(mode)}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Secondary Elements */}
+                                        <div>
+                                            <label className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-2 block">
+                                                Elementos Secundários ({secondaryFiles.length})
+                                            </label>
+                                            <div className="flex flex-wrap gap-2 mb-2">
+                                                {secondaryFiles.map((file, idx) => (
+                                                    <div key={idx} className="relative group">
+                                                        <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/5 flex items-center justify-center overflow-hidden">
+                                                            <i className="fas fa-image text-gray-400"></i>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => removeSecondaryFile(idx)}
+                                                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            <i className="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                <button
+                                                    onClick={() => secondaryInputRef.current?.click()}
+                                                    className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-lime-500 dark:hover:border-lime-500 flex items-center justify-center text-gray-400 hover:text-lime-500 transition-colors"
+                                                >
+                                                    <i className="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                ref={secondaryInputRef}
+                                                onChange={handleSecondarySelect}
+                                                multiple
+                                                className="hidden"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
                             {/* Reference Upload Button */}
                             <div className="relative">
                                 <input
@@ -229,7 +348,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                             />
 
                             <button
-                                onClick={() => prompt.trim() && onPromptSubmit(prompt, selectedMode, selectedFile || undefined)}
+                                onClick={() => prompt.trim() && onPromptSubmit(prompt, selectedMode, selectedFile || undefined, generatorMode, secondaryFiles)}
                                 className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-lime-500 hover:text-black dark:hover:bg-lime-500 dark:hover:text-black text-gray-500 dark:text-gray-400 flex items-center justify-center transition-all duration-300"
                             >
                                 <i className="fas fa-arrow-up"></i>
@@ -243,7 +362,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         {['Cyberpunk City', 'Minimalist Office', 'Neon Abstract'].map((suggestion) => (
                             <button
                                 key={suggestion}
-                                onClick={() => onPromptSubmit(suggestion, selectedMode)}
+                                onClick={() => onPromptSubmit(suggestion, selectedMode, undefined, generatorMode, secondaryFiles)}
                                 className="text-xs px-3 py-1 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-lime-500/50 text-gray-600 dark:text-gray-400 hover:text-lime-600 dark:hover:text-lime-400 transition-colors"
                             >
                                 {suggestion}

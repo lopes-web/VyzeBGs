@@ -21,8 +21,10 @@ const AppContent: React.FC = () => {
 
     // App Navigation State
     const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
-    const [initialPrompt, setInitialPrompt] = useState<string>('');
+    const [initialPrompt, setInitialPrompt] = useState<string | undefined>(undefined);
     const [initialReference, setInitialReference] = useState<File | undefined>(undefined);
+    const [initialGeneratorMode, setInitialGeneratorMode] = useState<GeneratorMode | undefined>(undefined);
+    const [initialSecondaryElements, setInitialSecondaryElements] = useState<File[] | undefined>(undefined);
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -193,9 +195,11 @@ const AppContent: React.FC = () => {
         return (
             <HomeHub
                 onSelectSection={setCurrentSection}
-                onPromptSubmit={(prompt, section, referenceFile) => {
+                onPromptSubmit={(prompt, section, referenceFile, generatorMode, secondaryFiles) => {
                     setInitialPrompt(prompt);
                     setInitialReference(referenceFile);
+                    setInitialGeneratorMode(generatorMode);
+                    setInitialSecondaryElements(secondaryFiles);
                     setCurrentSection(section);
                 }}
                 userEmail={user.email}
@@ -326,6 +330,8 @@ const AppContent: React.FC = () => {
                             section={currentSection}
                             initialPrompt={initialPrompt}
                             initialReference={initialReference}
+                            initialGeneratorMode={initialGeneratorMode}
+                            initialSecondaryElements={initialSecondaryElements}
                             isActive={activeTabId === tab.id}
                             setHasKey={setHasKey}
                             onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
