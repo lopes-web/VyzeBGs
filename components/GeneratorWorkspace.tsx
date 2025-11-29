@@ -303,6 +303,25 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         setAttributes(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
+    const handleDownload = async (url: string) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = `design-builder-${Date.now()}.webp`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error('Download failed:', error);
+            window.open(url, '_blank');
+        }
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden" style={{ display: isActive ? 'grid' : 'none' }}>
 
@@ -519,14 +538,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 className="max-w-full max-h-full object-contain shadow-2xl"
                             />
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <a
-                                    href={generatedImage}
-                                    download="design-builder.png"
+                                <button
+                                    onClick={() => handleDownload(generatedImage)}
                                     className="bg-black/60 hover:bg-lime-600 hover:text-black text-white p-3 rounded-lg backdrop-blur-md border border-white/10 transition-colors"
                                     title="Baixar Imagem"
                                 >
                                     <i className="fas fa-download"></i>
-                                </a>
+                                </button>
                             </div>
 
                             {/* Validation Actions Overlay */}
