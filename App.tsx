@@ -267,7 +267,7 @@ const AppContent: React.FC = () => {
                             console.error("Failed to create project:", error);
                         }
                     }
-                }
+                }}
                 userEmail={user.email}
                 onLogout={signOut}
                 onOpenProfile={() => setShowProfileModal(true)}
