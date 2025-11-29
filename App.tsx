@@ -12,6 +12,7 @@ import { GeneratorMode, ProjectTab, HistoryItem, AppSection } from './types';
 
 import { ThemeProvider } from './components/ThemeContext';
 import ThemeToggle from './components/ThemeToggle';
+import HomeHub from './components/HomeHub';
 
 const AppContent: React.FC = () => {
     const { user, signOut, loading } = useAuth();
@@ -20,6 +21,8 @@ const AppContent: React.FC = () => {
 
     // App Navigation State
     const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
+    const [initialPrompt, setInitialPrompt] = useState<string>('');
+    const [initialReference, setInitialReference] = useState<File | undefined>(undefined);
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -188,54 +191,16 @@ const AppContent: React.FC = () => {
     // --- MAIN APP HUB (SELECTION SCREEN) ---
     if (!currentSection) {
         return (
-            <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
-                <div className="flex items-center justify-between px-8 py-6">
-                    <div className="flex items-center gap-3">
-                        <img src="/logo.webp" alt="Vyze Logo" className="h-10 w-auto" />
-                    </div>
-                    <ThemeToggle />
-                </div>
-
-                <div className="flex-grow flex items-center justify-center p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
-                        {/* LANDING PAGES APP */}
-                        <div
-                            onClick={() => setCurrentSection('LANDING_PAGES')}
-                            className="group bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/10 hover:border-lime-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-lime-500/10 relative overflow-hidden"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-lime-500/0 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-gray-200 dark:border-white/5 group-hover:bg-lime-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-laptop-code text-4xl text-lime-600 dark:text-lime-500 group-hover:text-black transition-colors"></i>
-                            </div>
-                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Landing Pages</h2>
-                            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                                Gerador de backgrounds de alta conversão. Foco em sujeitos humanos e produtos com posicionamento para texto.
-                            </p>
-                            <span className="inline-flex items-center text-lime-600 dark:text-lime-400 font-bold uppercase tracking-wider text-sm">
-                                Acessar App <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                            </span>
-                        </div>
-
-                        {/* DESIGNS APP */}
-                        <div
-                            onClick={() => setCurrentSection('DESIGNS')}
-                            className="group bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/10 hover:border-purple-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10 relative overflow-hidden"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-gray-200 dark:border-white/5 group-hover:bg-purple-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-palette text-4xl text-purple-600 dark:text-purple-500 group-hover:text-black transition-colors"></i>
-                            </div>
-                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Designs</h2>
-                            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                                Criação de assets gráficos, texturas e composições artísticas para redes sociais e marketing.
-                            </p>
-                            <span className="inline-flex items-center text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider text-sm">
-                                Acessar App <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <HomeHub
+                onSelectSection={setCurrentSection}
+                onPromptSubmit={(prompt, section, referenceFile) => {
+                    setInitialPrompt(prompt);
+                    setInitialReference(referenceFile);
+                    setCurrentSection(section);
+                }}
+                userEmail={user.email}
+                onLogout={signOut}
+            />
         );
     }
 
@@ -357,8 +322,10 @@ const AppContent: React.FC = () => {
                         style={{ display: activeTabId === tab.id ? 'block' : 'none' }}
                     >
                         <GeneratorWorkspace
-                            mode={tab.mode}
+                            mode={currentSection === 'LANDING_PAGES' ? 'LANDING_PAGE' : 'DESIGN'}
                             section={currentSection}
+                            initialPrompt={initialPrompt}
+                            initialReference={initialReference}
                             isActive={activeTabId === tab.id}
                             setHasKey={setHasKey}
                             onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}

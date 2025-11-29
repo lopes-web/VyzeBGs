@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageUpload from './ImageUpload';
 import PositionSelector from './PositionSelector';
 import ReferenceManager from './ReferenceManager';
@@ -12,8 +12,10 @@ import { useAuth } from './AuthContext';
 interface GeneratorWorkspaceProps {
     mode: GeneratorMode;
     section: AppSection;
-    isActive: boolean; // Controls visibility for tab system
-    setHasKey: (val: boolean) => void;
+    initialPrompt?: string;
+    initialReference?: File;
+    isActive: boolean;
+    setHasKey: (hasKey: boolean) => void;
     onAddToGlobalHistory: (item: HistoryItem) => void;
     checkConcurrencyLimit: () => boolean;
     onGenerationStart: () => void;
@@ -24,6 +26,8 @@ interface GeneratorWorkspaceProps {
 const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     mode,
     section,
+    initialPrompt,
+    initialReference,
     isActive,
     setHasKey,
     onAddToGlobalHistory,
@@ -34,8 +38,33 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 }) => {
     const { user } = useAuth();
 
+    const [userPrompt, setUserPrompt] = useState(initialPrompt || '');
+
+    // Update prompt if initialPrompt changes
+    useEffect(() => {
+        if (initialPrompt) {
+            setUserPrompt(initialPrompt);
+        }
+    }, [initialPrompt]);
+
+    // Handle initial reference
+    useEffect(() => {
+        if (initialReference) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result as string;
+                setUserImages(prev => {
+                    // Avoid duplicates if possible, though simple check might be hard with base64
+                    // Just adding it for now
+                    return [...prev, base64]; // Assuming userImages is string[]
+                });
+            };
+            reader.readAsDataURL(initialReference);
+        }
+    }, [initialReference]);
+
     // Load Project History
-    React.useEffect(() => {
+    useEffect(() => {
         if (projectId) {
             const loadHistory = async () => {
                 const history = await getProjectHistory(projectId);
@@ -52,7 +81,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [referenceItems, setReferenceItems] = useState<ReferenceItem[]>([]);
     const [assetImages, setAssetImages] = useState<string[]>([]);
 
-    const [userPrompt, setUserPrompt] = useState('');
+
     const [position, setPosition] = useState<SubjectPosition>(SubjectPosition.RIGHT);
     const [attributes, setAttributes] = useState<GenerationAttributes>({ useGradient: true, useBlur: false });
     const [batchSize, setBatchSize] = useState<number>(1);
@@ -237,7 +266,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     setError("Chave de API inválida ou expirada.");
                     setHasKey(false);
                 } else {
-                    setError(`Algumas gerações falharam: ${errMsg}`);
+                    setError(`Algumas gerações falharam: ${errMsg} `);
                 }
             }
 
@@ -264,7 +293,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         try {
             const result = await refineImage(generatedImage, refinePrompt, refineAssets);
             setGeneratedImage(result);
-            addToHistory(result, `Ajuste: ${refinePrompt}`);
+            addToHistory(result, `Ajuste: ${refinePrompt} `);
             setRefinePrompt('');
             setRefineAssets([]);
         } catch (err: any) {
@@ -290,7 +319,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         try {
             const result = await reframeImageForTextLayout(generatedImage, verticalHeight, verticalPrompt);
             setGeneratedImage(result);
-            addToHistory(result, `Formato Vertical(${verticalHeight}px) - ${verticalPrompt || 'Padrão'}`);
+            addToHistory(result, `Formato Vertical(${verticalHeight}px) - ${verticalPrompt || 'Padrão'} `);
         } catch (err: any) {
             setError(err.message || "Falha ao formatar imagem.");
         } finally {
@@ -311,7 +340,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = `design-builder-${Date.now()}.webp`;
+            link.download = `design - builder - ${Date.now()}.webp`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -334,7 +363,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* Image Inputs */}
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className={`fas ${mode === 'HUMAN' ? 'fa-user' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
+                            <i className={`fas ${mode === 'HUMAN' ? 'fa-user' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - lime - 600 dark: text - lime - 400`}></i>
                             {getModeLabel()}
                         </h2>
                         <ImageUpload
@@ -409,22 +438,22 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-6 grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
-                                className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
-                                    }`}
+                                className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useGradient
+                                        ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                        : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    } `}
                             >
-                                <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-square'}`}></i>
+                                <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-square'} `}></i>
                                 Degradê (Fade)
                             </button>
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
-                                className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
-                                    }`}
+                                className={`flex items - center justify - center gap - 2 p - 3 rounded - lg border text - sm font - medium transition - all ${attributes.useBlur
+                                        ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                        : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    } `}
                             >
-                                <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'}`}></i>
+                                <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'} `}></i>
                                 Blur (Rack Focus)
                             </button>
                         </div>
@@ -486,8 +515,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 <button
                                     key={num}
                                     onClick={() => setBatchSize(num)}
-                                    className={`w-8 h-8 rounded text-sm font-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
-                                        }`}
+                                    className={`w - 8 h - 8 rounded text - sm font - bold transition - all ${batchSize === num ? 'bg-lime-500 text-black shadow' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+                                        } `}
                                 >
                                     {num}x
                                 </button>
@@ -499,13 +528,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         onClick={handleGenerate}
                         disabled={isGenerating || userImages.length === 0}
                         className={`
-                        w-full py-4 px-6 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center gap-2
-                        transition-all duration-300 transform hover:scale-[1.01] active:scale-95
+w - full py - 4 px - 6 rounded - xl font - bold text - lg shadow - xl flex items - center justify - center gap - 2
+transition - all duration - 300 transform hover: scale - [1.01] active: scale - 95
                         ${isGenerating || userImages.length === 0
                                 ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-700'
                                 : 'bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-white dark:text-gray-900 border border-lime-400'
                             }
-                    `}
+`}
                     >
                         {isGenerating ? (
                             <>
@@ -590,9 +619,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 </div>
                             ) : (
                                 <div className="text-center p-8">
-                                    <i className={`fas ${mode === 'HUMAN' ? 'fa-user-circle' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
+                                    <i className={`fas ${mode === 'HUMAN' ? 'fa-user-circle' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text - 6xl mb - 4 text - gray - 300 dark: text - gray - 800`}></i>
                                     <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
-                                        {mode === 'ENHANCE' ? 'Melhorar Imagem' : mode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${mode === 'HUMAN' ? 'Pessoa' : 'Objeto'}`}
+                                        {mode === 'ENHANCE' ? 'Melhorar Imagem' : mode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${mode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
                                     </p>
                                 </div>
                             )}
@@ -661,7 +690,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 return (
                                     <div
                                         key={item.id}
-                                        className={`relative flex-shrink-0 h-24 aspect-[16/9] rounded-lg overflow-hidden border-2 cursor-pointer transition-all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'}`}
+                                        className={`relative flex - shrink - 0 h - 24 aspect - [16 / 9] rounded - lg overflow - hidden border - 2 cursor - pointer transition - all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'} `}
                                         onClick={() => restoreFromHistory(item)}
                                     >
                                         <img src={item.url} alt="Histórico" className="w-full h-full object-cover" />
@@ -677,7 +706,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             className="absolute top-1 left-1 z-10"
                                             onClick={(e) => { e.stopPropagation(); toggleHistorySelection(item.id); }}
                                         >
-                                            <div className={`w-4 h-4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items-center justify-center`}>
+                                            <div className={`w - 4 h - 4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items - center justify - center`}>
                                                 {isSelected && <i className="fas fa-check text-[10px] text-black"></i>}
                                             </div>
                                         </div>
