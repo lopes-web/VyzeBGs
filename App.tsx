@@ -197,14 +197,55 @@ const AppContent: React.FC = () => {
         return (
             <HomeHub
                 onSelectSection={setCurrentSection}
-                onPromptSubmit={(prompt, section, principalFile, styleReferenceFile, generatorMode, secondaryFiles) => {
+                onPromptSubmit={async (prompt, section, principalFile, styleReferenceFile, generatorMode, secondaryFiles) => {
+                    setCurrentSection(section);
+
+                    // Create New Project Tab
+                    const mode = generatorMode || 'HUMAN';
+                    const titleMap: Record<string, string> = {
+                        'HUMAN': 'Pessoa',
+                        'OBJECT': 'Produto',
+                        'ENHANCE': 'Edit',
+                        'INFOPRODUCT': 'Expert'
+                    };
+
+                    // Calculate next project number based on existing tabs for this section
+                    const sectionTabs = tabs.filter(t => t.section === section);
+                    const title = `Projeto ${sectionTabs.length + 1} (${titleMap[mode] || 'Novo'})`;
+
+                    const tempId = Date.now().toString();
+                    const newTab: ProjectTab = {
+                        id: tempId,
+                        title: title,
+                        mode: mode,
+                        section: section,
+                        createdAt: Date.now()
+                    };
+
+                    // Update State
+                    setTabs(prev => [...prev, newTab]);
+                    setActiveTabId(tempId);
+
+                    // Set Initial Params for Generator
                     setInitialPrompt(prompt);
                     setInitialReference(principalFile);
                     setInitialStyleReference(styleReferenceFile);
                     setInitialGeneratorMode(generatorMode);
                     setInitialSecondaryElements(secondaryFiles);
                     setShouldAutoGenerate(true);
-                    setCurrentSection(section);
+
+                    // Persist to DB
+                    if (user) {
+                        try {
+                            const savedProject = await createProject(user.id, title, mode, section);
+                            if (savedProject) {
+                                setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
+                                setActiveTabId(savedProject.id);
+                            }
+                        } catch (error) {
+                            console.error("Failed to create project:", error);
+                        }
+                    }
                 }}
                 userEmail={user.email}
                 onLogout={signOut}
