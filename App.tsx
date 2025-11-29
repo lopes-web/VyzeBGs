@@ -21,12 +21,8 @@ const AppContent: React.FC = () => {
 
     // App Navigation State
     const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
-    const [initialPrompt, setInitialPrompt] = useState<string | undefined>(undefined);
-    const [initialReference, setInitialReference] = useState<File | undefined>(undefined);
-    const [initialStyleReference, setInitialStyleReference] = useState<File | undefined>(undefined);
-    const [initialGeneratorMode, setInitialGeneratorMode] = useState<GeneratorMode | undefined>(undefined);
-    const [initialSecondaryElements, setInitialSecondaryElements] = useState<File[] | undefined>(undefined);
-    const [shouldAutoGenerate, setShouldAutoGenerate] = useState(false);
+    const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
+
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -219,20 +215,20 @@ const AppContent: React.FC = () => {
                         title: title,
                         mode: mode,
                         section: section,
-                        createdAt: Date.now()
+                        createdAt: Date.now(),
+                        initialData: {
+                            prompt,
+                            referenceImage: principalFile,
+                            styleReferenceImage: styleReferenceFile,
+                            secondaryElements: secondaryFiles,
+                            shouldAutoGenerate: true,
+                            generatorMode
+                        }
                     };
 
                     // Update State
                     setTabs(prev => [...prev, newTab]);
                     setActiveTabId(tempId);
-
-                    // Set Initial Params for Generator
-                    setInitialPrompt(prompt);
-                    setInitialReference(principalFile);
-                    setInitialStyleReference(styleReferenceFile);
-                    setInitialGeneratorMode(generatorMode);
-                    setInitialSecondaryElements(secondaryFiles);
-                    setShouldAutoGenerate(true);
 
                     // Persist to DB
                     if (user) {
@@ -371,14 +367,14 @@ const AppContent: React.FC = () => {
                         style={{ display: activeTabId === tab.id ? 'block' : 'none' }}
                     >
                         <GeneratorWorkspace
-                            mode={currentSection === 'LANDING_PAGES' ? 'LANDING_PAGE' : 'DESIGN'}
-                            section={currentSection}
-                            initialPrompt={initialPrompt}
-                            initialReference={initialReference}
-                            initialStyleReference={initialStyleReference}
-                            initialGeneratorMode={initialGeneratorMode}
-                            initialSecondaryElements={initialSecondaryElements}
-                            shouldAutoGenerate={shouldAutoGenerate}
+                            mode={tab.mode}
+                            section={tab.section}
+                            initialPrompt={tab.initialData?.prompt}
+                            initialReference={tab.initialData?.referenceImage || undefined}
+                            initialStyleReference={tab.initialData?.styleReferenceImage || undefined}
+                            initialGeneratorMode={tab.initialData?.generatorMode}
+                            initialSecondaryElements={tab.initialData?.secondaryElements}
+                            shouldAutoGenerate={tab.initialData?.shouldAutoGenerate}
                             isActive={activeTabId === tab.id}
                             setHasKey={setHasKey}
                             onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}

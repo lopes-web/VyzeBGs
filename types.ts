@@ -21,12 +21,12 @@ export interface ColorPalette {
 }
 
 export interface HistoryItem {
-    id: string;
-    url: string;
-    prompt: string;
-    timestamp: number;
-    mode: GeneratorMode; 
-    section: AppSection;
+  id: string;
+  url: string;
+  prompt: string;
+  timestamp: number;
+  mode: GeneratorMode;
+  section: AppSection;
 }
 
 export interface ReferenceItem {
@@ -46,12 +46,20 @@ export interface ProjectTab {
   mode: GeneratorMode;
   section: AppSection;
   createdAt: number;
+  initialData?: {
+    prompt?: string;
+    referenceImage?: File | null;
+    styleReferenceImage?: File | null;
+    secondaryElements?: File[];
+    shouldAutoGenerate?: boolean;
+    generatorMode?: GeneratorMode;
+  };
 }
 
 export interface AppState {
-  userImages: string[]; 
-  referenceItems: ReferenceItem[]; 
-  assetImages: string[]; 
+  userImages: string[];
+  referenceItems: ReferenceItem[];
+  assetImages: string[];
   userPrompt: string;
   position: SubjectPosition;
   attributes: GenerationAttributes;
