@@ -14,6 +14,7 @@ interface GeneratorWorkspaceProps {
     section: AppSection;
     initialPrompt?: string;
     initialReference?: File;
+    initialStyleReference?: File;
     initialGeneratorMode?: GeneratorMode;
     initialSecondaryElements?: File[];
     isActive: boolean;
@@ -22,6 +23,7 @@ interface GeneratorWorkspaceProps {
     checkConcurrencyLimit: () => boolean;
     onGenerationStart: () => void;
     onGenerationEnd: () => void;
+    projectId?: string;
     shouldAutoGenerate?: boolean;
 }
 
@@ -30,6 +32,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     section,
     initialPrompt,
     initialReference,
+    initialStyleReference,
     initialGeneratorMode,
     initialSecondaryElements,
     isActive,
@@ -55,7 +58,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         }
     }, [initialPrompt]);
 
-    // Handle initial reference
+    // Handle initial reference (Principal Image - Subject)
     useEffect(() => {
         if (initialReference) {
             const reader = new FileReader();
@@ -72,6 +75,29 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             reader.readAsDataURL(initialReference);
         }
     }, [initialReference]);
+
+    // Handle initial style reference (Style/Example)
+    useEffect(() => {
+        if (initialStyleReference) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result as string;
+                const newItem: ReferenceItem = {
+                    id: Date.now().toString(),
+                    image: base64,
+                    description: 'Referência de Estilo (Home Hub)'
+                };
+                setReferenceItems(prev => {
+                    // Avoid duplicates based on image content
+                    if (!prev.some(item => item.image === base64)) {
+                        return [...prev, newItem];
+                    }
+                    return prev;
+                });
+            };
+            reader.readAsDataURL(initialStyleReference);
+        }
+    }, [initialStyleReference]);
 
     // Handle initial secondary elements
     useEffect(() => {

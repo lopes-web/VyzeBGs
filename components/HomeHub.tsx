@@ -7,7 +7,8 @@ interface HomeHubProps {
     onPromptSubmit: (
         prompt: string,
         section: AppSection,
-        referenceFile?: File,
+        principalFile?: File,
+        styleReferenceFile?: File,
         generatorMode?: GeneratorMode,
         secondaryFiles?: File[]
     ) => void;
@@ -25,15 +26,21 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     const [generatorMode, setGeneratorMode] = useState<GeneratorMode>('HUMAN');
     const [secondaryFiles, setSecondaryFiles] = useState<File[]>([]);
 
-    // Reference Upload State
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    // Principal Image State (Subject/Input)
+    const [principalFile, setPrincipalFile] = useState<File | null>(null);
+    const [principalPreview, setPrincipalPreview] = useState<string | null>(null);
+    const principalInputRef = useRef<HTMLInputElement>(null);
+
+    // Style Reference State (Style/Example)
+    const [styleReferenceFile, setStyleReferenceFile] = useState<File | null>(null);
+    const [styleReferencePreview, setStyleReferencePreview] = useState<string | null>(null);
+    const styleReferenceInputRef = useRef<HTMLInputElement>(null);
+
     const secondaryInputRef = useRef<HTMLInputElement>(null);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && prompt.trim()) {
-            onPromptSubmit(prompt, selectedMode, selectedFile || undefined, generatorMode, secondaryFiles);
+            onPromptSubmit(prompt, selectedMode, principalFile || undefined, styleReferenceFile || undefined, generatorMode, secondaryFiles);
         }
     };
 
@@ -45,13 +52,25 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
         setIsDropdownOpen(false);
     };
 
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePrincipalSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setSelectedFile(file);
+            setPrincipalFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPreviewUrl(reader.result as string);
+                setPrincipalPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleStyleReferenceSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setStyleReferenceFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setStyleReferencePreview(reader.result as string);
             };
             reader.readAsDataURL(file);
         }
@@ -68,11 +87,19 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
         setSecondaryFiles(prev => prev.filter((_, i) => i !== index));
     };
 
-    const clearReference = () => {
-        setSelectedFile(null);
-        setPreviewUrl(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+    const clearPrincipal = () => {
+        setPrincipalFile(null);
+        setPrincipalPreview(null);
+        if (principalInputRef.current) {
+            principalInputRef.current.value = '';
+        }
+    };
+
+    const clearStyleReference = () => {
+        setStyleReferenceFile(null);
+        setStyleReferencePreview(null);
+        if (styleReferenceInputRef.current) {
+            styleReferenceInputRef.current.value = '';
         }
     };
 
@@ -229,7 +256,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                             <div className="w-px h-8 bg-gray-200 dark:bg-white/10 mx-2"></div>
 
-                            {/* Config Button (New) */}
+                            {/* Config Button */}
                             <div className="relative">
                                 <button
                                     onClick={toggleConfig}
@@ -241,7 +268,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Config Dropdown */}
                                 {isConfigOpen && (
-                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-white dark:bg-[#262626] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-white dark:bg-[#262626] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto">
                                         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                                             <i className="fas fa-cog text-lime-500"></i> Configuração
                                         </h3>
@@ -266,32 +293,80 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                             </div>
                                         </div>
 
-                                        {/* REFERENCE IMAGE UPLOAD */}
+                                        {/* PRINCIPAL IMAGE UPLOAD */}
                                         <div className="mb-4">
                                             <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                                                Imagem de Referência (Principal)
+                                                Imagem Principal (Para melhorar/mudar)
                                             </label>
                                             <div className="flex gap-2 items-start">
+                                                <input
+                                                    type="file"
+                                                    ref={principalInputRef}
+                                                    onChange={handlePrincipalSelect}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
                                                 <button
-                                                    onClick={() => fileInputRef.current?.click()}
+                                                    onClick={() => principalInputRef.current?.click()}
                                                     className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center text-gray-400 hover:text-lime-500 hover:border-lime-500 hover:bg-lime-50 dark:hover:bg-lime-500/10 transition-all"
-                                                    title="Adicionar Referência"
+                                                    title="Adicionar Imagem Principal"
                                                 >
-                                                    <i className="fas fa-plus text-lg mb-1"></i>
+                                                    <i className="fas fa-user text-lg mb-1"></i>
                                                 </button>
 
-                                                {selectedFile && (
+                                                {principalFile && (
                                                     <div className="relative group w-16 h-16">
                                                         <img
-                                                            src={URL.createObjectURL(selectedFile)}
-                                                            alt="Ref"
+                                                            src={principalPreview || ''}
+                                                            alt="Principal"
                                                             className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
                                                         />
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setSelectedFile(null);
-                                                                if (fileInputRef.current) fileInputRef.current.value = '';
+                                                                clearPrincipal();
+                                                            }}
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition-colors"
+                                                        >
+                                                            <i className="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* STYLE REFERENCE UPLOAD (NEW) */}
+                                        <div className="mb-4">
+                                            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                                                Imagem de Referência (Estilo/Exemplo)
+                                            </label>
+                                            <div className="flex gap-2 items-start">
+                                                <input
+                                                    type="file"
+                                                    ref={styleReferenceInputRef}
+                                                    onChange={handleStyleReferenceSelect}
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                />
+                                                <button
+                                                    onClick={() => styleReferenceInputRef.current?.click()}
+                                                    className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center text-gray-400 hover:text-purple-500 hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-all"
+                                                    title="Adicionar Referência de Estilo"
+                                                >
+                                                    <i className="fas fa-image text-lg mb-1"></i>
+                                                </button>
+
+                                                {styleReferenceFile && (
+                                                    <div className="relative group w-16 h-16">
+                                                        <img
+                                                            src={styleReferencePreview || ''}
+                                                            alt="Style Ref"
+                                                            className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                                                        />
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                clearStyleReference();
                                                             }}
                                                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition-colors"
                                                         >
@@ -340,30 +415,23 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 )}
                             </div>
 
-                            {/* Reference Upload Button (Paperclip) - Keeping it for quick access too */}
+                            {/* Principal Image Quick Upload (Paperclip) - Mapped to Principal */}
                             <div className="relative">
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileSelect}
-                                    accept="image/*"
-                                    className="hidden"
-                                />
                                 <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${previewUrl ? 'bg-lime-100 dark:bg-lime-500/20 text-lime-600 dark:text-lime-400' : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
-                                    title="Adicionar referência"
+                                    onClick={() => principalInputRef.current?.click()}
+                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${principalPreview ? 'bg-lime-100 dark:bg-lime-500/20 text-lime-600 dark:text-lime-400' : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                                    title="Adicionar imagem principal"
                                 >
                                     <i className="fas fa-paperclip"></i>
                                 </button>
 
                                 {/* Preview Tooltip */}
-                                {previewUrl && (
+                                {principalPreview && (
                                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-white/10 animate-in fade-in zoom-in-95">
                                         <div className="relative w-16 h-16 rounded overflow-hidden">
-                                            <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                                            <img src={principalPreview} alt="Preview" className="w-full h-full object-cover" />
                                             <button
-                                                onClick={(e) => { e.stopPropagation(); clearReference(); }}
+                                                onClick={(e) => { e.stopPropagation(); clearPrincipal(); }}
                                                 className="absolute top-0 right-0 bg-black/50 hover:bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-bl-lg text-xs transition-colors"
                                             >
                                                 <i className="fas fa-times"></i>
@@ -384,7 +452,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                             />
 
                             <button
-                                onClick={() => prompt.trim() && onPromptSubmit(prompt, selectedMode, selectedFile || undefined, generatorMode, secondaryFiles)}
+                                onClick={() => prompt.trim() && onPromptSubmit(prompt, selectedMode, principalFile || undefined, styleReferenceFile || undefined, generatorMode, secondaryFiles)}
                                 className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-lime-500 hover:text-black dark:hover:bg-lime-500 dark:hover:text-black text-gray-500 dark:text-gray-400 flex items-center justify-center transition-all duration-300"
                             >
                                 <i className="fas fa-arrow-up"></i>
@@ -398,7 +466,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         {['Cyberpunk City', 'Minimalist Office', 'Neon Abstract'].map((suggestion) => (
                             <button
                                 key={suggestion}
-                                onClick={() => onPromptSubmit(suggestion, selectedMode, undefined, generatorMode, secondaryFiles)}
+                                onClick={() => onPromptSubmit(suggestion, selectedMode, undefined, undefined, generatorMode, secondaryFiles)}
                                 className="text-xs px-3 py-1 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-lime-500/50 text-gray-600 dark:text-gray-400 hover:text-lime-600 dark:hover:text-lime-400 transition-colors"
                             >
                                 {suggestion}

@@ -23,6 +23,7 @@ const AppContent: React.FC = () => {
     const [currentSection, setCurrentSection] = useState<AppSection | null>(null);
     const [initialPrompt, setInitialPrompt] = useState<string | undefined>(undefined);
     const [initialReference, setInitialReference] = useState<File | undefined>(undefined);
+    const [initialStyleReference, setInitialStyleReference] = useState<File | undefined>(undefined);
     const [initialGeneratorMode, setInitialGeneratorMode] = useState<GeneratorMode | undefined>(undefined);
     const [initialSecondaryElements, setInitialSecondaryElements] = useState<File[] | undefined>(undefined);
     const [shouldAutoGenerate, setShouldAutoGenerate] = useState(false);
@@ -196,9 +197,10 @@ const AppContent: React.FC = () => {
         return (
             <HomeHub
                 onSelectSection={setCurrentSection}
-                onPromptSubmit={(prompt, section, referenceFile, generatorMode, secondaryFiles) => {
+                onPromptSubmit={(prompt, section, principalFile, styleReferenceFile, generatorMode, secondaryFiles) => {
                     setInitialPrompt(prompt);
-                    setInitialReference(referenceFile);
+                    setInitialReference(principalFile);
+                    setInitialStyleReference(styleReferenceFile);
                     setInitialGeneratorMode(generatorMode);
                     setInitialSecondaryElements(secondaryFiles);
                     setShouldAutoGenerate(true);
@@ -332,6 +334,7 @@ const AppContent: React.FC = () => {
                             section={currentSection}
                             initialPrompt={initialPrompt}
                             initialReference={initialReference}
+                            initialStyleReference={initialStyleReference}
                             initialGeneratorMode={initialGeneratorMode}
                             initialSecondaryElements={initialSecondaryElements}
                             shouldAutoGenerate={shouldAutoGenerate}
