@@ -10,7 +10,10 @@ import ApiKeyInput from './components/ApiKeyInput';
 import { useAuth } from './components/AuthContext';
 import { GeneratorMode, ProjectTab, HistoryItem, AppSection } from './types';
 
-const App: React.FC = () => {
+import { ThemeProvider } from './components/ThemeContext';
+import ThemeToggle from './components/ThemeToggle';
+
+const AppContent: React.FC = () => {
     const { user, signOut, loading } = useAuth();
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [hasKey, setHasKey] = useState(false);
@@ -141,19 +144,19 @@ const App: React.FC = () => {
 
     if (!isSupabaseConfigured) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white p-4">
-                <div className="max-w-md w-full text-center space-y-6 p-8 bg-gray-900/40 rounded-3xl border border-red-500/20 backdrop-blur-xl shadow-2xl">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 transition-colors duration-300">
+                <div className="max-w-md w-full text-center space-y-6 p-8 bg-white/60 dark:bg-gray-900/40 rounded-3xl border border-red-500/20 backdrop-blur-xl shadow-2xl">
                     <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                         <i className="fas fa-exclamation-triangle text-3xl text-red-500"></i>
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Configuração Pendente</h1>
-                    <p className="text-gray-400">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configuração Pendente</h1>
+                    <p className="text-gray-600 dark:text-gray-400">
                         As variáveis de ambiente do Supabase não foram encontradas.
                     </p>
-                    <div className="bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-white/5">
+                    <div className="bg-gray-100 dark:bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-gray-200 dark:border-white/5">
                         <p className="mb-2">Adicione na Vercel:</p>
-                        <p className="text-lime-400">VITE_SUPABASE_URL</p>
-                        <p className="text-lime-400">VITE_SUPABASE_ANON_KEY</p>
+                        <p className="text-lime-600 dark:text-lime-400">VITE_SUPABASE_URL</p>
+                        <p className="text-lime-600 dark:text-lime-400">VITE_SUPABASE_ANON_KEY</p>
                     </div>
                 </div>
             </div>
@@ -163,7 +166,7 @@ const App: React.FC = () => {
     // 1. Loading State
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
             </div>
         );
@@ -185,11 +188,12 @@ const App: React.FC = () => {
     // --- MAIN APP HUB (SELECTION SCREEN) ---
     if (!currentSection) {
         return (
-            <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden">
+            <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
                 <div className="flex items-center justify-between px-8 py-6">
                     <div className="flex items-center gap-3">
                         <img src="/logo.webp" alt="Vyze Logo" className="h-10 w-auto" />
                     </div>
+                    <ThemeToggle />
                 </div>
 
                 <div className="flex-grow flex items-center justify-center p-4">
@@ -197,17 +201,17 @@ const App: React.FC = () => {
                         {/* LANDING PAGES APP */}
                         <div
                             onClick={() => setCurrentSection('LANDING_PAGES')}
-                            className="group bg-gray-900/40 border border-white/10 hover:border-lime-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-lime-500/10 relative overflow-hidden"
+                            className="group bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/10 hover:border-lime-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-lime-500/10 relative overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-lime-500/0 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div className="w-20 h-20 bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:bg-lime-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-laptop-code text-4xl text-lime-500 group-hover:text-black transition-colors"></i>
+                            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-gray-200 dark:border-white/5 group-hover:bg-lime-500 group-hover:text-black transition-colors">
+                                <i className="fas fa-laptop-code text-4xl text-lime-600 dark:text-lime-500 group-hover:text-black transition-colors"></i>
                             </div>
-                            <h2 className="text-3xl font-bold text-white mb-4">Landing Pages</h2>
-                            <p className="text-gray-400 mb-8 text-lg">
+                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Landing Pages</h2>
+                            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
                                 Gerador de backgrounds de alta conversão. Foco em sujeitos humanos e produtos com posicionamento para texto.
                             </p>
-                            <span className="inline-flex items-center text-lime-400 font-bold uppercase tracking-wider text-sm">
+                            <span className="inline-flex items-center text-lime-600 dark:text-lime-400 font-bold uppercase tracking-wider text-sm">
                                 Acessar App <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                             </span>
                         </div>
@@ -215,17 +219,17 @@ const App: React.FC = () => {
                         {/* DESIGNS APP */}
                         <div
                             onClick={() => setCurrentSection('DESIGNS')}
-                            className="group bg-gray-900/40 border border-white/10 hover:border-purple-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10 relative overflow-hidden"
+                            className="group bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/10 hover:border-purple-500/50 rounded-[2rem] p-10 cursor-pointer backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10 relative overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div className="w-20 h-20 bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-white/5 group-hover:bg-purple-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-palette text-4xl text-purple-500 group-hover:text-black transition-colors"></i>
+                            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-8 border border-gray-200 dark:border-white/5 group-hover:bg-purple-500 group-hover:text-black transition-colors">
+                                <i className="fas fa-palette text-4xl text-purple-600 dark:text-purple-500 group-hover:text-black transition-colors"></i>
                             </div>
-                            <h2 className="text-3xl font-bold text-white mb-4">Designs</h2>
-                            <p className="text-gray-400 mb-8 text-lg">
+                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Designs</h2>
+                            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
                                 Criação de assets gráficos, texturas e composições artísticas para redes sociais e marketing.
                             </p>
-                            <span className="inline-flex items-center text-purple-400 font-bold uppercase tracking-wider text-sm">
+                            <span className="inline-flex items-center text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider text-sm">
                                 Acessar App <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                             </span>
                         </div>
@@ -237,25 +241,25 @@ const App: React.FC = () => {
 
     // --- WORKSPACE VIEW (EXISTING LOGIC) ---
     return (
-        <div className="h-screen flex flex-col bg-gray-950 text-white font-sans overflow-hidden">
+        <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
 
             {/* HEADER & TABS BAR */}
-            <div className="bg-gray-900/80 backdrop-blur-md border-b border-white/5 flex flex-col z-50">
+            <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">
 
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-3">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => { setCurrentSection(null); setActiveTabId(null); }}
-                            className="w-8 h-8 bg-black/20 hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-lime-400 transition-colors border border-transparent hover:border-white/5"
+                            className="w-8 h-8 bg-black/5 dark:bg-black/20 hover:bg-black/10 dark:hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-lime-600 dark:hover:text-lime-400 transition-colors border border-transparent hover:border-black/5 dark:hover:border-white/5"
                             title="Voltar para Apps"
                         >
                             <i className="fas fa-th"></i>
                         </button>
                         <img src="/logo.webp" alt="Vyze Logo" className="h-8 w-auto" />
-                        <div className="h-6 w-px bg-white/10 mx-1"></div>
+                        <div className="h-6 w-px bg-gray-200 dark:bg-white/10 mx-1"></div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-lg tracking-tight text-white leading-none">
+                            <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white leading-none">
                                 {currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'}
                             </span>
                             <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Workspace</span>
@@ -263,24 +267,26 @@ const App: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="text-xs text-gray-500 flex items-center gap-2 px-3 py-1 bg-black/20 rounded-full border border-white/5">
-                            <i className="fas fa-server"></i> Processamento: <span className={generatingCount > 0 ? 'text-lime-400' : 'text-gray-400'}>{generatingCount}/2</span>
+                        <div className="text-xs text-gray-500 flex items-center gap-2 px-3 py-1 bg-black/5 dark:bg-black/20 rounded-full border border-black/5 dark:border-white/5">
+                            <i className="fas fa-server"></i> Processamento: <span className={generatingCount > 0 ? 'text-lime-600 dark:text-lime-400' : 'text-gray-400'}>{generatingCount}/2</span>
                         </div>
                         <button
                             onClick={() => setIsHistoryOpen(true)}
-                            className="text-sm text-gray-300 hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-lg transition-colors"
+                            className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
                         >
-                            <i className="fas fa-history text-lime-400"></i> Histórico
+                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Histórico
                         </button>
 
+                        <ThemeToggle />
+
                         {user ? (
-                            <div className="flex items-center gap-3 pl-3 border-l border-white/10">
+                            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-white/10">
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs">
                                     {user.email?.substring(0, 2).toUpperCase()}
                                 </div>
                                 <button
                                     onClick={() => signOut()}
-                                    className="text-xs text-gray-400 hover:text-white"
+                                    className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                                     title="Sair"
                                 >
                                     <i className="fas fa-sign-out-alt"></i>
@@ -289,7 +295,7 @@ const App: React.FC = () => {
                         ) : (
                             <button
                                 onClick={() => setShowAuthModal(true)}
-                                className="text-sm bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                                className="text-sm bg-gray-900 dark:bg-white/10 hover:bg-gray-800 dark:hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                             >
                                 Entrar
                             </button>
@@ -306,8 +312,8 @@ const App: React.FC = () => {
                             className={`
                         group relative flex items-center gap-2 px-4 py-2 rounded-t-xl text-sm font-medium cursor-pointer transition-all min-w-[150px] max-w-[200px] select-none
                         ${activeTabId === tab.id
-                                    ? 'bg-gray-900/60 text-lime-400 border-t border-x border-white/5 shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-10'
-                                    : 'bg-black/20 text-gray-500 hover:bg-white/5 hover:text-gray-300 border-transparent mb-[2px]'
+                                    ? 'bg-white dark:bg-gray-900/60 text-lime-600 dark:text-lime-400 border-t border-x border-gray-200 dark:border-white/5 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-10'
+                                    : 'bg-black/5 dark:bg-black/20 text-gray-500 hover:bg-black/10 dark:hover:bg-white/5 hover:text-gray-700 dark:hover:text-gray-300 border-transparent mb-[2px]'
                                 }
                     `}
                         >
@@ -315,7 +321,7 @@ const App: React.FC = () => {
                             <span className="truncate">{tab.title}</span>
                             <button
                                 onClick={(e) => closeTab(e, tab.id)}
-                                className="ml-auto text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="ml-auto text-gray-400 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                                 <i className="fas fa-times text-xs"></i>
                             </button>
@@ -330,8 +336,8 @@ const App: React.FC = () => {
                     <button
                         onClick={() => setActiveTabId(null)}
                         className={`
-                    px-3 py-2 rounded-t-xl text-gray-500 hover:text-white hover:bg-white/5 transition-colors mb-[2px]
-                    ${activeTabId === null ? 'text-white bg-white/5' : ''}
+                    px-3 py-2 rounded-t-xl text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors mb-[2px]
+                    ${activeTabId === null ? 'text-gray-900 dark:text-white bg-black/5 dark:bg-white/5' : ''}
                 `}
                         title="Novo Projeto"
                     >
@@ -341,7 +347,7 @@ const App: React.FC = () => {
             </div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-grow relative overflow-hidden bg-gray-950 p-6">
+            <div className="flex-grow relative overflow-hidden bg-gray-50 dark:bg-gray-950 p-6 transition-colors duration-300">
 
                 {/* Render All Workspaces (Hidden if inactive) to preserve state */}
                 {tabs.map(tab => (
@@ -369,8 +375,8 @@ const App: React.FC = () => {
                     <div className="h-full flex flex-col items-center justify-center animate-fadeIn pb-20 overflow-y-auto">
                         <div className="text-center mb-12 relative">
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-lime-500/10 rounded-full blur-[100px]"></div>
-                            <h2 className="text-4xl font-bold mb-4 relative z-10 text-white">Novo Projeto</h2>
-                            <p className="text-gray-400 relative z-10 max-w-lg mx-auto">
+                            <h2 className="text-4xl font-bold mb-4 relative z-10 text-gray-900 dark:text-white">Novo Projeto</h2>
+                            <p className="text-gray-600 dark:text-gray-400 relative z-10 max-w-lg mx-auto">
                                 {currentSection === 'LANDING_PAGES'
                                     ? 'Crie backgrounds focados em conversão.'
                                     : 'Crie assets gráficos e designs criativos.'}
@@ -381,16 +387,16 @@ const App: React.FC = () => {
                             {/* HUMAN CARD */}
                             <div
                                 onClick={() => createTab('HUMAN')}
-                                className="bg-gray-900/40 border border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-gray-800/60 hover:border-lime-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                             >
-                                <div className="w-14 h-14 bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-user-astronaut text-2xl text-black"></i>
+                                <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
+                                    <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
-                                <p className="text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
+                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
                                     Ideal para especialistas e retratos. Mantém a fisionomia e expressões com fidelidade.
                                 </p>
-                                <span className="text-lime-400 font-bold text-xs flex items-center mt-auto">
+                                <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                 </span>
                             </div>
@@ -398,16 +404,16 @@ const App: React.FC = () => {
                             {/* INFOPRODUCT CARD */}
                             <div
                                 onClick={() => createTab('INFOPRODUCT')}
-                                className="bg-gray-900/40 border border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-gray-800/60 hover:border-amber-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-amber-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                             >
-                                <div className="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-chalkboard-teacher text-2xl text-black"></i>
+                                <div className="w-14 h-14 bg-amber-100 dark:bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
+                                    <i className="fas fa-chalkboard-teacher text-2xl text-amber-600 dark:text-black"></i>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
-                                <p className="text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
+                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
                                     Foco em cursos e mentorias. Gera camadas de profundidade, luzes de estúdio e melhora a postura/roupa do expert.
                                 </p>
-                                <span className="text-amber-400 font-bold text-xs flex items-center mt-auto">
+                                <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                 </span>
                             </div>
@@ -415,16 +421,16 @@ const App: React.FC = () => {
                             {/* OBJECT CARD */}
                             <div
                                 onClick={() => createTab('OBJECT')}
-                                className="bg-gray-900/40 border border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-gray-800/60 hover:border-blue-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-blue-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                             >
-                                <div className="w-14 h-14 bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-cube text-2xl text-black"></i>
+                                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                                    <i className="fas fa-cube text-2xl text-blue-600 dark:text-black"></i>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-blue-400 transition-colors">Produto</h3>
-                                <p className="text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
+                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
                                     Foco em geometria, materiais e iluminação realista (Ray-tracing) para objetos.
                                 </p>
-                                <span className="text-blue-400 font-bold text-xs flex items-center mt-auto">
+                                <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                 </span>
                             </div>
@@ -432,16 +438,16 @@ const App: React.FC = () => {
                             {/* ENHANCE CARD */}
                             <div
                                 onClick={() => createTab('ENHANCE')}
-                                className="bg-gray-900/40 border border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-gray-800/60 hover:border-purple-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-purple-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                             >
-                                <div className="w-14 h-14 bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-wand-magic-sparkles text-2xl text-black"></i>
+                                <div className="w-14 h-14 bg-purple-100 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
+                                    <i className="fas fa-wand-magic-sparkles text-2xl text-purple-600 dark:text-black"></i>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-purple-400 transition-colors">Enhance</h3>
-                                <p className="text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
+                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
                                     Melhore imagens existentes. Aumente detalhes e iluminação mantendo a composição original.
                                 </p>
-                                <span className="text-purple-400 font-bold text-xs flex items-center mt-auto">
+                                <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                 </span>
                             </div>
@@ -456,18 +462,18 @@ const App: React.FC = () => {
             {/* GLOBAL HISTORY POPUP */}
             {isHistoryOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-8 animate-fadeIn">
-                    <div className="bg-gray-900 border border-white/10 w-full max-w-6xl h-[80vh] rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 w-full max-w-6xl h-[80vh] rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
 
                         {/* Header */}
-                        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-black/20">
-                            <h2 className="text-2xl font-bold text-white"><i className="fas fa-history text-lime-400 mr-2"></i> Galeria Global {currentSection ? `(${currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'})` : ''}</h2>
-                            <button onClick={() => setIsHistoryOpen(false)} className="text-gray-400 hover:text-white p-2 text-xl">
+                        <div className="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between bg-gray-50 dark:bg-black/20">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><i className="fas fa-history text-lime-600 dark:text-lime-400 mr-2"></i> Galeria Global {currentSection ? `(${currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'})` : ''}</h2>
+                            <button onClick={() => setIsHistoryOpen(false)} className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 text-xl">
                                 <i className="fas fa-times"></i>
                             </button>
                         </div>
 
                         {/* Grid */}
-                        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-gray-700">
+                        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
                             {displayedHistory.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                                     <i className="fas fa-images text-4xl mb-4 opacity-50"></i>
@@ -476,7 +482,7 @@ const App: React.FC = () => {
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                     {displayedHistory.map((item) => (
-                                        <div key={item.id} className="group relative aspect-[9/16] bg-black/40 rounded-xl overflow-hidden border border-white/5 hover:border-lime-500/50 transition-all">
+                                        <div key={item.id} className="group relative aspect-[9/16] bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden border border-gray-200 dark:border-white/5 hover:border-lime-500/50 transition-all">
                                             <img src={item.url} alt="History" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
                                                 <span className="text-xs font-bold text-lime-400 mb-1 uppercase tracking-wider">{item.mode}</span>
@@ -504,6 +510,14 @@ const App: React.FC = () => {
             )}
 
         </div>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <ThemeProvider>
+            <AppContent />
+        </ThemeProvider>
     );
 };
 

@@ -15,7 +15,7 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({ value, onChange }) 
 
   return (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-300 mb-3">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
         Subject Position
       </label>
       <div className="grid grid-cols-3 gap-3">
@@ -25,15 +25,15 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({ value, onChange }) 
             onClick={() => onChange(option.id)}
             className={`
               flex flex-col items-center justify-center p-3 rounded-lg border transition-all duration-200
-              ${value === option.id 
-                ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/50' 
-                : 'border-gray-700 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:border-gray-600'
+              ${value === option.id
+                ? 'border-indigo-500 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 ring-1 ring-indigo-500/50'
+                : 'border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
               }
             `}
           >
-            <div className="h-8 w-16 bg-gray-900 rounded mb-2 relative overflow-hidden border border-gray-700">
-                {/* Visual Representation of Positioning */}
-                <div className={`absolute top-1 bottom-1 w-4 bg-current rounded-sm opacity-80
+            <div className="h-8 w-16 bg-gray-200 dark:bg-gray-900 rounded mb-2 relative overflow-hidden border border-gray-300 dark:border-gray-700">
+              {/* Visual Representation of Positioning */}
+              <div className={`absolute top-1 bottom-1 w-4 bg-current rounded-sm opacity-80
                     ${option.id === SubjectPosition.LEFT ? 'left-2' : ''}
                     ${option.id === SubjectPosition.CENTER ? 'left-1/2 -translate-x-1/2' : ''}
                     ${option.id === SubjectPosition.RIGHT ? 'right-2' : ''}

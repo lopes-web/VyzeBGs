@@ -326,15 +326,15 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden" style={{ display: isActive ? 'grid' : 'none' }}>
 
             {/* LEFT PANEL: CONTROLS (FIXED FOOTER LAYOUT) */}
-            <div className="lg:col-span-4 h-full flex flex-col relative bg-gray-900/40 backdrop-blur-xl border-r border-white/5 rounded-l-2xl overflow-hidden">
+            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-gray-900/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
 
                 {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-700 p-6 space-y-6">
+                <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 p-6 space-y-6">
 
                     {/* Image Inputs */}
-                    <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white/90">
-                            <i className={`fas ${mode === 'HUMAN' ? 'fa-user' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-400`}></i>
+                    <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
+                            <i className={`fas ${mode === 'HUMAN' ? 'fa-user' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
                             {getModeLabel()}
                         </h2>
                         <ImageUpload
@@ -360,17 +360,17 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Configuration */}
-                    <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white/90">
-                            <i className="fas fa-sliders-h text-lime-400"></i> Configuração
+                    <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
+                            <i className="fas fa-sliders-h text-lime-600 dark:text-lime-400"></i> Configuração
                         </h2>
 
                         <PositionSelector value={position} onChange={setPosition} />
 
                         {/* INFOPRODUCT COLOR PALETTE */}
                         {mode === 'INFOPRODUCT' && (
-                            <div className="mb-6 space-y-3 border-t border-b border-white/5 py-4">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Paleta de Cores e Luz</h3>
+                            <div className="mb-6 space-y-3 border-t border-gray-200 dark:border-white/5 py-4">
+                                <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Paleta de Cores e Luz</h3>
 
                                 <div>
                                     <label className="block text-xs text-gray-500 mb-1">Fundo (Predominante)</label>
@@ -379,7 +379,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Preto Luxo, Azul Marinho..."
                                         value={colorPalette.primary}
                                         onChange={(e) => setColorPalette(prev => ({ ...prev, primary: e.target.value }))}
-                                        className="w-full bg-black/40 border border-gray-700 rounded px-2 py-1.5 text-sm text-white focus:border-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
                                     />
                                 </div>
                                 <div>
@@ -389,7 +389,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Dourado, Ciano, Branco Frio..."
                                         value={colorPalette.secondary}
                                         onChange={(e) => setColorPalette(prev => ({ ...prev, secondary: e.target.value }))}
-                                        className="w-full bg-black/40 border border-gray-700 rounded px-2 py-1.5 text-sm text-white focus:border-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
                                     />
                                 </div>
                                 <div>
@@ -399,7 +399,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Verde Neon, Laranja..."
                                         value={colorPalette.accent}
                                         onChange={(e) => setColorPalette(prev => ({ ...prev, accent: e.target.value }))}
-                                        className="w-full bg-black/40 border border-gray-700 rounded px-2 py-1.5 text-sm text-white focus:border-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
                                     />
                                 </div>
                             </div>
@@ -410,8 +410,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-400'
-                                    : 'bg-black/40 border-gray-700 text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     }`}
                             >
                                 <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-square'}`}></i>
@@ -420,8 +420,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-400'
-                                    : 'bg-black/40 border-gray-700 text-gray-400'
+                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     }`}
                             >
                                 <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'}`}></i>
@@ -432,21 +432,21 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         {/* Dimensions Input */}
                         <div className="mb-4 grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-medium text-gray-400 mb-1">Largura (px)</label>
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Largura (px)</label>
                                 <input
                                     type="number"
                                     value={1920}
                                     disabled
-                                    className="w-full bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-gray-500 text-sm cursor-not-allowed"
+                                    className="w-full bg-gray-100 dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-500 text-sm cursor-not-allowed"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-gray-400 mb-1">Altura (px)</label>
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Altura (px)</label>
                                 <input
                                     type="number"
                                     value={customHeight}
                                     onChange={(e) => setCustomHeight(Number(e.target.value))}
-                                    className="w-full bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                    className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
                                     min={500}
                                     max={2160}
                                 />
@@ -454,7 +454,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {mode === 'ENHANCE' ? 'Instruções de Melhoria' : 'Prompt do Cenário'}
                             </label>
                             <textarea
@@ -467,7 +467,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             ? "Descreva o nicho (ex: Mentor financeiro, Curso de inglês) e a atmosfera desejada..."
                                             : "Descreva o cenário..."
                                 }
-                                className="w-full bg-black/40 border border-gray-700 rounded-xl p-3 text-sm text-white placeholder-gray-600 focus:ring-2 focus:ring-lime-500 focus:border-transparent outline-none transition-all min-h-[100px]"
+                                className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-lime-500 focus:border-transparent outline-none transition-all min-h-[100px]"
                             />
                         </div>
                     </div>
@@ -477,16 +477,16 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                 </div>
 
                 {/* Sticky Footer */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-t border-white/10 p-4 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+                <div className="absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/10 p-4 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
                     {/* BATCH SELECTOR */}
                     <div className="flex items-center justify-between mb-4 px-1">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                        <div className="flex gap-2 bg-black/40 p-1 rounded-lg border border-gray-700">
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantidade:</span>
+                        <div className="flex gap-2 bg-gray-100 dark:bg-black/40 p-1 rounded-lg border border-gray-300 dark:border-gray-700">
                             {[1, 2, 3, 4].map(num => (
                                 <button
                                     key={num}
                                     onClick={() => setBatchSize(num)}
-                                    className={`w-8 h-8 rounded text-sm font-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow' : 'text-gray-500 hover:text-white'
+                                    className={`w-8 h-8 rounded text-sm font-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                                         }`}
                                 >
                                     {num}x
@@ -502,8 +502,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         w-full py-4 px-6 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center gap-2
                         transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                         ${isGenerating || userImages.length === 0
-                                ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'
-                                : 'bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-gray-900 border border-lime-400'
+                                ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-700'
+                                : 'bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-white dark:text-gray-900 border border-lime-400'
                             }
                     `}
                     >
@@ -518,7 +518,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         )}
                     </button>
                     {error && (
-                        <div className="mt-2 p-2 text-center text-xs text-red-400 bg-red-500/10 rounded">
+                        <div className="mt-2 p-2 text-center text-xs text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-500/10 rounded">
                             <i className="fas fa-exclamation-triangle mr-1"></i> {error}
                         </div>
                     )}
@@ -529,9 +529,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             <div className="lg:col-span-8 flex flex-col h-full overflow-hidden">
 
                 {/* Main Preview */}
-                <div className="bg-gray-900/60 backdrop-blur-xl border border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]">
+                <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]">
                     {generatedImage ? (
-                        <div className="relative w-full h-full flex flex-col items-center justify-center bg-black/20 rounded-xl overflow-hidden">
+                        <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-black/20 rounded-xl overflow-hidden">
                             <img
                                 src={generatedImage}
                                 alt="Generated Background"
@@ -540,7 +540,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <button
                                     onClick={() => handleDownload(generatedImage)}
-                                    className="bg-black/60 hover:bg-lime-600 hover:text-black text-white p-3 rounded-lg backdrop-blur-md border border-white/10 transition-colors"
+                                    className="bg-white/80 dark:bg-black/60 hover:bg-lime-500 hover:text-black text-gray-900 dark:text-white p-3 rounded-lg backdrop-blur-md border border-gray-200 dark:border-white/10 transition-colors"
                                     title="Baixar Imagem"
                                 >
                                     <i className="fas fa-download"></i>
@@ -550,14 +550,14 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             {/* Validation Actions Overlay */}
                             {!isGenerating && (
                                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="bg-black/80 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-4 shadow-2xl">
+                                    <div className="bg-white/90 dark:bg-black/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-4 shadow-2xl">
                                         <div className="flex-1 w-full">
                                             <input
                                                 type="text"
                                                 value={verticalPrompt}
                                                 onChange={(e) => setVerticalPrompt(e.target.value)}
                                                 placeholder="Prompt Vertical (Opcional)"
-                                                className="w-full bg-transparent border-b border-gray-600 px-3 py-2 text-xs text-white focus:border-lime-500 outline-none"
+                                                className="w-full bg-transparent border-b border-gray-400 dark:border-gray-600 px-3 py-2 text-xs text-gray-900 dark:text-white focus:border-lime-500 outline-none"
                                             />
                                         </div>
                                         <div className="flex items-center gap-2 pl-4">
@@ -567,7 +567,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     type="number"
                                                     value={verticalHeight}
                                                     onChange={(e) => setVerticalHeight(Number(e.target.value))}
-                                                    className="w-14 bg-gray-800 border border-gray-600 rounded text-xs px-1 py-1 text-white text-center"
+                                                    className="w-14 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs px-1 py-1 text-gray-900 dark:text-white text-center"
                                                 />
                                             </div>
                                             <button
@@ -582,16 +582,16 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             )}
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-600 bg-black/20 rounded-xl">
+                        <div className="h-full flex flex-col items-center justify-center text-gray-600 bg-gray-50 dark:bg-black/20 rounded-xl">
                             {isGenerating ? (
                                 <div className="text-center">
                                     <div className="inline-block w-16 h-16 border-4 border-lime-500/30 border-t-lime-500 rounded-full animate-spin mb-4"></div>
-                                    <p className="text-lime-400 animate-pulse font-medium">Renderizando com Gemini...</p>
+                                    <p className="text-lime-600 dark:text-lime-400 animate-pulse font-medium">Renderizando com Gemini...</p>
                                 </div>
                             ) : (
                                 <div className="text-center p-8">
-                                    <i className={`fas ${mode === 'HUMAN' ? 'fa-user-circle' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-800`}></i>
-                                    <p className="text-xl font-medium text-gray-500">
+                                    <i className={`fas ${mode === 'HUMAN' ? 'fa-user-circle' : mode === 'OBJECT' ? 'fa-cube' : mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
+                                    <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
                                         {mode === 'ENHANCE' ? 'Melhorar Imagem' : mode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${mode === 'HUMAN' ? 'Pessoa' : 'Objeto'}`}
                                     </p>
                                 </div>
@@ -602,9 +602,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                 {/* Refinement Section */}
                 {generatedImage && !isGenerating && (
-                    <div className="bg-gray-900/60 backdrop-blur-xl border border-white/5 rounded-2xl p-4 shadow-lg animate-fadeIn mb-4">
-                        <label className="block text-sm font-medium text-gray-300 mb-2 flex justify-between">
-                            <span><i className="fas fa-sliders-h mr-2 text-lime-400"></i>Ajustes Finos</span>
+                    <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 shadow-lg animate-fadeIn mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex justify-between">
+                            <span><i className="fas fa-sliders-h mr-2 text-lime-600 dark:text-lime-400"></i>Ajustes Finos</span>
                         </label>
                         <div className="flex flex-col gap-3">
                             <div className="flex gap-2 items-start">
@@ -623,13 +623,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         value={refinePrompt}
                                         onChange={(e) => setRefinePrompt(e.target.value)}
                                         placeholder="Ex: 'Deixe a luz mais quente'..."
-                                        className="flex-1 bg-black/40 border border-gray-700 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none h-12 text-white"
+                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none h-12 text-gray-900 dark:text-white"
                                         onKeyDown={(e) => e.key === 'Enter' && handleRefine()}
                                     />
                                     <button
                                         onClick={handleRefine}
                                         disabled={!refinePrompt}
-                                        className="bg-gray-800 hover:bg-gray-700 text-white px-4 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 h-12 border border-gray-700"
+                                        className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 h-12 border border-gray-300 dark:border-gray-700"
                                     >
                                         Refinar
                                     </button>
@@ -641,9 +641,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                 {/* Local History Strip */}
                 {localHistory.length > 0 && (
-                    <div className="bg-gray-900/80 backdrop-blur-xl border border-white/5 rounded-t-2xl p-4 flex flex-col mt-auto shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+                    <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-t-2xl p-4 flex flex-col mt-auto shadow-[0_-5px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
                         <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                            <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
                                 <i className="fas fa-history"></i> Histórico da Aba
                             </h3>
                             {selectedHistoryIds.length > 0 && (
@@ -655,13 +655,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 </button>
                             )}
                         </div>
-                        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-700 h-28 items-center">
+                        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 h-28 items-center">
                             {localHistory.map(item => {
                                 const isSelected = selectedHistoryIds.includes(item.id);
                                 return (
                                     <div
                                         key={item.id}
-                                        className={`relative flex-shrink-0 h-24 aspect-[16/9] rounded-lg overflow-hidden border-2 cursor-pointer transition-all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-700 hover:border-gray-500'}`}
+                                        className={`relative flex-shrink-0 h-24 aspect-[16/9] rounded-lg overflow-hidden border-2 cursor-pointer transition-all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'}`}
                                         onClick={() => restoreFromHistory(item)}
                                     >
                                         <img src={item.url} alt="Histórico" className="w-full h-full object-cover" />
@@ -677,7 +677,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             className="absolute top-1 left-1 z-10"
                                             onClick={(e) => { e.stopPropagation(); toggleHistorySelection(item.id); }}
                                         >
-                                            <div className={`w-4 h-4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-black/50 border-gray-400'} flex items-center justify-center`}>
+                                            <div className={`w-4 h-4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items-center justify-center`}>
                                                 {isSelected && <i className="fas fa-check text-[10px] text-black"></i>}
                                             </div>
                                         </div>
