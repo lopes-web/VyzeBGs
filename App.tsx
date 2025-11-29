@@ -360,7 +360,7 @@ const App: React.FC = () => {
             <div className="flex-grow relative overflow-hidden bg-gray-950 p-6">
 
                 {/* Render All Workspaces (Hidden if inactive) to preserve state */}
-                {activeSectionTabs.map(tab => (
+                {tabs.map(tab => (
                     <div
                         key={tab.id}
                         className="h-full w-full"
