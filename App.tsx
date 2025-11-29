@@ -44,9 +44,15 @@ const AppContent: React.FC = () => {
         verifyKey();
     }, []);
 
+    const lastUserId = React.useRef<string | null>(null);
+
     // Load Projects and History on Auth
     useEffect(() => {
         if (user) {
+            // Only run if user ID has changed (prevents reset on window focus/token refresh)
+            if (lastUserId.current === user.id) return;
+            lastUserId.current = user.id;
+
             // Force Hub view on login
             setCurrentSection(null);
             setActiveTabId(null);
@@ -71,6 +77,7 @@ const AppContent: React.FC = () => {
             };
             loadData();
         } else {
+            lastUserId.current = null;
             setTabs([]);
             setGlobalHistory([]);
             setCurrentSection(null); // Also reset on logout

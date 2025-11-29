@@ -61,11 +61,14 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     // Handle initial reference (Principal Image - Subject)
     useEffect(() => {
         if (initialReference) {
+            // Create a unique ID for the file to prevent re-reading the same file object if effect re-runs
+            const fileId = `${initialReference.name}-${initialReference.lastModified}`;
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64 = reader.result as string;
                 setUserImages(prev => {
-                    // Simple duplicate check
+                    // Check if this specific base64 is already in the list to avoid duplicates
                     if (!prev.includes(base64)) {
                         return [...prev, base64];
                     }
@@ -575,7 +578,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Spacer to prevent content being hidden behind footer */}
-                    <div className="h-32"></div>
+                    <div className="h-48"></div>
                 </div>
 
                 {/* Sticky Footer */}
