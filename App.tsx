@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
+import { isSupabaseConfigured } from './services/supabaseClient';
 import GeneratorWorkspace from './components/GeneratorWorkspace';
 import ChatWidget from './components/ChatWidget';
 import AuthModal from './components/AuthModal';
@@ -86,6 +87,27 @@ const App: React.FC = () => {
     // Filter history for global view (can be toggled later, currently shows all but labeled)
     const displayedHistory = isHistoryOpen ? globalHistory.filter(h => !currentSection || h.section === currentSection) : [];
 
+    if (!isSupabaseConfigured) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white p-4">
+                <div className="max-w-md w-full text-center space-y-6 p-8 bg-gray-900/40 rounded-3xl border border-red-500/20 backdrop-blur-xl shadow-2xl">
+                    <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                        <i className="fas fa-exclamation-triangle text-3xl text-red-500"></i>
+                    </div>
+                    <h1 className="text-2xl font-bold text-white">Configuração Pendente</h1>
+                    <p className="text-gray-400">
+                        As variáveis de ambiente do Supabase não foram encontradas.
+                    </p>
+                    <div className="bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-white/5">
+                        <p className="mb-2">Adicione na Vercel:</p>
+                        <p className="text-lime-400">VITE_SUPABASE_URL</p>
+                        <p className="text-lime-400">VITE_SUPABASE_ANON_KEY</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (!hasKey) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 to-black text-white p-4">
@@ -109,6 +131,7 @@ const App: React.FC = () => {
             </div>
         );
     }
+
 
     // --- MAIN APP HUB (SELECTION SCREEN) ---
     if (!currentSection) {
