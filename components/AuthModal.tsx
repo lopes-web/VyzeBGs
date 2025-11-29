@@ -8,6 +8,7 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,67 +39,110 @@ const AuthModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-gray-900 border border-white/10 w-full max-w-md p-8 rounded-3xl shadow-2xl relative">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
-                    <i className="fas fa-times"></i>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0a0a0a] p-4 font-sans">
+            <div className="w-full max-w-[400px] p-8 relative">
+                <button onClick={onClose} className="absolute top-0 right-0 text-gray-600 hover:text-gray-400 transition-colors">
+                    <i className="fas fa-times text-xl"></i>
                 </button>
 
-                <div className="text-center mb-8">
-                    <img src="/logo.webp" alt="Vyze Logo" className="h-16 w-auto mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-white">
-                        {isSignUp ? 'Criar Conta' : 'Entrar'}
+                {/* Header */}
+                <div className="flex flex-col items-center mb-8">
+                    <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center mb-6 border border-white/5">
+                        <img src="/logo.webp" alt="Logo" className="w-6 h-auto" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">
+                        {isSignUp ? 'Create an account' : 'Sign in to Design Builder'}
                     </h2>
-                    <p className="text-gray-400 text-sm mt-2">Entre para acessar seus projetos</p>
+                    <div className="flex items-center gap-1 text-sm">
+                        <span className="text-gray-500">
+                            {isSignUp ? 'Already have an account?' : 'New to the workspace?'}
+                        </span>
+                        <button
+                            onClick={() => setIsSignUp(!isSignUp)}
+                            className="text-[#039E73] hover:text-[#04d49b] font-medium transition-colors"
+                        >
+                            {isSignUp ? 'Sign in' : 'Create an account'}
+                        </button>
+                    </div>
                 </div>
 
                 {error && (
-                    <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-4 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg mb-6 text-sm text-center">
                         {error}
                     </div>
                 )}
 
-                <form onSubmit={handleAuth} className="space-y-4">
-                    <div>
-                        <label className="block text-gray-400 text-sm mb-1">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-white focus:border-lime-500 focus:outline-none transition-colors"
-                            required
-                        />
+                <form onSubmit={handleAuth} className="space-y-5">
+                    {/* Email Input */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">Work Email</label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i className="fas fa-envelope text-gray-600 group-focus-within:text-gray-400 transition-colors"></i>
+                            </div>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="you@company.com"
+                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label className="block text-gray-400 text-sm mb-1">Senha</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-white focus:border-lime-500 focus:outline-none transition-colors"
-                            required
-                        />
+
+                    {/* Password Input */}
+                    <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[10px] font-bold text-gray-500 tracking-wider uppercase">Password</label>
+                            {!isSignUp && (
+                                <button type="button" className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors">
+                                    Forgot?
+                                </button>
+                            )}
+                        </div>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i className="fas fa-lock text-gray-600 group-focus-within:text-gray-400 transition-colors"></i>
+                            </div>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter your password"
+                                className="w-full bg-[#141414] border border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-white placeholder-gray-700 focus:border-[#039E73] focus:ring-1 focus:ring-[#039E73] outline-none transition-all"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-gray-600 hover:text-gray-400 transition-colors font-medium"
+                            >
+                                {showPassword ? 'Hide' : 'Show'}
+                            </button>
+                        </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-lime-500 text-black font-bold py-3 rounded-xl hover:bg-lime-400 transition-colors disabled:opacity-50"
+                        className="w-full bg-[#039E73] hover:bg-[#027a59] text-white font-medium py-2.5 rounded-lg transition-all shadow-lg shadow-[#039E73]/20 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                     >
-                        {loading ? 'Processando...' : (isSignUp ? 'Cadastrar' : 'Entrar')}
+                        {loading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <i className="fas fa-circle-notch fa-spin"></i> Processing...
+                            </span>
+                        ) : (
+                            isSignUp ? 'Create account' : 'Continue to dashboard'
+                        )}
                     </button>
                 </form>
 
-                <div className="mt-6 text-center">
-                    <button
-                        onClick={() => setIsSignUp(!isSignUp)}
-                        className="text-gray-400 hover:text-white text-sm underline"
-                    >
-                        {isSignUp ? 'Já tem uma conta? Entrar' : 'Não tem conta? Cadastrar'}
-                    </button>
-                </div>
-            </div >
-        </div >
+                <p className="mt-8 text-center text-[10px] text-gray-600 leading-relaxed">
+                    By continuing, you agree to the Design Builder <a href="#" className="text-gray-500 hover:text-gray-400">Terms</a> and <a href="#" className="text-gray-500 hover:text-gray-400">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
     );
 };
 
