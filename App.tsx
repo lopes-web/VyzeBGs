@@ -262,15 +262,13 @@ const AppContent: React.FC = () => {
                             const savedProject = await createProject(user.id, title, mode, section);
                             if (savedProject) {
                                 setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
-                                setActiveTabId(savedProject.id);
                             }
-                        } catch (error) {
-                            console.error("Failed to create project:", error);
                         }
-                    }
-                }}
+                }
+                }
                 userEmail={user.email}
                 onLogout={signOut}
+                onOpenProfile={() => setShowProfileModal(true)}
             />
         );
     }

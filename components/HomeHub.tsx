@@ -14,9 +14,10 @@ interface HomeHubProps {
     ) => void;
     userEmail?: string;
     onLogout: () => void;
+    onOpenProfile: () => void;
 }
 
-const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, userEmail, onLogout }) => {
+const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, userEmail, onLogout, onOpenProfile }) => {
     const [prompt, setPrompt] = useState('');
     const [selectedMode, setSelectedMode] = useState<AppSection>('LANDING_PAGES');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -137,15 +138,19 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     <ThemeToggle />
                     {userEmail && (
                         <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-white/10">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs">
-                                {userEmail.substring(0, 2).toUpperCase()}
-                            </div>
                             <button
-                                onClick={onLogout}
-                                className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                title="Sair"
+                                onClick={onOpenProfile}
+                                className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-lime-500/20"
+                                title="Meu Perfil"
                             >
-                                <i className="fas fa-sign-out-alt"></i>
+                                {userEmail.substring(0, 2).toUpperCase()}
+                            </button>
+                            <button
+                                onClick={onOpenProfile}
+                                className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                title="Configurações"
+                            >
+                                <i className="fas fa-cog"></i>
                             </button>
                         </div>
                     )}
