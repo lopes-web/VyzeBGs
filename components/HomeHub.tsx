@@ -482,13 +482,14 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         ))}
                     </div>
                 </div>
-
-                {/* Footer / Info */}
-                <div className="absolute bottom-6 left-0 w-full text-center text-xs text-gray-400 dark:text-gray-600">
-                    <p>Pressione <kbd className="font-mono bg-gray-100 dark:bg-white/10 px-1 rounded">Enter</kbd> para gerar</p>
-                </div>
             </div>
-            );
+
+            {/* Footer / Info */}
+            <div className="absolute bottom-6 left-0 w-full text-center text-xs text-gray-400 dark:text-gray-600">
+                <p>Pressione <kbd className="font-mono bg-gray-100 dark:bg-white/10 px-1 rounded">Enter</kbd> para gerar</p>
+            </div>
+        </div>
+    );
 };
 
-            export default HomeHub;
+export default HomeHub;
