@@ -126,26 +126,28 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     };
 
     return (
-        <div className="h-[100dvh] flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
-            {/* Background Images */}
-            <div className="absolute inset-0 z-0">
-                {/* Light Mode Background */}
-                <img
-                    src="/bg-white.png"
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover opacity-100 dark:opacity-0 transition-opacity duration-500"
-                />
-
-                {/* Dark Mode Background */}
-                <img
-                    src="/bg-dark.png"
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 dark:opacity-100 transition-opacity duration-500"
-                />
-
-                {/* Contrast Overlay */}
-                <div className="absolute inset-0 bg-white/30 dark:bg-black/40 backdrop-blur-[1px]"></div>
-            </div>
+        <div className="relative h-[100dvh] w-full overflow-hidden flex flex-col bg-gray-50 dark:bg-black font-sans transition-colors duration-500">
+            {/* Backgrounds */}
+            <div
+                className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100 dark:opacity-0"
+                style={{
+                    backgroundImage: 'url("/bg-white.png")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            />
+            <div
+                className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-0 dark:opacity-100"
+                style={{
+                    backgroundImage: 'url("/bg-dark.png")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            />
+            {/* Contrast Overlay - Disabled based on user feedback */}
+            {/* <div className="absolute inset-0 bg-white/30 dark:bg-black/40 backdrop-blur-[1px]"></div> */}
 
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-6 z-10">
@@ -496,7 +498,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div className="absolute bottom-6 left-0 w-full text-center text-xs text-gray-400 dark:text-gray-600">
                 <p>Pressione <kbd className="font-mono bg-gray-100 dark:bg-white/10 px-1 rounded">Enter</kbd> para gerar</p>
             </div>
-        </div >
+        </div>
     );
 };
 
