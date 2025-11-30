@@ -220,6 +220,52 @@ const AppContent: React.FC = () => {
             <>
                 <HomeHub
                     onSelectSection={setCurrentSection}
+                    onPromptSubmit={async (prompt, section, principalFile, styleReferenceFile, generatorMode, secondaryFiles) => {
+                        if (!user) return;
+
+                        const tempId = crypto.randomUUID();
+                        const newTab: ProjectTab = {
+                            id: tempId,
+                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (${generatorMode === 'HUMAN' ? 'Pessoa' : generatorMode === 'OBJECT' ? 'Produto' : generatorMode === 'INFOPRODUCT' ? 'Expert' : 'Edit'})`,
+                            mode: generatorMode || 'HUMAN',
+                            section: section,
+                            createdAt: Date.now(),
+                            initialData: {
+                                prompt,
+                                referenceImage: principalFile,
+                                styleReferenceImage: styleReferenceFile,
+                                secondaryElements: secondaryFiles,
+                                shouldAutoGenerate: true,
+                                generatorMode
+                            }
+                        };
+
+                        // Update State
+                        setTabs(prev => [...prev, newTab]);
+                        setActiveTabId(tempId);
+
+                        // Persist to DB
+                        try {
+                            const create = async () => {
+                                const titleMap: Record<string, string> = {
+                                    'HUMAN': 'Pessoa',
+                                    'OBJECT': 'Produto',
+                                    'ENHANCE': 'Edit',
+                                    'INFOPRODUCT': 'Expert'
+                                };
+                                const title = `Projeto ${tabs.filter(t => t.section === section).length + 1} (${titleMap[generatorMode || 'HUMAN'] || 'Novo'})`;
+                                const mode = generatorMode || 'HUMAN';
+
+                                const savedProject = await createProject(user.id, title, mode, section);
+                                if (savedProject) {
+                                    setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
+                                }
+                            };
+                            create();
+                        } catch (error) {
+                            console.error("Failed to create project:", error);
+                        }
+                    }}
                     onNewProjectFromHistory={async ({ section, prompt, principalFile, styleReferenceFile, secondaryFiles, generatorMode }) => {
                         if (!user) return;
 

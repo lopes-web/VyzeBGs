@@ -440,17 +440,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Preview Tooltip */}
                                 {principalPreview && (
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-1 bg-gray-800 rounded-lg shadow-xl border border-white/10 animate-in fade-in zoom-in-95">
-                                        <div className="relative w-16 h-16 rounded overflow-hidden">
-                                            <img src={principalPreview} alt="Preview" className="w-full h-full object-cover" />
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); clearPrincipal(); }}
-                                                className="absolute top-0 right-0 bg-black/50 hover:bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-bl-lg text-xs transition-colors"
-                                            >
-                                                <i className="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <div className="hidden"></div>
                                 )}
                             </div>
 
