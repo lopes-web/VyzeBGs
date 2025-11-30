@@ -131,10 +131,10 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             {/* Background Effects */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 <EtherealShadow
-                    className="opacity-60 dark:opacity-40"
-                    color="rgba(132, 204, 22, 0.4)" // Lime-500-ish
-                    animation={{ scale: 120, speed: 80 }}
-                    noise={{ opacity: 0.5, scale: 1 }}
+                    className=""
+                    color="rgba(128, 128, 128, 1)"
+                    animation={{ scale: 100, speed: 90 }}
+                    noise={{ opacity: 1, scale: 1.2 }}
                 />
             </div>
 
