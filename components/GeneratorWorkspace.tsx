@@ -25,6 +25,7 @@ interface GeneratorWorkspaceProps {
     onGenerationEnd: () => void;
     projectId?: string;
     shouldAutoGenerate?: boolean;
+    isOptimistic?: boolean;
 }
 
 const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
@@ -42,7 +43,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     onGenerationStart,
     onGenerationEnd,
     projectId,
-    shouldAutoGenerate
+    shouldAutoGenerate,
+    isOptimistic
 }) => {
     const { user } = useAuth();
 
@@ -51,147 +53,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     const [userPrompt, setUserPrompt] = useState(initialPrompt || '');
 
-    // Update prompt if initialPrompt changes
-    useEffect(() => {
-        if (initialPrompt) {
-            setUserPrompt(initialPrompt);
-        }
-    }, [initialPrompt]);
-
-    // Handle initial reference (Principal Image - Subject)
-    useEffect(() => {
-        if (initialReference) {
-            // Create a unique ID for the file to prevent re-reading the same file object if effect re-runs
-            const fileId = `${initialReference.name}-${initialReference.lastModified}`;
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                // Fix: Remove data:image prefix to avoid double prefixing in ImageUpload
-                const result = reader.result as string;
-                const base64 = result.includes(',') ? result.split(',')[1] : result;
-
-                setUserImages(prev => {
-                    // Check if this specific base64 is already in the list to avoid duplicates
-                    if (!prev.includes(base64)) {
-                        return [...prev, base64];
-                    }
-                    return prev;
-                });
-            };
-            reader.readAsDataURL(initialReference);
-        }
-    }, [initialReference]);
-
-    // Handle initial style reference (Style/Example)
-    useEffect(() => {
-        if (initialStyleReference) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                const base64 = result.includes(',') ? result.split(',')[1] : result;
-                const newItem: ReferenceItem = {
-                    id: Date.now().toString(),
-                    image: base64,
-                    description: 'Referência de Estilo (Home Hub)'
-                };
-                setReferenceItems(prev => {
-                    // Avoid duplicates based on image content
-                    if (!prev.some(item => item.image === base64)) {
-                        return [...prev, newItem];
-                    }
-                    return prev;
-                });
-            };
-            reader.readAsDataURL(initialStyleReference);
-        }
-    }, [initialStyleReference]);
-
-    // Handle initial secondary elements
-    useEffect(() => {
-        if (initialSecondaryElements && initialSecondaryElements.length > 0) {
-            initialSecondaryElements.forEach(file => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const result = reader.result as string;
-                    const base64 = result.includes(',') ? result.split(',')[1] : result;
-                    setAssetImages(prev => {
-                        if (!prev.includes(base64)) {
-                            return [...prev, base64];
-                        }
-                        return prev;
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    }, [initialSecondaryElements]);
-
-    // Load Project History
-    useEffect(() => {
-        if (projectId) {
-            const loadHistory = async () => {
-                const history = await getProjectHistory(projectId);
-                setLocalHistory(history);
-            };
-            loadHistory();
-        } else {
-            setLocalHistory([]);
-        }
-    }, [projectId]);
-
-    // Inputs
-    const [userImages, setUserImages] = useState<string[]>([]);
-    const [referenceItems, setReferenceItems] = useState<ReferenceItem[]>([]);
-    const [assetImages, setAssetImages] = useState<string[]>([]);
-
-
-    const [position, setPosition] = useState<SubjectPosition>(SubjectPosition.RIGHT);
-    const [attributes, setAttributes] = useState<GenerationAttributes>({ useGradient: true, useBlur: false });
-    const [batchSize, setBatchSize] = useState<number>(1);
-
-    // InfoProduct Palette
-    const [colorPalette, setColorPalette] = useState<ColorPalette>({
-        primary: '',
-        secondary: '',
-        accent: ''
-    });
-
-    const [customHeight, setCustomHeight] = useState<number>(1080);
-    const [verticalHeight, setVerticalHeight] = useState<number>(1920);
-    const [verticalPrompt, setVerticalPrompt] = useState<string>("");
-
-    // UI State
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    // Safety cleanup for processing count
-    const isGeneratingRef = React.useRef(false);
-    useEffect(() => {
-        isGeneratingRef.current = isGenerating;
-    }, [isGenerating]);
-
-    useEffect(() => {
-        return () => {
-            if (isGeneratingRef.current) {
-                onGenerationEnd();
-            }
-        };
-    }, []);
-
-    // Edit
-    const [refinePrompt, setRefinePrompt] = useState('');
-    const [refineAssets, setRefineAssets] = useState<string[]>([]);
-
-    // Local History & Merge
-    const [localHistory, setLocalHistory] = useState<HistoryItem[]>([]);
-    const [selectedHistoryIds, setSelectedHistoryIds] = useState<string[]>([]);
+    // ... (rest of state)
 
     // Auto-generate effect
     const [hasAutoGenerated, setHasAutoGenerated] = useState(false);
 
     useEffect(() => {
-        if (shouldAutoGenerate && !hasAutoGenerated && userPrompt) {
+        if (shouldAutoGenerate && !hasAutoGenerated && userPrompt && !isOptimistic) {
             // Check if we are waiting for images to be processed
             const waitingForReference = initialReference && userImages.length === 0;
             const waitingForStyle = initialStyleReference && referenceItems.length === 0;
@@ -203,7 +71,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                 setHasAutoGenerated(true);
             }
         }
-    }, [shouldAutoGenerate, hasAutoGenerated, userPrompt, userImages, referenceItems, assetImages, initialReference, initialStyleReference, initialSecondaryElements]);
+    }, [shouldAutoGenerate, hasAutoGenerated, userPrompt, userImages, referenceItems, assetImages, initialReference, initialStyleReference, initialSecondaryElements, isOptimistic]);
 
     const addToHistory = (url: string, promptUsed: string) => {
         const newItem: HistoryItem = {

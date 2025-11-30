@@ -237,7 +237,8 @@ const AppContent: React.FC = () => {
                                 secondaryElements: secondaryFiles,
                                 shouldAutoGenerate: true,
                                 generatorMode
-                            }
+                            },
+                            isOptimistic: true
                         };
 
                         // Update State
@@ -259,7 +260,8 @@ const AppContent: React.FC = () => {
 
                                 const savedProject = await createProject(user.id, title, mode, section);
                                 if (savedProject) {
-                                    setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id } : t));
+                                    setTabs(prev => prev.map(t => t.id === tempId ? { ...t, id: savedProject.id, isOptimistic: false } : t));
+                                    setActiveTabId(prev => prev === tempId ? savedProject.id : prev);
                                 }
                             };
                             create();
@@ -466,6 +468,7 @@ const AppContent: React.FC = () => {
                             onGenerationStart={() => setGeneratingCount(c => c + 1)}
                             onGenerationEnd={() => setGeneratingCount(c => Math.max(0, c - 1))}
                             projectId={tab.id}
+                            isOptimistic={tab.isOptimistic}
                         />
                     </div>
                 ))}

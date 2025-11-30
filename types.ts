@@ -47,6 +47,7 @@ export interface ProjectTab {
   mode: GeneratorMode;
   section: AppSection;
   createdAt: number;
+  isOptimistic?: boolean;
   initialData?: {
     prompt?: string;
     referenceImage?: File | null;
