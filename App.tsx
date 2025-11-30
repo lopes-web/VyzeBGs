@@ -243,6 +243,7 @@ const AppContent: React.FC = () => {
                         // Update State
                         setTabs(prev => [...prev, newTab]);
                         setActiveTabId(tempId);
+                        setCurrentSection(section); // Fix: Navigate to workspace
 
                         // Persist to DB
                         try {

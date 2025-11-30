@@ -428,21 +428,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 )}
                             </div>
 
-                            {/* Principal Image Quick Upload (Paperclip) - Mapped to Principal */}
-                            <div className="relative">
-                                <button
-                                    onClick={() => principalInputRef.current?.click()}
-                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${principalPreview ? 'bg-lime-500/20 text-lime-400' : 'hover:bg-white/5 text-gray-400 hover:text-gray-300'}`}
-                                    title="Adicionar imagem principal"
-                                >
-                                    <i className="fas fa-paperclip"></i>
-                                </button>
-
-                                {/* Preview Tooltip */}
-                                {principalPreview && (
-                                    <div className="hidden"></div>
-                                )}
-                            </div>
+                            {/* Principal Image Quick Upload (Paperclip) - REMOVED */}
 
                             <input
                                 type="text"
