@@ -500,27 +500,26 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         />
 
                         <ImageUpload
-                            label={currentMode === 'INFOPRODUCT' ? "Elementos 3D / Ícones (Flutuantes)" : "Elementos Secundários"}
+                            label="Elementos Secundários (Opcional)"
                             value={assetImages}
                             onChange={setAssetImages}
                             multiple={true}
-                            description={currentMode === 'INFOPRODUCT' ? "Serão desfocados no fundo (Ex: moedas, gráficos)." : "Logotipos ou elementos extras."}
+                            description="Objetos extras para compor o cenário"
                         />
                     </div>
 
-                    {/* Configuration */}
+                    {/* Configuration Panel */}
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className="fas fa-sliders-h text-lime-600 dark:text-lime-400"></i> Configuração
-                        </h2>
+                        <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
 
-                        <PositionSelector value={position} onChange={setPosition} />
+                        <div className="mb-6">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Posição do Sujeito</label>
+                            <PositionSelector value={position} onChange={setPosition} />
+                        </div>
 
-                        {/* INFOPRODUCT COLOR PALETTE */}
                         {currentMode === 'INFOPRODUCT' && (
-                            <div className="mb-6 space-y-3 border-t border-gray-200 dark:border-white/5 py-4">
-                                <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Paleta de Cores e Luz</h3>
-
+                            <div className="mb-6 space-y-3">
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Paleta de Cores (Marca)</label>
                                 <div>
                                     <label className="block text-xs text-gray-500 mb-1">Fundo (Predominante)</label>
                                     <input
@@ -727,6 +726,33 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                             </button>
                                         </div>
                                     </div>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="h-full flex flex-col items-center justify-center text-gray-600 bg-gray-50 dark:bg-black/20 rounded-xl">
+                            {isGenerating ? (
+                                <div className="text-center w-full max-w-md px-8">
+                                    <div className="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                                        <span>Renderizando com Gemini...</span>
+                                        <span>{Math.round(progress)}%</span>
+                                    </div>
+                                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-lime-500 to-emerald-500 transition-all duration-200 ease-out"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-4 animate-pulse">
+                                        Criando detalhes e iluminação...
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="text-center p-8">
+                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
+                                    <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
+                                        {currentMode === 'ENHANCE' ? 'Melhorar Imagem' : currentMode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${currentMode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
+                                    </p>
                                 </div>
                             )}
                         </div>
