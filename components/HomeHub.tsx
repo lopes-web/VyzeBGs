@@ -1,12 +1,21 @@
-section: AppSection,
-    principalFile ?: File,
-    styleReferenceFile ?: File,
-    generatorMode ?: GeneratorMode,
-    secondaryFiles ?: File[]
+import React, { useState, useRef } from 'react';
+import { AppSection, GeneratorMode } from '../types';
+import ThemeToggle from './ThemeToggle';
+import { EtherealShadow } from './EtherealShadow';
+
+interface HomeHubProps {
+    onSelectSection: (section: AppSection) => void;
+    onPromptSubmit: (
+        prompt: string,
+        section: AppSection,
+        principalFile?: File,
+        styleReferenceFile?: File,
+        generatorMode?: GeneratorMode,
+        secondaryFiles?: File[]
     ) => void;
-userEmail ?: string;
-onLogout: () => void;
-onOpenProfile: () => void;
+    userEmail?: string;
+    onLogout: () => void;
+    onOpenProfile: () => void;
 }
 
 const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, userEmail, onLogout, onOpenProfile }) => {
