@@ -167,6 +167,29 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    // Progress State
+    const [progress, setProgress] = useState(0);
+
+    // Simulate Progress
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (isGenerating) {
+            setProgress(0);
+            interval = setInterval(() => {
+                setProgress(prev => {
+                    if (prev >= 95) return 95; // Stall at 95%
+                    // Slow down as it gets higher
+                    const increment = prev < 50 ? 5 : prev < 80 ? 2 : 0.5;
+                    return Math.min(prev + increment, 95);
+                });
+            }, 200);
+        } else {
+            setProgress(100);
+            setTimeout(() => setProgress(0), 500); // Reset after completion
+        }
+        return () => clearInterval(interval);
+    }, [isGenerating]);
+
     // Safety cleanup for processing count
     const isGeneratingRef = React.useRef(false);
     useEffect(() => {
@@ -704,22 +727,6 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-600 bg-gray-50 dark:bg-black/20 rounded-xl">
-                            {isGenerating ? (
-                                <div className="text-center">
-                                    <div className="inline-block w-16 h-16 border-4 border-lime-500/30 border-t-lime-500 rounded-full animate-spin mb-4"></div>
-                                    <p className="text-lime-600 dark:text-lime-400 animate-pulse font-medium">Renderizando com Gemini...</p>
-                                </div>
-                            ) : (
-                                <div className="text-center p-8">
-                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
-                                    <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
-                                        {currentMode === 'ENHANCE' ? 'Melhorar Imagem' : currentMode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${currentMode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
-                                    </p>
                                 </div>
                             )}
                         </div>
