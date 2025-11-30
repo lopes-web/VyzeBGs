@@ -128,8 +128,17 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     return (
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
             {/* Background Effects */}
-            {/* Background Effects */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-lime-500/10 dark:bg-lime-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+            {/* Background Images */}
+            <div className="absolute inset-0 z-0">
+                {/* Light Mode Background */}
+                <div className="absolute inset-0 bg-[url('/background-white.avif')] bg-cover bg-center opacity-100 dark:opacity-0 transition-opacity duration-500"></div>
+
+                {/* Dark Mode Background */}
+                <div className="absolute inset-0 bg-[url('/background-dark.avif')] bg-cover bg-center opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
+
+                {/* Contrast Overlay */}
+                <div className="absolute inset-0 bg-white/30 dark:bg-black/40 backdrop-blur-[1px]"></div>
+            </div>
 
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-6 z-10">
