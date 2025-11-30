@@ -126,12 +126,12 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     };
 
     return (
-        <div className="relative h-[100dvh] w-full overflow-hidden flex flex-col bg-gray-50 dark:bg-black font-sans transition-colors duration-500">
+        <div className="relative h-[100dvh] w-full overflow-hidden flex flex-col bg-white dark:bg-black font-sans transition-colors duration-500">
             {/* Backgrounds */}
             <div
                 className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100 dark:opacity-0"
                 style={{
-                    backgroundImage: 'url("/bg-white.png")',
+                    backgroundImage: 'url("/bg-white.png?v=1")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
@@ -140,7 +140,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div
                 className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-0 dark:opacity-100"
                 style={{
-                    backgroundImage: 'url("/bg-dark.png")',
+                    backgroundImage: 'url("/bg-dark.png?v=1")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
