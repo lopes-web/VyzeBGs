@@ -165,18 +165,21 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 </div>
             </div>
 
+            {/* Background Overlay for Contrast */}
+            <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none"></div>
+
             {/* Main Content */}
-            <div className="flex-grow flex flex-col items-center justify-center p-4 z-10 -mt-10">
+            <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 -mt-10">
 
                 {/* Hero Text */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-12 space-y-4">
                     <div className="inline-flex items-center justify-center mb-4">
                         <i className="fas fa-sparkles text-lime-500 text-2xl animate-pulse"></i>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight text-white">
+                    <h1 className="text-6xl md:text-7xl font-black tracking-tight bg-gradient-to-b from-white via-gray-200 to-gray-500 bg-clip-text text-transparent drop-shadow-2xl">
                         Como posso ajudar?
                     </h1>
-                    <p className="text-gray-400 text-lg">
+                    <p className="text-lg text-gray-400 max-w-xl mx-auto font-light">
                         Crie assets incríveis para seus projetos em segundos.
                     </p>
                 </div>
