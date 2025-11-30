@@ -124,15 +124,24 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             default: return 'Pessoa';
         }
     };
+
     return (
-        <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
+        <div className="h-[100dvh] flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
             {/* Background Images */}
             <div className="absolute inset-0 z-0">
                 {/* Light Mode Background */}
-                <div className="absolute inset-0 bg-[url('/bg-white.png')] bg-cover bg-center opacity-100 dark:opacity-0 transition-opacity duration-500"></div>
+                <img
+                    src="/bg-white.png"
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover opacity-100 dark:opacity-0 transition-opacity duration-500"
+                />
 
                 {/* Dark Mode Background */}
-                <div className="absolute inset-0 bg-[url('/bg-dark.png')] bg-cover bg-center opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
+                <img
+                    src="/bg-dark.png"
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 dark:opacity-100 transition-opacity duration-500"
+                />
 
                 {/* Contrast Overlay */}
                 <div className="absolute inset-0 bg-white/30 dark:bg-black/40 backdrop-blur-[1px]"></div>
