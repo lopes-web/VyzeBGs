@@ -1,20 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { AppSection, GeneratorMode } from '../types';
-import ThemeToggle from './ThemeToggle';
-
-interface HomeHubProps {
-    onSelectSection: (section: AppSection) => void;
-    onPromptSubmit: (
-        prompt: string,
-        section: AppSection,
-        principalFile?: File,
-        styleReferenceFile?: File,
-        generatorMode?: GeneratorMode,
-        secondaryFiles?: File[]
+section: AppSection,
+    principalFile ?: File,
+    styleReferenceFile ?: File,
+    generatorMode ?: GeneratorMode,
+    secondaryFiles ?: File[]
     ) => void;
-    userEmail?: string;
-    onLogout: () => void;
-    onOpenProfile: () => void;
+userEmail ?: string;
+onLogout: () => void;
+onOpenProfile: () => void;
 }
 
 const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, userEmail, onLogout, onOpenProfile }) => {
@@ -127,7 +119,15 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     return (
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
             {/* Background Effects */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-lime-500/10 dark:bg-lime-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+            {/* Background Effects */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <EtherealShadow
+                    className="opacity-60 dark:opacity-40"
+                    color="rgba(132, 204, 22, 0.4)" // Lime-500-ish
+                    animation={{ scale: 120, speed: 80 }}
+                    noise={{ opacity: 0.5, scale: 1 }}
+                />
+            </div>
 
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-6 z-10">
