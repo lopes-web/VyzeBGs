@@ -338,13 +338,6 @@ const AppContent: React.FC = () => {
                                 >
                                     {user.email?.substring(0, 2).toUpperCase()}
                                 </button>
-                                <button
-                                    onClick={() => setShowProfileModal(true)}
-                                    className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                    title="Configurações"
-                                >
-                                    <i className="fas fa-cog"></i>
-                                </button>
                             </div>
                         ) : (
                             <button
