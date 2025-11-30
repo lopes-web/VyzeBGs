@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { AppSection, GeneratorMode } from '../types';
 import ThemeToggle from './ThemeToggle';
-import { EtherealShadow } from './EtherealShadow';
+
 
 interface HomeHubProps {
     onSelectSection: (section: AppSection) => void;
@@ -129,14 +129,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
             {/* Background Effects */}
             {/* Background Effects */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                <EtherealShadow
-                    className=""
-                    color="rgba(128, 128, 128, 1)"
-                    animation={{ scale: 100, speed: 90 }}
-                    noise={{ opacity: 0.05, scale: 1.2 }}
-                />
-            </div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-lime-500/10 dark:bg-lime-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-6 z-10">
