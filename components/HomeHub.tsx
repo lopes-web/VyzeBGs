@@ -124,16 +124,15 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             default: return 'Pessoa';
         }
     };
-
     return (
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300 relative">
             {/* Background Images */}
             <div className="absolute inset-0 z-0">
                 {/* Light Mode Background */}
-                <div className="absolute inset-0 bg-[url('/bg-white.svg')] bg-cover bg-center opacity-100 dark:opacity-0 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-[url('/bg-white.png')] bg-cover bg-center opacity-100 dark:opacity-0 transition-opacity duration-500"></div>
 
                 {/* Dark Mode Background */}
-                <div className="absolute inset-0 bg-[url('/bg-dark.svg')] bg-cover bg-center opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-[url('/bg-dark.png')] bg-cover bg-center opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
 
                 {/* Contrast Overlay */}
                 <div className="absolute inset-0 bg-white/30 dark:bg-black/40 backdrop-blur-[1px]"></div>
@@ -488,7 +487,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div className="absolute bottom-6 left-0 w-full text-center text-xs text-gray-400 dark:text-gray-600">
                 <p>Pressione <kbd className="font-mono bg-gray-100 dark:bg-white/10 px-1 rounded">Enter</kbd> para gerar</p>
             </div>
-        </div>
+        </div >
     );
 };
 
