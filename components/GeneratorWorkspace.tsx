@@ -165,7 +165,14 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     // UI State
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+    const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [error, setError] = useState<string | null>(null);
+
+    // Export State
+    const [showExportModal, setShowExportModal] = useState(false);
+    const [exportFormat, setExportFormat] = useState<'png' | 'jpeg' | 'webp'>('png');
+    const [exportQuality, setExportQuality] = useState(1);
 
     // Progress State
     const [progress, setProgress] = useState(0);
@@ -245,6 +252,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     const restoreFromHistory = (item: HistoryItem) => {
         setGeneratedImage(item.url);
+        setGeneratedImages([item.url]);
+        setSelectedImageIndex(0);
         // Optional: Restore prompt as well
         if (item.prompt && !item.prompt.includes("Auto-generated")) {
             setUserPrompt(item.prompt);
@@ -314,6 +323,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         setIsGenerating(true);
         setError(null);
         setGeneratedImage(null);
+        setGeneratedImages([]);
+        setSelectedImageIndex(0);
         onGenerationStart();
 
         try {
@@ -345,18 +356,14 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             const failResults = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
 
             if (successResults.length > 0) {
-                setGeneratedImage(successResults[0].value.image);
+                const newImages: string[] = [];
 
                 // Save to Supabase if logged in
                 if (user) {
                     for (const res of successResults) {
                         const publicUrl = await uploadImageToStorage(res.value.image, user.id);
                         if (publicUrl) {
-                            // Update Main View to WebP if this is the first image
-                            if (res === successResults[0]) {
-                                setGeneratedImage(publicUrl);
-                            }
-
+                            newImages.push(publicUrl);
                             const savedItem = await saveGeneration(
                                 user.id,
                                 publicUrl,
@@ -370,14 +377,20 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             }
                         } else {
                             // Fallback local
+                            newImages.push(res.value.image);
                             addToHistory(res.value.image, res.value.finalPrompt);
                         }
                     }
                 } else {
                     successResults.forEach(res => {
+                        newImages.push(res.value.image);
                         addToHistory(res.value.image, res.value.finalPrompt);
                     });
                 }
+
+                setGeneratedImages(newImages);
+                setGeneratedImage(newImages[0]);
+                setSelectedImageIndex(0);
             }
 
             if (failResults.length > 0) {
@@ -452,23 +465,42 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         setAttributes(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-    const handleDownload = async (url: string) => {
+    const handleExport = async () => {
+        if (!generatedImage) return;
+
         try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = generatedImage;
+            await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            ctx.drawImage(img, 0, 0);
+
+            const dataUrl = canvas.toDataURL(`image/${exportFormat}`, exportQuality);
 
             const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = `design - builder - ${Date.now()}.webp`;
+            link.href = dataUrl;
+            link.download = `vyze-export-${Date.now()}.${exportFormat}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            window.URL.revokeObjectURL(blobUrl);
-        } catch (error) {
-            console.error('Download failed:', error);
-            window.open(url, '_blank');
+            setShowExportModal(false);
+        } catch (err) {
+            console.error("Export failed", err);
+            setError("Falha ao exportar imagem. Tente novamente.");
         }
+    };
+
+    const handleDownload = async (url: string) => {
+        setShowExportModal(true);
     };
 
     return (
@@ -695,9 +727,28 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                 </button>
                             </div>
 
+                            {/* Batch Thumbnails Overlay */}
+                            {generatedImages.length > 1 && (
+                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 p-2 bg-black/50 backdrop-blur-md rounded-xl z-10">
+                                    {generatedImages.map((img, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => {
+                                                setGeneratedImage(img);
+                                                setSelectedImageIndex(idx);
+                                            }}
+                                            className={`w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? 'border-lime-500 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
+                                                }`}
+                                        >
+                                            <img src={img} alt={`Variation ${idx + 1}`} className="w-full h-full object-cover" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
                             {/* Validation Actions Overlay */}
                             {!isGenerating && (
-                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <div className="bg-white/90 dark:bg-black/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-4 shadow-2xl">
                                         <div className="flex-1 w-full">
                                             <input
@@ -847,6 +898,62 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                     </div>
                 )}
             </div>
+
+            {/* Export Modal */}
+            {showExportModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+                        <button
+                            onClick={() => setShowExportModal(false)}
+                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                        >
+                            <i className="fas fa-times"></i>
+                        </button>
+
+                        <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Exportar Imagem</h3>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Formato</label>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {['png', 'jpeg', 'webp'].map((fmt) => (
+                                        <button
+                                            key={fmt}
+                                            onClick={() => setExportFormat(fmt as any)}
+                                            className={`py-2 px-4 rounded-lg border text-sm font-bold uppercase transition-all ${exportFormat === fmt
+                                                    ? 'bg-lime-500 text-black border-lime-500'
+                                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-500 border-transparent hover:bg-gray-200 dark:hover:bg-gray-700'
+                                                }`}
+                                        >
+                                            {fmt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Qualidade ({Math.round(exportQuality * 100)}%)</label>
+                                <input
+                                    type="range"
+                                    min="0.1"
+                                    max="1"
+                                    step="0.1"
+                                    value={exportQuality}
+                                    onChange={(e) => setExportQuality(parseFloat(e.target.value))}
+                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleExport}
+                                className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-3 rounded-xl shadow-lg transition-transform transform active:scale-95"
+                            >
+                                <i className="fas fa-download mr-2"></i> Baixar Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
