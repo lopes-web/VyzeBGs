@@ -411,3 +411,72 @@ export const sendAgentChat = async (
     throw new Error(error.message || "Failed to get response from agent");
   }
 };
+
+export const inpaintImage = async (
+  originalImageBase64: string,
+  maskImageBase64: string,
+  prompt: string
+): Promise<string> => {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error("API Key not found");
+  const ai = new GoogleGenAI({ apiKey });
+
+  // Create a black and white mask from the red overlay if needed, 
+  // but Gemini is smart enough to understand "edit the area covered by the second image mask".
+  // Ideally, we should send a B&W mask where white = edit, black = keep.
+  // For now, we will send the mask as is and instruct the model.
+
+  const parts: any[] = [
+    {
+      inlineData: {
+        data: cleanBase64(originalImageBase64),
+        mimeType: 'image/png',
+      },
+    },
+    {
+      inlineData: {
+        data: cleanBase64(maskImageBase64),
+        mimeType: 'image/png',
+      },
+    },
+    {
+      text: `INPAINTING TASK:
+             The first image is the ORIGINAL IMAGE.
+             The second image is the MASK (the red/colored areas indicate what to edit).
+             
+             INSTRUCTION:
+             Edit the ORIGINAL IMAGE only in the areas highlighted by the MASK.
+             ${prompt ? `User Request: ${prompt}` : 'Remove the masked object and fill the background naturally (Inpainting/Removal).'}
+             
+             CRITICAL:
+             1. Do NOT change anything outside the masked area.
+             2. Blend the edges seamlessly.
+             3. Maintain the original resolution and style.`
+    }
+  ];
+
+  try {
+    const response = await ai.models.generateContent({
+      model: MODEL_NAME,
+      contents: { parts },
+      config: {
+        imageConfig: {
+          aspectRatio: "16:9", // Or match original
+          imageSize: "2K"
+        }
+      },
+    });
+
+    if (response.candidates && response.candidates[0] && response.candidates[0].content && response.candidates[0].content.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          return `data:image/png;base64,${part.inlineData.data}`;
+        }
+      }
+    }
+    throw new Error("No image data found in response.");
+  } catch (error: any) {
+    console.error("Inpainting Error:", error);
+    throw new Error(error.message || "Failed to inpaint image");
+  }
+};
