@@ -89,20 +89,13 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
     };
 
     return (
-        <div className="relative" style={{ width, height }}>
-            {/* Background Image */}
-            <img
-                src={imageUrl}
-                alt="Background"
-                className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-            />
-
+        <div className="absolute inset-0 w-full h-full">
             {/* Drawing Canvas */}
             <canvas
                 ref={canvasRef}
                 width={width}
                 height={height}
-                className={`absolute inset-0 w-full h-full touch-none cursor-crosshair ${isDrawingEnabled ? '' : 'pointer-events-none'}`}
+                className={`w-full h-full touch-none cursor-crosshair ${isDrawingEnabled ? '' : 'pointer-events-none'}`}
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}

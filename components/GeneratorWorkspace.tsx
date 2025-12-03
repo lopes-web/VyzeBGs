@@ -426,6 +426,22 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         }
     };
 
+    const urlToBase64 = async (url: string): Promise<string> => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error("Error converting URL to base64:", error);
+            throw error;
+        }
+    };
+
     const handleInpaint = async () => {
         if (!generatedImage || !eraserMask) return;
 
@@ -439,7 +455,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         onGenerationStart();
 
         try {
-            const result = await inpaintImage(generatedImage, eraserMask, eraserPrompt);
+            // Convert generatedImage to base64 if it's a URL
+            let imageBase64 = generatedImage;
+            if (generatedImage.startsWith('http')) {
+                imageBase64 = await urlToBase64(generatedImage);
+            }
+
+            const result = await inpaintImage(imageBase64, eraserMask, eraserPrompt);
             setGeneratedImage(result);
             addToHistory(result, `Magic Eraser: ${eraserPrompt || 'Remoção'} `);
             setIsEraserActive(false);
