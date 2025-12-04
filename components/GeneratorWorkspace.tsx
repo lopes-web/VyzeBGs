@@ -932,6 +932,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                         onChange={setRefineAssets}
                                         multiple={true}
                                         description=""
+                                        compact={true}
                                     />
                                 </div>
                                 <div className="flex-1 flex gap-2">

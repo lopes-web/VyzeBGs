@@ -7,9 +7,10 @@ interface ImageUploadProps {
   onChange: (val: any) => void;
   description?: string;
   multiple?: boolean;
+  compact?: boolean;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, description, multiple = false }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, description, multiple = false, compact = false }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -107,7 +108,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
         onDrop={handleDrop}
         className={`
           relative flex flex-col items-center justify-center w-full 
-          ${(!multiple && value) ? 'h-48' : 'h-32'}
+          ${compact ? 'h-12' : (!multiple && value) ? 'h-48' : 'h-32'}
           border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200
           ${isDragging
             ? 'border-lime-500 bg-lime-500/10'
@@ -135,12 +136,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center p-4">
-            <i className={`fas fa-cloud-upload-alt text-3xl mb-2 ${isDragging ? 'text-lime-500 dark:text-lime-400' : 'text-gray-400 dark:text-gray-500'}`}></i>
-            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400 text-center">
-              {multiple ? 'Adicionar mais imagens' : 'Clique ou arraste'}
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">PNG, JPG</p>
+          <div className={`flex flex-col items-center justify-center ${compact ? 'p-1' : 'p-4'}`}>
+            <i className={`fas fa-cloud-upload-alt ${compact ? 'text-lg' : 'text-3xl mb-2'} ${isDragging ? 'text-lime-500 dark:text-lime-400' : 'text-gray-400 dark:text-gray-500'}`}></i>
+            {!compact && (
+              <>
+                <p className="mb-1 text-sm text-gray-500 dark:text-gray-400 text-center">
+                  {multiple ? 'Adicionar mais imagens' : 'Clique ou arraste'}
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">PNG, JPG</p>
+              </>
+            )}
           </div>
         )}
         <input
