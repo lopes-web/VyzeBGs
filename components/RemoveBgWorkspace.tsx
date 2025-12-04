@@ -163,7 +163,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                                 <img
                                     src={outputImage || `data:image/png;base64,${inputImage}`}
                                     alt="Workspace"
-                                    className="max-w-full max-h-full object-contain"
+                                    className="max-w-full max-h-[400px] object-contain shadow-lg"
                                 />
 
                                 {/* Loading Overlay */}
