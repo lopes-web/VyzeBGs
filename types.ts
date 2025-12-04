@@ -5,7 +5,7 @@ export enum SubjectPosition {
   RIGHT = 'RIGHT',
 }
 
-export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT';
+export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
 
 export type AppSection = 'LANDING_PAGES' | 'DESIGNS';
 

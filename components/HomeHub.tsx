@@ -185,7 +185,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full mb-12 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl w-full mb-12 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     {/* Landing Pages Card */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
@@ -219,6 +219,24 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         <h3 className="text-lg font-bold mb-1 text-white">Designs</h3>
                         <p className="text-sm text-gray-400">
                             Crie texturas, padrões e elementos gráficos artísticos.
+                        </p>
+                    </button>
+
+                    {/* Remove BG Card */}
+                    <button
+                        onClick={() => onSelectSection('REMOVE_BG' as any)}
+                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="flex items-start justify-between mb-4">
+                            <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400 group-hover:bg-blue-500 group-hover:text-black transition-colors">
+                                <i className="fas fa-eraser text-xl"></i>
+                            </div>
+                            <i className="fas fa-arrow-right text-gray-700 group-hover:text-blue-500 transition-colors -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"></i>
+                        </div>
+                        <h3 className="text-lg font-bold mb-1 text-white">Remover Fundo</h3>
+                        <p className="text-sm text-gray-400">
+                            Remova o fundo de imagens automaticamente com IA.
                         </p>
                     </button>
                 </div>

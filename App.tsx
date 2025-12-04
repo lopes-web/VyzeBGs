@@ -14,6 +14,7 @@ import { ThemeProvider } from './components/ThemeContext';
 import ThemeToggle from './components/ThemeToggle';
 import HomeHub from './components/HomeHub';
 import ProfileModal from './components/ProfileModal';
+import RemoveBgWorkspace from './components/RemoveBgWorkspace';
 
 const AppContent: React.FC = () => {
     const { user, signOut, loading } = useAuth();
@@ -335,6 +336,14 @@ const AppContent: React.FC = () => {
                     )
                 }
             </>
+        );
+    }
+
+    if (currentSection === 'REMOVE_BG' as any) {
+        return (
+            <RemoveBgWorkspace
+                onBack={() => setCurrentSection(null)}
+            />
         );
     }
 
