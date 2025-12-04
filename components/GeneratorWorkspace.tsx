@@ -749,12 +749,30 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                 {/* Main Preview */}
                 <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]">
                     {generatedImage ? (
-                        <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-black/20 rounded-xl overflow-hidden">
-                            <img
-                                src={generatedImage}
-                                alt="Generated Background"
-                                className="max-w-full max-h-full object-contain shadow-2xl"
-                            />
+                        <div className="relative w-full h-full flex items-center justify-center bg-gray-100 dark:bg-black/20 rounded-xl overflow-hidden p-4">
+                            {/* Image Container with Aspect Ratio Enforcement */}
+                            <div className="relative max-w-full max-h-full aspect-video shadow-2xl">
+                                <img
+                                    src={generatedImage}
+                                    alt="Generated Background"
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+
+                                {/* Magic Eraser Overlay - Inside the same container to match dimensions */}
+                                {isEraserActive && (
+                                    <div className="absolute inset-0 z-10 rounded-lg overflow-hidden">
+                                        <MagicEraserCanvas
+                                            imageUrl={generatedImage}
+                                            width={1920}
+                                            height={1080}
+                                            onMaskChange={setEraserMask}
+                                            isDrawingEnabled={true}
+                                            brushSize={40}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                                 <button
                                     onClick={() => setIsEraserActive(!isEraserActive)}
@@ -775,42 +793,30 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                 </button>
                             </div>
 
-                            {/* Magic Eraser Overlay */}
-                            {isEraserActive && generatedImage && (
-                                <div className="absolute inset-0 z-10 flex items-center justify-center">
-                                    <MagicEraserCanvas
-                                        imageUrl={generatedImage}
-                                        width={1920} // Should ideally match rendered size, but for now fixed or responsive
-                                        height={1080}
-                                        onMaskChange={setEraserMask}
-                                        isDrawingEnabled={true}
-                                        brushSize={40}
+                            {/* Eraser Controls - Floating outside the image container but visible */}
+                            {isEraserActive && (
+                                <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-4 rounded-xl flex flex-col gap-3 border border-white/10 shadow-2xl w-80 z-30">
+                                    <div className="flex justify-between items-center text-white text-xs font-bold uppercase">
+                                        <span><i className="fas fa-magic mr-2 text-lime-500"></i>Magic Eraser</span>
+                                        <button onClick={() => setIsEraserActive(false)} className="text-gray-400 hover:text-white"><i className="fas fa-times"></i></button>
+                                    </div>
+                                    <p className="text-xs text-gray-400">Pinte sobre o objeto que deseja remover ou alterar.</p>
+
+                                    <input
+                                        type="text"
+                                        value={eraserPrompt}
+                                        onChange={(e) => setEraserPrompt(e.target.value)}
+                                        placeholder="Descreva a alteração (Opcional)"
+                                        className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-xs text-white placeholder-gray-500 focus:border-lime-500 outline-none"
                                     />
 
-                                    {/* Eraser Controls */}
-                                    <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-4 rounded-xl flex flex-col gap-3 border border-white/10 shadow-2xl w-80">
-                                        <div className="flex justify-between items-center text-white text-xs font-bold uppercase">
-                                            <span><i className="fas fa-magic mr-2 text-lime-500"></i>Magic Eraser</span>
-                                            <button onClick={() => setIsEraserActive(false)} className="text-gray-400 hover:text-white"><i className="fas fa-times"></i></button>
-                                        </div>
-                                        <p className="text-xs text-gray-400">Pinte sobre o objeto que deseja remover ou alterar.</p>
-
-                                        <input
-                                            type="text"
-                                            value={eraserPrompt}
-                                            onChange={(e) => setEraserPrompt(e.target.value)}
-                                            placeholder="Descreva a alteração (Opcional)"
-                                            className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-xs text-white placeholder-gray-500 focus:border-lime-500 outline-none"
-                                        />
-
-                                        <button
-                                            onClick={handleInpaint}
-                                            disabled={!eraserMask}
-                                            className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 rounded-lg text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            {eraserPrompt ? 'Substituir' : 'Apagar Objeto'}
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={handleInpaint}
+                                        disabled={!eraserMask}
+                                        className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 rounded-lg text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {eraserPrompt ? 'Substituir' : 'Apagar Objeto'}
+                                    </button>
                                 </div>
                             )}
 

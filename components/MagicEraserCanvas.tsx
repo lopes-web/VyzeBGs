@@ -80,7 +80,7 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
         ctx.globalCompositeOperation = 'source-over';
         ctx.beginPath();
         ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Semi-transparent red for visibility
+        ctx.fillStyle = 'rgba(255, 50, 50, 0.3)'; // Softer red with lower opacity
         ctx.fill();
 
         // For the actual mask, we might want a solid color, but for UI feedback red is good.
