@@ -301,6 +301,22 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         }
     };
 
+    const urlToBase64 = async (url: string): Promise<string> => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error("Error converting URL to base64:", error);
+            throw error;
+        }
+    };
+
     const handleGenerate = async () => {
         if (userImages.length === 0) {
             setError(currentMode === 'ENHANCE' ? "Envie a imagem que deseja melhorar." : "Por favor, envie pelo menos uma foto do sujeito.");
@@ -413,7 +429,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         onGenerationStart();
 
         try {
-            const result = await refineImage(generatedImage, refinePrompt, refineAssets);
+            // Convert generatedImage to base64 if it's a URL
+            let imageBase64 = generatedImage;
+            if (generatedImage.startsWith('http')) {
+                imageBase64 = await urlToBase64(generatedImage);
+            }
+
+            const result = await refineImage(imageBase64, refinePrompt, refineAssets);
             setGeneratedImage(result);
             addToHistory(result, `Ajuste: ${refinePrompt} `);
             setRefinePrompt('');
@@ -423,22 +445,6 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         } finally {
             setIsGenerating(false);
             onGenerationEnd();
-        }
-    };
-
-    const urlToBase64 = async (url: string): Promise<string> => {
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-        } catch (error) {
-            console.error("Error converting URL to base64:", error);
-            throw error;
         }
     };
 
@@ -793,29 +799,35 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                 </button>
                             </div>
 
-                            {/* Eraser Controls - Floating outside the image container but visible */}
+                            {/* Eraser Controls - Floating Bottom Bar */}
                             {isEraserActive && (
-                                <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-4 rounded-xl flex flex-col gap-3 border border-white/10 shadow-2xl w-80 z-30">
-                                    <div className="flex justify-between items-center text-white text-xs font-bold uppercase">
-                                        <span><i className="fas fa-magic mr-2 text-lime-500"></i>Magic Eraser</span>
-                                        <button onClick={() => setIsEraserActive(false)} className="text-gray-400 hover:text-white"><i className="fas fa-times"></i></button>
+                                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-3 rounded-full flex items-center gap-4 border border-white/10 shadow-2xl z-30 animate-fadeIn">
+                                    <div className="flex items-center gap-2 px-2 border-r border-white/10">
+                                        <i className="fas fa-magic text-lime-500"></i>
+                                        <span className="text-white text-xs font-bold uppercase hidden sm:inline">Magic Eraser</span>
                                     </div>
-                                    <p className="text-xs text-gray-400">Pinte sobre o objeto que deseja remover ou alterar.</p>
 
                                     <input
                                         type="text"
                                         value={eraserPrompt}
                                         onChange={(e) => setEraserPrompt(e.target.value)}
-                                        placeholder="Descreva a alteração (Opcional)"
-                                        className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-xs text-white placeholder-gray-500 focus:border-lime-500 outline-none"
+                                        placeholder="O que alterar? (Opcional)"
+                                        className="bg-transparent border-none text-white text-sm placeholder-gray-400 focus:ring-0 w-48 outline-none"
                                     />
 
                                     <button
                                         onClick={handleInpaint}
                                         disabled={!eraserMask}
-                                        className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 rounded-lg text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 px-4 rounded-full text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                     >
-                                        {eraserPrompt ? 'Substituir' : 'Apagar Objeto'}
+                                        {eraserPrompt ? 'Substituir' : 'Apagar'}
+                                    </button>
+
+                                    <button
+                                        onClick={() => setIsEraserActive(false)}
+                                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                                    >
+                                        <i className="fas fa-times"></i>
                                     </button>
                                 </div>
                             )}
