@@ -114,7 +114,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden">
+        <div className="flex flex-col h-screen bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden">
             {/* Top Bar */}
             <div className="flex-none p-4 flex items-center justify-between z-20 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm border-b border-neutral-200/50 dark:border-neutral-800/50">
                 <button
