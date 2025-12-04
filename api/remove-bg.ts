@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    version: "fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003", // cjwbw/rembg
+                    version: "95fcc2a26d3899cd6c2691c900465aaeff466285a65c14638cc5f36f34befaf1", // lucataco/remove-bg
                     input: {
                         image: imageUrl
                     },

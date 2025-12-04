@@ -156,15 +156,14 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full flex items-center justify-center">
+                        <div className="relative w-full h-full flex items-center justify-center p-4">
                             {/* Image Display */}
-                            <div className="relative shadow-2xl rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-checkerboard flex items-center justify-center max-w-3xl max-h-[50vh]">
+                            <div className="relative w-full h-full shadow-2xl rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-checkerboard flex items-center justify-center">
                                 {/* If output exists, show it. Otherwise show input. */}
                                 <img
                                     src={outputImage || `data:image/png;base64,${inputImage}`}
                                     alt="Workspace"
                                     className="max-w-full max-h-full object-contain"
-                                    style={{ maxHeight: '50vh' }}
                                 />
 
                                 {/* Loading Overlay */}
