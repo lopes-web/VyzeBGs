@@ -35,11 +35,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    version: "a029dff38972b5fda4ec5d75d7d1cd25aeff621d2cf4946a41055d7db66b80bc", // 851-labs/background-remover
+                    version: "fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003", // cjwbw/rembg
                     input: {
-                        image: imageUrl,
-                        format: "png",
-                        background_type: "rgba"
+                        image: imageUrl
                     },
                 }),
             });
