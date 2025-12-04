@@ -77,21 +77,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
   const hasContent = multiple ? (Array.isArray(value) && value.length > 0) : !!value;
 
   return (
-    <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+    <div className="w-full">
+      <label className="block text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-3 ml-1">
         {label}
       </label>
-      {description && <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{description}</p>}
 
       {/* Grid for multiple images */}
       {multiple && Array.isArray(value) && value.length > 0 && (
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           {value.map((img, idx) => (
-            <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group border border-gray-200 dark:border-gray-700">
-              <img src={`data:image/png;base64,${img}`} className="w-full h-full object-cover" alt={`Upload ${idx}`} />
+            <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-neutral-200 dark:border-neutral-800 shadow-sm">
+              <img src={`data:image/png;base64,${img}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={`Upload ${idx}`} />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <button
                 onClick={(e) => { e.stopPropagation(); removeImage(idx); }}
-                className="absolute top-1 right-1 bg-white/80 dark:bg-black/60 text-gray-900 dark:text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-2 right-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500/80 hover:border-red-500"
               >
                 <i className="fas fa-times"></i>
               </button>
@@ -100,50 +100,66 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
         </div>
       )}
 
-      {/* Upload Box - Always render, content changes based on state */}
+      {/* Upload Box */}
       <div
         onClick={() => fileInputRef.current?.click()}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={`
-          relative flex flex-col items-center justify-center w-full 
-          ${compact ? 'h-12' : (!multiple && value) ? 'h-48' : 'h-32'}
-          border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200
+          relative group flex flex-col items-center justify-center w-full 
+          ${compact ? 'h-16' : (!multiple && value) ? 'h-64' : 'h-64'}
+          rounded-3xl cursor-pointer transition-all duration-300 ease-out
+          border-2 border-dashed
           ${isDragging
-            ? 'border-lime-500 bg-lime-500/10'
+            ? 'border-[#00ca8c] bg-[#00ca8c]/5 scale-[1.02] shadow-xl shadow-[#00ca8c]/10'
             : (!multiple && value)
-              ? 'border-gray-400 dark:border-gray-600 bg-gray-100 dark:bg-gray-800'
-              : 'border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800'
+              ? 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50'
+              : 'border-neutral-300 dark:border-neutral-700 hover:border-[#00ca8c]/50 dark:hover:border-[#00ca8c]/50 bg-white/50 dark:bg-neutral-900/30 hover:bg-white/80 dark:hover:bg-neutral-900/50 hover:shadow-2xl hover:shadow-[#00ca8c]/5 hover:scale-[1.01]'
           }
         `}
       >
         {!multiple && value ? (
-          <div className="relative w-full h-full overflow-hidden rounded-xl group">
+          <div className="relative w-full h-full overflow-hidden rounded-[22px] group-inner">
             <img
               src={`data:image/png;base64,${value}`}
               alt="Preview"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain p-2"
             />
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white font-medium"><i className="fas fa-sync mr-2"></i>Trocar Imagem</span>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                <span className="text-white font-bold text-lg flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+                  <i className="fas fa-sync-alt text-[#00ca8c]"></i> Trocar Imagem
+                </span>
+              </div>
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); removeImage(); }}
-              className="absolute top-2 right-2 text-red-400 hover:text-red-300 bg-black/50 rounded-full p-2"
+              className="absolute top-4 right-4 text-white bg-black/50 hover:bg-red-500/80 backdrop-blur-md border border-white/10 hover:border-red-500 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 transform scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100"
             >
-              <i className="fas fa-trash"></i>
+              <i className="fas fa-trash-alt"></i>
             </button>
           </div>
         ) : (
-          <div className={`flex flex-col items-center justify-center ${compact ? 'p-1' : 'p-4'}`}>
-            <i className={`fas fa-cloud-upload-alt ${compact ? 'text-lg' : 'text-3xl mb-2'} ${isDragging ? 'text-lime-500 dark:text-lime-400' : 'text-gray-400 dark:text-gray-500'}`}></i>
+          <div className={`flex flex-col items-center justify-center text-center p-6 transition-transform duration-300 ${isDragging ? 'scale-110' : 'group-hover:scale-105'}`}>
+            <div className={`
+              w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300
+              ${isDragging ? 'bg-[#00ca8c]/20 text-[#00ca8c]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 group-hover:bg-[#00ca8c]/10 group-hover:text-[#00ca8c]'}
+            `}>
+              <i className={`fas fa-cloud-upload-alt text-3xl`}></i>
+            </div>
+
             {!compact && (
               <>
-                <p className="mb-1 text-sm text-gray-500 dark:text-gray-400 text-center">
-                  {multiple ? 'Adicionar mais imagens' : 'Clique ou arraste'}
+                <h3 className="text-lg font-bold text-neutral-700 dark:text-neutral-200 mb-1 group-hover:text-[#00ca8c] transition-colors">
+                  {isDragging ? 'Solte para enviar' : 'Upload de Imagem'}
+                </h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-[200px]">
+                  {multiple ? 'Arraste ou clique para adicionar mais' : 'Arraste e solte ou clique para selecionar'}
                 </p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">PNG, JPG</p>
+                <div className="mt-4 flex items-center gap-2 text-xs font-medium text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-full">
+                  <i className="fas fa-image"></i> PNG, JPG, WEBP
+                </div>
               </>
             )}
           </div>

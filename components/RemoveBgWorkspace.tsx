@@ -133,27 +133,25 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                 {/* Content Container */}
                 <div className="relative z-10 w-full h-full flex items-center justify-center">
                     {!inputImage ? (
-                        <div className="max-w-lg w-full">
-                            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-                                <div className="p-8 text-center border-b border-neutral-100 dark:border-neutral-800">
-                                    <div className="w-16 h-16 bg-[#00ca8c]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <i className="fas fa-magic text-3xl text-[#00ca8c]"></i>
-                                    </div>
-                                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Upload de Imagem</h2>
-                                    <p className="text-neutral-500">Remova o fundo automaticamente com IA</p>
-                                </div>
-                                <div className="p-8 bg-neutral-50 dark:bg-neutral-950/50">
-                                    <ImageUpload
-                                        label=""
-                                        value={null}
-                                        onChange={(val) => {
-                                            setInputImage(val as string);
-                                            setOutputImage(null);
-                                        }}
-                                        multiple={false}
-                                    />
-                                </div>
+                        <div className="max-w-2xl w-full animate-fadeIn">
+                            <div className="text-center mb-8">
+                                <h2 className="text-4xl font-bold text-neutral-900 dark:text-white mb-3 tracking-tight">
+                                    Remover Fundo
+                                </h2>
+                                <p className="text-lg text-neutral-500 dark:text-neutral-400 max-w-md mx-auto leading-relaxed">
+                                    Faça upload da sua imagem e deixe a IA cuidar do resto em segundos.
+                                </p>
                             </div>
+
+                            <ImageUpload
+                                label=""
+                                value={null}
+                                onChange={(val) => {
+                                    setInputImage(val as string);
+                                    setOutputImage(null);
+                                }}
+                                multiple={false}
+                            />
                         </div>
                     ) : (
                         <div className="relative w-full h-full flex items-center justify-center p-4">
