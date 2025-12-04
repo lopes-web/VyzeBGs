@@ -151,25 +151,24 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                                             setOutputImage(null);
                                         }}
                                         multiple={false}
-                                        description="Arraste ou clique (PNG, JPG)"
                                     />
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full flex items-center justify-center">
+                        <div className="relative w-full h-full flex items-center justify-center p-4">
                             {/* Image Display */}
-                            <div className="relative max-w-full max-h-[70vh] shadow-2xl rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-checkerboard">
+                            <div className="relative max-w-full max-h-full shadow-2xl rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-checkerboard flex items-center justify-center">
                                 {/* If output exists, show it. Otherwise show input. */}
                                 <img
                                     src={outputImage || `data:image/png;base64,${inputImage}`}
                                     alt="Workspace"
-                                    className="max-w-full max-h-[70vh] object-contain block"
+                                    className="max-w-full max-h-[70vh] object-contain"
                                 />
 
                                 {/* Loading Overlay */}
                                 {isProcessing && (
-                                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center text-white">
+                                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center text-white z-20">
                                         <i className="fas fa-circle-notch fa-spin text-4xl mb-4 text-[#00ca8c]"></i>
                                         <p className="font-medium">Removendo fundo...</p>
                                     </div>
