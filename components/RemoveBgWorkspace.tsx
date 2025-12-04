@@ -6,7 +6,11 @@ interface RemoveBgWorkspaceProps {
     onBack: () => void;
 }
 
+import { useAuth } from './AuthContext';
+import { uploadImageToStorage } from '../services/storageService';
+
 const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
+    const { user } = useAuth();
     const [apiKey, setApiKey] = useState('');
     const [hasKey, setHasKey] = useState(false);
     const [inputImage, setInputImage] = useState<string | null>(null);
@@ -26,7 +30,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
     };
 
     const handleProcess = async () => {
-        if (!inputImage) return;
+        if (!inputImage || !user) return;
 
         setIsProcessing(true);
         setError(null);
@@ -36,7 +40,22 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
             const key = localStorage.getItem('replicate_api_key');
             if (!key) throw new Error("API Key not found");
 
-            const resultUrl = await removeBackground(inputImage, key);
+            // 1. Upload to Supabase Storage to get a public URL
+            // inputImage is base64 (from ImageUpload)
+            // We need to add the data:image/png;base64, prefix if it's missing for the storage service?
+            // storageService expects "base64Str". Let's check if it needs prefix.
+            // ImageUpload returns raw base64. storageService uses "new Image(); img.src = base64Str".
+            // So it needs the prefix. ImageUpload strips it. We need to add it back.
+
+            const base64WithPrefix = `data:image/png;base64,${inputImage}`;
+            const publicUrl = await uploadImageToStorage(base64WithPrefix, user.id);
+
+            if (!publicUrl) {
+                throw new Error("Failed to upload image. Please try again.");
+            }
+
+            // 2. Call Replicate with the public URL
+            const resultUrl = await removeBackground(publicUrl, key);
             setOutputImage(resultUrl);
         } catch (err: any) {
             console.error(err);
