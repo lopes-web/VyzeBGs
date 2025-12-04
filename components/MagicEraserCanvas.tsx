@@ -52,6 +52,7 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
     const stopDrawing = () => {
         if (isDrawing) {
             setIsDrawing(false);
+            if (onDrawingStateChange) onDrawingStateChange(false);
             if (canvasRef.current) {
                 onMaskChange(canvasRef.current.toDataURL('image/png'));
                 setHasDrawn(true);
