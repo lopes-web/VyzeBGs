@@ -150,7 +150,6 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     <img src="/logo.webp" alt="Vyze Logo" className="h-8 w-auto" />
                 </div>
                 <div className="flex items-center gap-4">
-                    {/* ThemeToggle Removed */}
                     {userEmail && (
                         <div className="flex items-center gap-3 pl-3 border-l border-white/10">
                             <button
@@ -172,11 +171,8 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 -mt-10">
 
                 {/* Hero Text */}
-                <div className="text-center mb-12 space-y-4 animate-fadeInDown">
-                    <div className="inline-flex items-center justify-center mb-4">
-                        <i className="fas fa-sparkles text-lime-500 text-2xl animate-pulse"></i>
-                    </div>
-                    <h1 className="text-6xl md:text-7xl font-black tracking-tight bg-gradient-to-b from-white via-gray-200 to-gray-500 bg-clip-text text-transparent drop-shadow-2xl">
+                <div className="text-center mb-16 space-y-4 animate-fadeInDown">
+                    <h1 className="text-6xl md:text-7xl font-black tracking-tight text-white drop-shadow-2xl">
                         Como posso ajudar?
                     </h1>
                     <p className="text-lg text-gray-400 max-w-xl mx-auto font-light">
@@ -184,60 +180,142 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     </p>
                 </div>
 
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl w-full mb-12 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                    {/* Landing Pages Card */}
+                {/* Cards Grid - REDESIGNED */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full mb-16 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
+
+                    {/* Card 1: Landing Pages (Gauge Style) */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
-                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-lime-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-lime-500/5"
+                        className="group relative h-80 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-lime-500/50 hover:to-lime-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(132,204,22,0.3)]"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-br from-lime-500/0 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="p-3 bg-lime-500/10 rounded-xl text-lime-400 group-hover:bg-lime-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-laptop-code text-xl"></i>
+                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col">
+                            {/* Graphic Area */}
+                            <div className="flex-grow relative flex items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                {/* Gauge Graphic */}
+                                <div className="relative w-40 h-40">
+                                    {/* Outer Glow */}
+                                    <div className="absolute inset-0 bg-lime-500/20 blur-3xl rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+
+                                    {/* Rings */}
+                                    <div className="absolute inset-0 rounded-full border border-white/10"></div>
+                                    <div className="absolute inset-4 rounded-full border border-white/5 border-dashed animate-spin-slow"></div>
+
+                                    {/* Progress Arc */}
+                                    <svg className="absolute inset-0 w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="none" stroke="#333" strokeWidth="8" />
+                                        <circle cx="50" cy="50" r="45" fill="none" stroke="#84cc16" strokeWidth="8" strokeDasharray="283" strokeDashoffset="20" strokeLinecap="round" className="drop-shadow-[0_0_10px_rgba(132,204,22,0.5)]" />
+                                    </svg>
+
+                                    {/* Center Text */}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-3xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">98%</span>
+                                        <span className="text-[10px] text-lime-400 uppercase tracking-wider font-bold">Conversion</span>
+                                    </div>
+                                </div>
                             </div>
-                            <i className="fas fa-arrow-right text-gray-700 group-hover:text-lime-500 transition-colors -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"></i>
+
+                            {/* Text Content */}
+                            <div className="p-6 relative z-10 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-lime-400 transition-colors">Landing Pages</h3>
+                                <p className="text-sm text-gray-400 leading-relaxed">
+                                    Gere backgrounds de alta conversão com sujeitos e produtos integrados.
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-lg font-bold mb-1 text-white">Landing Pages</h3>
-                        <p className="text-sm text-gray-400">
-                            Gere backgrounds otimizados para conversão com sujeitos e produtos.
-                        </p>
                     </button>
 
-                    {/* Designs Card */}
+                    {/* Card 2: Designs (Tree Style) */}
                     <button
                         onClick={() => onSelectSection('DESIGNS')}
-                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/5"
+                        className="group relative h-80 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-purple-500/50 hover:to-purple-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400 group-hover:bg-purple-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-palette text-xl"></i>
+                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col">
+                            {/* Graphic Area */}
+                            <div className="flex-grow relative flex items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                {/* Tree Graphic */}
+                                <div className="relative w-full h-full flex flex-col items-center justify-center p-8">
+                                    {/* Top Node */}
+                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                        <i className="fas fa-layer-group text-white text-lg"></i>
+                                    </div>
+
+                                    {/* Connecting Lines */}
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-4 w-32 h-16 border-t-2 border-l-2 border-r-2 border-purple-500/30 rounded-t-2xl"></div>
+
+                                    {/* Bottom Nodes */}
+                                    <div className="flex gap-6 relative z-10 mt-2">
+                                        <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-purple-500/50 group-hover:bg-purple-500/10 transition-all duration-300 delay-75">
+                                            <i className="fas fa-image text-gray-400 text-xs group-hover:text-purple-400"></i>
+                                        </div>
+                                        <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-purple-500/50 group-hover:bg-purple-500/10 transition-all duration-300 delay-100">
+                                            <i className="fas fa-font text-gray-400 text-xs group-hover:text-purple-400"></i>
+                                        </div>
+                                        <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-purple-500/50 group-hover:bg-purple-500/10 transition-all duration-300 delay-150">
+                                            <i className="fas fa-palette text-gray-400 text-xs group-hover:text-purple-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <i className="fas fa-arrow-right text-gray-700 group-hover:text-purple-500 transition-colors -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"></i>
+
+                            {/* Text Content */}
+                            <div className="p-6 relative z-10 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Designs</h3>
+                                <p className="text-sm text-gray-400 leading-relaxed">
+                                    Crie texturas, padrões e elementos gráficos artísticos.
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-lg font-bold mb-1 text-white">Designs</h3>
-                        <p className="text-sm text-gray-400">
-                            Crie texturas, padrões e elementos gráficos artísticos.
-                        </p>
                     </button>
 
-                    {/* Remove BG Card */}
+                    {/* Card 3: Remove BG (Network Style) */}
                     <button
                         onClick={() => onSelectSection('REMOVE_BG' as any)}
-                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5"
+                        className="group relative h-80 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-blue-500/50 hover:to-blue-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400 group-hover:bg-blue-500 group-hover:text-black transition-colors">
-                                <i className="fas fa-eraser text-xl"></i>
+                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col">
+                            {/* Graphic Area */}
+                            <div className="flex-grow relative flex items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                {/* Network Graphic */}
+                                <div className="relative w-full px-8">
+                                    {/* Nodes */}
+                                    <div className="flex justify-between items-center mb-6 relative">
+                                        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+                                        <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center relative z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                                            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                        </div>
+                                        <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center relative z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                                            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-75"></div>
+                                        </div>
+                                        <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center relative z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                                            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-150"></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Progress Bar */}
+                                    <div className="bg-white/5 rounded-full h-2 w-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 w-3/4 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)] group-hover:w-full transition-all duration-1000 ease-out"></div>
+                                    </div>
+                                    <div className="flex justify-between mt-2 text-[10px] text-gray-500 font-mono uppercase">
+                                        <span>Processing</span>
+                                        <span className="text-blue-400">Done</span>
+                                    </div>
+                                </div>
                             </div>
-                            <i className="fas fa-arrow-right text-gray-700 group-hover:text-blue-500 transition-colors -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"></i>
+
+                            {/* Text Content */}
+                            <div className="p-6 relative z-10 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Remover Fundo</h3>
+                                <p className="text-sm text-gray-400 leading-relaxed">
+                                    Remova o fundo de imagens automaticamente com IA.
+                                </p>
+                            </div>
                         </div>
-                        <h3 className="text-lg font-bold mb-1 text-white">Remover Fundo</h3>
-                        <p className="text-sm text-gray-400">
-                            Remova o fundo de imagens automaticamente com IA.
-                        </p>
                     </button>
                 </div>
 
