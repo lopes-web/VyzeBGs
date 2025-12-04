@@ -477,7 +477,6 @@ const AppContent: React.FC = () => {
                 {activeTabId === null && (
                     <div className="h-full flex flex-col items-center justify-center animate-fadeIn pb-20 overflow-y-auto">
                         <div className="text-center mb-12 relative">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-lime-500/10 rounded-full blur-[100px]"></div>
                             <h2 className="text-4xl font-bold mb-4 relative z-10 text-gray-900 dark:text-white">Novo Projeto</h2>
                             <p className="text-gray-600 dark:text-gray-400 relative z-10 max-w-lg mx-auto">
                                 {currentSection === 'LANDING_PAGES'
