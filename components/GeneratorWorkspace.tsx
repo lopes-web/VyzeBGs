@@ -210,6 +210,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     // Magic Eraser State
     const [isEraserActive, setIsEraserActive] = useState(false);
+    const [isEraserDrawing, setIsEraserDrawing] = useState(false);
     const [eraserMask, setEraserMask] = useState<string | null>(null);
     const [eraserPrompt, setEraserPrompt] = useState('');
 
@@ -774,6 +775,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                             onMaskChange={setEraserMask}
                                             isDrawingEnabled={true}
                                             brushSize={40}
+                                            onDrawingStateChange={setIsEraserDrawing}
                                         />
                                     </div>
                                 )}
@@ -800,7 +802,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             </div>
 
                             {/* Eraser Controls - Floating Bottom Bar */}
-                            {isEraserActive && eraserMask && (
+                            {isEraserActive && eraserMask && !isEraserDrawing && (
                                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-3 rounded-full flex items-center gap-4 border border-white/10 shadow-2xl z-30 animate-fadeIn">
                                     <div className="flex items-center gap-2 px-2 border-r border-white/10">
                                         <i className="fas fa-magic text-lime-500"></i>

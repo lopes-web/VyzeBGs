@@ -7,6 +7,7 @@ interface MagicEraserCanvasProps {
     onMaskChange: (maskDataUrl: string | null) => void;
     brushSize?: number;
     isDrawingEnabled?: boolean;
+    onDrawingStateChange?: (isDrawing: boolean) => void;
 }
 
 const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
@@ -15,7 +16,8 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
     height,
     onMaskChange,
     brushSize = 20,
-    isDrawingEnabled = true
+    isDrawingEnabled = true,
+    onDrawingStateChange
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -43,6 +45,7 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
         if (!isDrawingEnabled) return;
         setIsDrawing(true);
+        if (onDrawingStateChange) onDrawingStateChange(true);
         draw(e);
     };
 
