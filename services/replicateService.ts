@@ -14,41 +14,42 @@ export const checkReplicateKey = (): boolean => {
 };
 
 export const removeBackground = async (imageUrl: string, apiKey: string): Promise<string> => {
-    // 1. Start the prediction
-    const startResponse = await fetch("https://api.replicate.com/v1/predictions", {
+    // 1. Start the prediction via Proxy
+    const startResponse = await fetch("/api/remove-bg", {
         method: "POST",
         headers: {
-            "Authorization": `Token ${apiKey}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            version: "a029dff38972b5fda4ec5d75d7d1cd25aeff621d2cf4946a41055d7db66b80bc", // 851-labs/background-remover
-            input: {
-                image: imageUrl,
-                format: "png",
-                background_type: "rgba"
-            },
+            action: 'start',
+            apiKey,
+            imageUrl
         }),
     });
 
     if (!startResponse.ok) {
         const error = await startResponse.json();
-        throw new Error(error.detail || "Failed to start background removal");
+        throw new Error(error.detail || error.error || "Failed to start background removal");
     }
 
     const prediction = await startResponse.json();
     let predictionId = prediction.id;
     let status = prediction.status;
 
-    // 2. Poll for results
+    // 2. Poll for results via Proxy
     while (status !== "succeeded" && status !== "failed" && status !== "canceled") {
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s
 
-        const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
+        const pollResponse = await fetch("/api/remove-bg", {
+            method: "POST",
             headers: {
-                "Authorization": `Token ${apiKey}`,
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+                action: 'check',
+                apiKey,
+                predictionId
+            }),
         });
 
         if (!pollResponse.ok) {
