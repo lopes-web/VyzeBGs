@@ -172,7 +172,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 -mt-10">
 
                 {/* Hero Text */}
-                <div className="text-center mb-12 space-y-4">
+                <div className="text-center mb-12 space-y-4 animate-fadeInDown">
                     <div className="inline-flex items-center justify-center mb-4">
                         <i className="fas fa-sparkles text-lime-500 text-2xl animate-pulse"></i>
                     </div>
@@ -185,7 +185,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full mb-12 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     {/* Landing Pages Card */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
@@ -224,7 +224,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 </div>
 
                 {/* Input Bar */}
-                <div className="w-full max-w-2xl relative z-20">
+                <div className="w-full max-w-2xl relative z-20 animate-fadeInUp delay-200 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     <div className="relative group">
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-lime-500 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-40 blur transition duration-300"></div>
                         <div className="relative bg-black/60 backdrop-blur-2xl rounded-2xl flex items-center p-2 shadow-2xl border border-white/10">
@@ -452,19 +452,6 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         </div>
                     </div>
 
-                    {/* Quick Suggestions (Optional) */}
-                    <div className="mt-4 flex flex-wrap justify-center gap-2">
-                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wider mr-2 pt-1">Sugestões:</span>
-                        {['Cyberpunk City', 'Minimalist Office', 'Neon Abstract'].map((suggestion) => (
-                            <button
-                                key={suggestion}
-                                onClick={() => onPromptSubmit(suggestion, selectedMode, undefined, undefined, generatorMode, secondaryFiles)}
-                                className="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/5 hover:border-lime-500/50 text-gray-400 hover:text-lime-400 transition-colors"
-                            >
-                                {suggestion}
-                            </button>
-                        ))}
-                    </div>
                 </div>
             </div>
 
