@@ -800,7 +800,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             </div>
 
                             {/* Eraser Controls - Floating Bottom Bar */}
-                            {isEraserActive && (
+                            {isEraserActive && eraserMask && (
                                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-3 rounded-full flex items-center gap-4 border border-white/10 shadow-2xl z-30 animate-fadeIn">
                                     <div className="flex items-center gap-2 px-2 border-r border-white/10">
                                         <i className="fas fa-magic text-lime-500"></i>
@@ -852,7 +852,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             )}
 
                             {/* Validation Actions Overlay */}
-                            {!isGenerating && (
+                            {!isGenerating && !isEraserActive && (
                                 <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <div className="bg-white/90 dark:bg-black/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-4 shadow-2xl">
                                         <div className="flex-1 w-full">
