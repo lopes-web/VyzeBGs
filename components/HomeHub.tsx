@@ -250,7 +250,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Dropdown Menu */}
                                 {isDropdownOpen && (
-                                    <div className="absolute top-full left-0 mt-2 w-48 bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute top-full left-0 mt-2 w-48 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
                                         <button
                                             onClick={() => selectMode('LANDING_PAGES')}
                                             className="w-full text-left px-4 py-3 hover:bg-white/5 flex items-center gap-3 text-sm text-gray-200"
@@ -283,7 +283,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Config Dropdown */}
                                 {isConfigOpen && (
-                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto">
+                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto">
                                         <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
                                             <i className="fas fa-cog text-lime-500"></i> Configuração
                                         </h3>
