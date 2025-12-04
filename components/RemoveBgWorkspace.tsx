@@ -163,7 +163,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                                 <img
                                     src={outputImage || `data:image/png;base64,${inputImage}`}
                                     alt="Workspace"
-                                    className={`max-w-full max-h-full object-contain transition-all duration-500 ${outputImage ? 'animate-fadeIn scale-100' : ''}`}
+                                    className="max-w-full max-h-full object-contain"
                                     style={{ maxHeight: '50vh' }}
                                 />
 
@@ -174,11 +174,6 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                                         <p className="font-medium">Removendo fundo...</p>
                                     </div>
                                 )}
-
-                                {/* Success Animation Overlay (Flash) */}
-                                {outputImage && (
-                                    <div className="absolute inset-0 bg-white/20 animate-ping pointer-events-none" style={{ animationDuration: '0.5s', animationIterationCount: 1 }}></div>
-                                )}
                             </div>
                         </div>
                     )}
@@ -187,7 +182,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
 
             {/* Bottom Toolbar */}
             {inputImage && (
-                <div className="flex-none p-6 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 z-20 flex items-center justify-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                <div className="flex-none p-6 bg-neutral-50 dark:bg-neutral-950 z-20 flex items-center justify-center gap-4">
                     <button
                         onClick={handleReset}
                         className="px-6 py-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-medium hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors flex items-center gap-2"
