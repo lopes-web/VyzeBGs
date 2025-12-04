@@ -137,9 +137,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div
                 className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100"
                 style={{
-                    backgroundImage: 'url("/bg-dark.png?v=2")',
+                    backgroundImage: 'url("/bg-home.avif")',
                     backgroundSize: 'cover',
-                    backgroundPosition: 'top center',
+                    backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
                 }}
             />
