@@ -308,7 +308,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                             <div className="p-6 relative z-10 bg-gradient-to-t from-black/80 to-transparent">
                                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#00ca8c] transition-colors">Remover Fundo</h3>
                                 <p className="text-sm text-gray-400 leading-relaxed">
-                                    Remova o fundo de imagens automaticamente com IA.
+                                    Remova o fundo de imagens instantaneamente.
                                 </p>
                             </div>
                         </div>
