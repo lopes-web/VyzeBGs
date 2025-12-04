@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { removeBackground, saveReplicateKey, checkReplicateKey } from '../services/replicateService';
 import ImageUpload from './ImageUpload';
+import { useAuth } from './AuthContext';
+import { uploadImageToStorage } from '../services/storageService';
 
 interface RemoveBgWorkspaceProps {
     onBack: () => void;
 }
-
-import { useAuth } from './AuthContext';
-import { uploadImageToStorage } from '../services/storageService';
 
 const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
     const { user } = useAuth();
@@ -40,13 +39,6 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
             const key = localStorage.getItem('replicate_api_key');
             if (!key) throw new Error("API Key not found");
 
-            // 1. Upload to Supabase Storage to get a public URL
-            // inputImage is base64 (from ImageUpload)
-            // We need to add the data:image/png;base64, prefix if it's missing for the storage service?
-            // storageService expects "base64Str". Let's check if it needs prefix.
-            // ImageUpload returns raw base64. storageService uses "new Image(); img.src = base64Str".
-            // So it needs the prefix. ImageUpload strips it. We need to add it back.
-
             const base64WithPrefix = `data:image/png;base64,${inputImage}`;
             const publicUrl = await uploadImageToStorage(base64WithPrefix, user.id);
 
@@ -54,7 +46,6 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                 throw new Error("Failed to upload image. Please try again.");
             }
 
-            // 2. Call Replicate with the public URL
             const resultUrl = await removeBackground(publicUrl, key);
             setOutputImage(resultUrl);
         } catch (err: any) {
@@ -83,9 +74,15 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
         }
     };
 
+    const handleReset = () => {
+        setInputImage(null);
+        setOutputImage(null);
+        setError(null);
+    };
+
     if (!hasKey) {
         return (
-            <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+            <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-gray-50 dark:bg-gray-950">
                 <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-800">
                     <div className="w-16 h-16 bg-[#00ca8c]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <i className="fas fa-magic text-2xl text-[#00ca8c]"></i>
@@ -117,119 +114,113 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-950 p-6 overflow-y-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={onBack}
-                        className="w-10 h-10 rounded-xl bg-white dark:bg-gray-900 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors shadow-sm"
-                    >
-                        <i className="fas fa-arrow-left"></i>
-                    </button>
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Removedor de Fundo</h1>
-                        <p className="text-gray-500">Remova o fundo das suas imagens em segundos com IA.</p>
-                    </div>
+        <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
+            {/* Top Bar */}
+            <div className="absolute top-0 left-0 right-0 z-10 p-4 flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
+                <button
+                    onClick={onBack}
+                    className="pointer-events-auto w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                >
+                    <i className="fas fa-arrow-left"></i>
+                </button>
+                <h1 className="text-white font-bold text-lg drop-shadow-md">Removedor de Fundo</h1>
+                <div className="w-10"></div> {/* Spacer */}
+            </div>
+
+            {/* Main Canvas Area */}
+            <div className="flex-grow flex items-center justify-center p-8 relative">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-checkerboard opacity-100 z-0"></div>
+
+                {/* Content Container */}
+                <div className="relative z-10 max-w-5xl w-full h-full flex items-center justify-center">
+                    {!inputImage ? (
+                        <div className="bg-white dark:bg-gray-900 rounded-3xl p-12 shadow-2xl border border-gray-200 dark:border-gray-800 text-center max-w-lg w-full">
+                            <div className="w-20 h-20 bg-[#00ca8c]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i className="fas fa-cloud-upload-alt text-4xl text-[#00ca8c]"></i>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Upload de Imagem</h2>
+                            <p className="text-gray-500 mb-8">Arraste uma imagem ou clique para selecionar.</p>
+
+                            <div className="w-full">
+                                <ImageUpload
+                                    label=""
+                                    value={null}
+                                    onChange={(val) => {
+                                        setInputImage(val as string);
+                                        setOutputImage(null);
+                                    }}
+                                    multiple={false}
+                                    description="PNG, JPG até 10MB"
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="relative w-full h-full flex items-center justify-center">
+                            {/* Image Display */}
+                            <div className="relative max-w-full max-h-[70vh] shadow-2xl rounded-lg overflow-hidden border-2 border-white/20">
+                                {/* If output exists, show it. Otherwise show input. */}
+                                <img
+                                    src={outputImage || `data:image/png;base64,${inputImage}`}
+                                    alt="Workspace"
+                                    className="max-w-full max-h-[70vh] object-contain block"
+                                />
+
+                                {/* Loading Overlay */}
+                                {isProcessing && (
+                                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center text-white">
+                                        <i className="fas fa-circle-notch fa-spin text-4xl mb-4 text-[#00ca8c]"></i>
+                                        <p className="font-medium">Removendo fundo...</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto w-full flex-grow">
-                {/* Input Section */}
-                <div className="flex flex-col gap-4">
-                    <div className="bg-white dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-white/5 h-full flex flex-col relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00ca8c] to-blue-500 opacity-50"></div>
 
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3 text-lg">
-                            <div className="p-2 bg-[#00ca8c]/10 rounded-lg text-[#00ca8c]">
-                                <i className="fas fa-image"></i>
-                            </div>
-                            Imagem Original
-                        </h3>
+            {/* Bottom Toolbar */}
+            {inputImage && (
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-20 flex items-center justify-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                    <button
+                        onClick={handleReset}
+                        className="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
+                    >
+                        <i className="fas fa-trash-alt"></i>
+                        <span className="hidden sm:inline">Limpar</span>
+                    </button>
 
-                        <div className="flex-grow flex flex-col justify-center">
-                            <ImageUpload
-                                label=""
-                                value={inputImage}
-                                onChange={(val) => {
-                                    setInputImage(val as string);
-                                    setOutputImage(null); // Reset output when input changes
-                                }}
-                                multiple={false}
-                                description="Arraste ou clique para enviar"
-                            />
-                        </div>
-
+                    {!outputImage ? (
                         <button
                             onClick={handleProcess}
-                            disabled={!inputImage || isProcessing}
-                            className={`
-                                w-full mt-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300
-                                ${!inputImage || isProcessing
-                                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                                    : 'bg-[#00ca8c] hover:bg-[#00ca8c]/90 text-black shadow-lg shadow-[#00ca8c]/20 hover:scale-[1.02] hover:shadow-[#00ca8c]/30'
-                                }
-                            `}
+                            disabled={isProcessing}
+                            className="px-8 py-3 rounded-xl bg-[#00ca8c] text-black font-bold hover:bg-[#00ca8c]/90 transition-all shadow-lg shadow-[#00ca8c]/20 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                         >
-                            {isProcessing ? (
-                                <>
-                                    <i className="fas fa-circle-notch fa-spin"></i> Processando...
-                                </>
-                            ) : (
-                                <>
-                                    <i className="fas fa-magic"></i> Remover Fundo
-                                </>
-                            )}
+                            <i className="fas fa-magic"></i>
+                            Remover Fundo
                         </button>
-                        {error && (
-                            <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm text-center flex items-center justify-center gap-2">
-                                <i className="fas fa-exclamation-circle"></i> {error}
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Output Section */}
-                <div className="flex flex-col gap-4">
-                    <div className="bg-white dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-white/5 h-full flex flex-col relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-[#00ca8c] opacity-50"></div>
-
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3 text-lg">
-                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
-                                <i className="fas fa-check-circle"></i>
-                            </div>
-                            Resultado
-                        </h3>
-
-                        <div className="flex-grow bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-gray-50 dark:bg-black/40 rounded-2xl border-2 border-dashed border-gray-200 dark:border-white/10 flex items-center justify-center relative overflow-hidden group transition-all duration-300 hover:border-[#00ca8c]/30">
-                            {outputImage ? (
-                                <img src={outputImage} alt="Removed Background" className="max-h-full max-w-full object-contain animate-in fade-in zoom-in-95 duration-500" />
-                            ) : (
-                                <div className="text-center text-gray-400 flex flex-col items-center gap-3">
-                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                                        <i className="fas fa-image text-2xl opacity-20"></i>
-                                    </div>
-                                    <p className="text-sm font-medium opacity-50">O resultado aparecerá aqui</p>
-                                </div>
-                            )}
-                        </div>
-
+                    ) : (
                         <button
                             onClick={handleDownload}
-                            disabled={!outputImage}
-                            className={`
-                                w-full mt-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300
-                                ${!outputImage
-                                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                                    : 'bg-white dark:bg-white text-black hover:bg-gray-100 shadow-lg shadow-white/5 hover:scale-[1.02]'
-                                }
-                            `}
+                            className="px-8 py-3 rounded-xl bg-white text-black border border-gray-200 font-bold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 transform hover:scale-105"
                         >
-                            <i className="fas fa-download"></i> Download PNG
+                            <i className="fas fa-download"></i>
+                            Download PNG
                         </button>
-                    </div>
+                    )}
                 </div>
-            </div>
+            )}
+
+            {/* Error Toast */}
+            {error && (
+                <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3 animate-fadeInDown z-50">
+                    <i className="fas fa-exclamation-circle"></i>
+                    {error}
+                    <button onClick={() => setError(null)} className="ml-2 hover:text-white/80">
+                        <i className="fas fa-times"></i>
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
