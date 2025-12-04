@@ -189,7 +189,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Landing Pages Card */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
-                        className="group relative overflow-hidden bg-black/30 backdrop-blur-3xl border border-white/10 rounded-2xl p-6 text-left hover:border-lime-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-lime-500/5"
+                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-lime-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-lime-500/5"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-lime-500/0 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div className="flex items-start justify-between mb-4">
@@ -207,7 +207,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Designs Card */}
                     <button
                         onClick={() => onSelectSection('DESIGNS')}
-                        className="group relative overflow-hidden bg-black/30 backdrop-blur-3xl border border-white/10 rounded-2xl p-6 text-left hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/5"
+                        className="group relative overflow-hidden bg-black border border-white/10 rounded-2xl p-6 text-left hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/5"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div className="flex items-start justify-between mb-4">
@@ -251,7 +251,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 {/* Dropdown Menu */}
                                 {isDropdownOpen && (
                                     <div
-                                        className="absolute top-full left-0 mt-2 w-48 bg-black/30 backdrop-blur-3xl border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200"
+                                        className="absolute top-full left-0 mt-2 w-48 bg-black border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200"
                                     >
                                         <button
                                             onClick={() => selectMode('LANDING_PAGES')}
@@ -286,7 +286,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 {/* Config Dropdown */}
                                 {isConfigOpen && (
                                     <div
-                                        className="absolute bottom-full left-0 mb-4 w-80 bg-black/30 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto"
+                                        className="absolute bottom-full left-0 mb-4 w-80 bg-black border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto"
                                     >
                                         <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
                                             <i className="fas fa-cog text-lime-500"></i> Configuração
