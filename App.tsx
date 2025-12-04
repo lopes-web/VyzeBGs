@@ -449,7 +449,7 @@ const AppContent: React.FC = () => {
                 {tabs.map(tab => (
                     <div
                         key={tab.id}
-                        className="h-full w-full"
+                        className={`h-full w-full ${activeTabId === tab.id ? 'animate-fadeIn' : ''}`}
                         style={{ display: activeTabId === tab.id ? 'block' : 'none' }}
                     >
                         <GeneratorWorkspace
