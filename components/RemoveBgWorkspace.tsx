@@ -82,13 +82,13 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
 
     if (!hasKey) {
         return (
-            <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-gray-50 dark:bg-gray-950">
-                <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-800">
+            <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-neutral-50 dark:bg-neutral-950">
+                <div className="max-w-md w-full bg-white dark:bg-neutral-900 rounded-2xl p-8 shadow-xl border border-neutral-200 dark:border-neutral-800">
                     <div className="w-16 h-16 bg-[#00ca8c]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <i className="fas fa-magic text-2xl text-[#00ca8c]"></i>
                     </div>
-                    <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Configurar Replicate</h2>
-                    <p className="text-gray-500 mb-6">
+                    <h2 className="text-2xl font-bold mb-2 text-neutral-900 dark:text-white">Configurar Replicate</h2>
+                    <p className="text-neutral-500 mb-6">
                         Para remover fundos, precisamos da sua chave de API da Replicate.
                     </p>
                     <input
@@ -96,7 +96,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                         placeholder="r8_..."
-                        className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-[#00ca8c]"
+                        className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 mb-4 focus:outline-none focus:ring-2 focus:ring-[#00ca8c]"
                     />
                     <button
                         onClick={handleSaveKey}
@@ -105,7 +105,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                     >
                         Salvar e Continuar
                     </button>
-                    <button onClick={onBack} className="mt-4 text-sm text-gray-400 hover:text-gray-600">
+                    <button onClick={onBack} className="mt-4 text-sm text-neutral-400 hover:text-neutral-600">
                         Voltar
                     </button>
                 </div>
@@ -114,16 +114,16 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
+        <div className="flex flex-col h-full bg-neutral-50 dark:bg-neutral-950 relative overflow-hidden">
             {/* Top Bar */}
-            <div className="flex-none p-4 flex items-center justify-between z-20 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-200/50 dark:border-gray-800/50">
+            <div className="flex-none p-4 flex items-center justify-between z-20 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm border-b border-neutral-200/50 dark:border-neutral-800/50">
                 <button
                     onClick={onBack}
-                    className="w-10 h-10 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm border border-gray-200 dark:border-gray-700"
+                    className="w-10 h-10 rounded-xl bg-white dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors shadow-sm border border-neutral-200 dark:border-neutral-700"
                 >
                     <i className="fas fa-arrow-left"></i>
                 </button>
-                <h1 className="text-gray-900 dark:text-white font-bold text-lg">Removedor de Fundo</h1>
+                <h1 className="text-neutral-900 dark:text-white font-bold text-lg">Removedor de Fundo</h1>
                 <div className="w-10"></div> {/* Spacer */}
             </div>
 
@@ -134,15 +134,15 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                 <div className="relative z-10 w-full h-full flex items-center justify-center">
                     {!inputImage ? (
                         <div className="max-w-lg w-full">
-                            <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
-                                <div className="p-8 text-center border-b border-gray-100 dark:border-gray-800">
+                            <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+                                <div className="p-8 text-center border-b border-neutral-100 dark:border-neutral-800">
                                     <div className="w-16 h-16 bg-[#00ca8c]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                         <i className="fas fa-magic text-3xl text-[#00ca8c]"></i>
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Upload de Imagem</h2>
-                                    <p className="text-gray-500">Remova o fundo automaticamente com IA</p>
+                                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Upload de Imagem</h2>
+                                    <p className="text-neutral-500">Remova o fundo automaticamente com IA</p>
                                 </div>
-                                <div className="p-8 bg-gray-50 dark:bg-gray-950/50">
+                                <div className="p-8 bg-neutral-50 dark:bg-neutral-950/50">
                                     <ImageUpload
                                         label=""
                                         value={null}
@@ -158,12 +158,12 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                     ) : (
                         <div className="relative w-full h-full flex items-center justify-center">
                             {/* Image Display */}
-                            <div className="relative shadow-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-checkerboard flex items-center justify-center max-w-3xl max-h-[50vh]">
+                            <div className="relative shadow-2xl rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-checkerboard flex items-center justify-center max-w-3xl max-h-[50vh]">
                                 {/* If output exists, show it. Otherwise show input. */}
                                 <img
                                     src={outputImage || `data:image/png;base64,${inputImage}`}
                                     alt="Workspace"
-                                    className="max-w-full max-h-full object-contain"
+                                    className={`max-w-full max-h-full object-contain transition-all duration-500 ${outputImage ? 'animate-fadeIn scale-100' : ''}`}
                                     style={{ maxHeight: '50vh' }}
                                 />
 
@@ -174,6 +174,11 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                                         <p className="font-medium">Removendo fundo...</p>
                                     </div>
                                 )}
+
+                                {/* Success Animation Overlay (Flash) */}
+                                {outputImage && (
+                                    <div className="absolute inset-0 bg-white/20 animate-ping pointer-events-none" style={{ animationDuration: '0.5s', animationIterationCount: 1 }}></div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -182,10 +187,10 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
 
             {/* Bottom Toolbar */}
             {inputImage && (
-                <div className="flex-none p-6 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-20 flex items-center justify-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                <div className="flex-none p-6 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 z-20 flex items-center justify-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                     <button
                         onClick={handleReset}
-                        className="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
+                        className="px-6 py-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-medium hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors flex items-center gap-2"
                     >
                         <i className="fas fa-trash-alt"></i>
                         <span className="hidden sm:inline">Limpar</span>
@@ -203,7 +208,7 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
                     ) : (
                         <button
                             onClick={handleDownload}
-                            className="px-8 py-3 rounded-xl bg-white text-black border border-gray-200 font-bold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 transform hover:scale-105"
+                            className="px-8 py-3 rounded-xl bg-white text-black border border-neutral-200 font-bold hover:bg-neutral-50 transition-all shadow-lg flex items-center gap-2 transform hover:scale-105"
                         >
                             <i className="fas fa-download"></i>
                             Download PNG
