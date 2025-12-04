@@ -226,7 +226,6 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 {/* Input Bar */}
                 <div className="w-full max-w-2xl relative z-20 animate-fadeInUp delay-200 opacity-0" style={{ animationFillMode: 'forwards' }}>
                     <div className="relative group">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-lime-500 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-40 blur transition duration-300"></div>
                         <div className="relative bg-black/60 backdrop-blur-2xl rounded-2xl flex items-center p-2 shadow-2xl border border-white/10">
 
                             {/* Dropdown Trigger */}
@@ -251,7 +250,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Dropdown Menu */}
                                 {isDropdownOpen && (
-                                    <div className="absolute top-full left-0 mt-2 w-48 bg-[#262626] border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute top-full left-0 mt-2 w-48 bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
                                         <button
                                             onClick={() => selectMode('LANDING_PAGES')}
                                             className="w-full text-left px-4 py-3 hover:bg-white/5 flex items-center gap-3 text-sm text-gray-200"
@@ -284,7 +283,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                                 {/* Config Dropdown */}
                                 {isConfigOpen && (
-                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-[#262626] border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto">
+                                    <div className="absolute bottom-full left-0 mb-4 w-80 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto">
                                         <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
                                             <i className="fas fa-cog text-lime-500"></i> Configuração
                                         </h3>
