@@ -63,6 +63,51 @@ const cleanBase64 = (data: string) => {
   return data.replace(/^data:image\/\w+;base64,/, "");
 };
 
+const generateInfoproductPrompt = async (
+  niche: string,
+  environmentColor: string,
+  rimLightColor: string,
+  framing: string,
+  floatingElementsDescription?: string
+): Promise<string> => {
+  const apiKey = getApiKey();
+  if (!apiKey) return "";
+  const ai = new GoogleGenAI({ apiKey });
+
+  const systemPrompt = `
+ROLE: You are a Master Visual Director for High-End InfoProducts.
+TASK: Construct a rigid, high-converting image prompt based on the user's niche and color settings.
+
+INPUTS:
+- Niche: ${niche}
+- Environment Color: ${environmentColor}
+- Rim Light Color: ${rimLightColor}
+- Framing: ${framing}
+- 3D Elements: ${floatingElementsDescription || 'None'}
+
+OUTPUT FORMAT:
+Return ONLY the raw prompt string. No explanations.
+
+PROMPT STRUCTURE TO GENERATE:
+"High-end studio portrait of a [${niche} Expert], [${framing}] shot.
+Background: Abstract, depth-filled studio environment in [${environmentColor}] tones.
+Lighting: Cinematic lighting with strong [${rimLightColor}] rim light separating subject from background.
+Details: ${floatingElementsDescription ? `Floating 3D elements: ${floatingElementsDescription}, with bokeh depth of field.` : 'Minimalist, clean texture.'}
+Atmosphere: Professional, authoritative, premium, 8k resolution, highly detailed, sharp focus on face."
+`;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-pro-latest",
+      contents: [{ role: 'user', parts: [{ text: systemPrompt }] }]
+    });
+    return response.text || "";
+  } catch (error) {
+    console.error("Prompt Generation Error:", error);
+    return "";
+  }
+};
+
 export const generateBackground = async (
   section: AppSection,
   mode: GeneratorMode,
@@ -83,6 +128,22 @@ export const generateBackground = async (
   const targetWidth = 1920;
 
   const parts: any[] = [];
+
+  // Master Prompt Generation for InfoProduct Mode
+  let infoproductMasterPrompt = "";
+  if (mode === 'INFOPRODUCT' && projectContext) {
+    try {
+      infoproductMasterPrompt = await generateInfoproductPrompt(
+        projectContext.niche || "Expert",
+        projectContext.environmentColor || "#1a1a1a",
+        projectContext.rimLightColor || "#FFD700",
+        projectContext.framing || "MEDIUM",
+        projectContext.floatingElements3D ? projectContext.floatingElementsDescription : undefined
+      );
+    } catch (e) {
+      console.error("Failed to generate master prompt", e);
+    }
+  }
 
   // 1. User Images (Subjects, Objects, or Base Canvas)
   userImagesBase64.forEach((img) => {
@@ -146,12 +207,14 @@ export const generateBackground = async (
     finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a ${section === 'LANDING_PAGES' ? 'Landing Page' : 'Design Composition'}.\n`;
   }
 
-  if (userPrompt.trim()) {
+  if (mode === 'INFOPRODUCT' && infoproductMasterPrompt) {
+    finalPrompt += `SCENE DESCRIPTION: ${infoproductMasterPrompt}\n`;
+  } else if (userPrompt.trim()) {
     finalPrompt += `User Scenario/Context Instructions: ${userPrompt}\n`;
   }
 
-  // Color Palette Injection for InfoProducts
-  if (mode === 'INFOPRODUCT' && palette) {
+  // Color Palette Injection for InfoProducts (Fallback if no master prompt)
+  if (mode === 'INFOPRODUCT' && palette && !infoproductMasterPrompt) {
     finalPrompt += `COLOR PALETTE & LIGHTING RULES:\n`;
     finalPrompt += `1. Dominant Background Color: ${palette.primary || 'Dark High-End Neutral'}.\n`;
     finalPrompt += `2. Secondary Lighting Color (Rim Light/Depth): ${palette.secondary || 'Warm Gold/Cold Blue'}.\n`;

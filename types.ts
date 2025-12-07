@@ -45,8 +45,9 @@ export interface ProjectContext {
   floatingElements3D: boolean;
   floatingElementsDescription?: string;
   niche?: string;
-  environment?: string;
-  useEnvironmentRef?: boolean;
+  environmentColor?: string;
+  rimLightColor?: string;
+  framing?: 'CLOSE_UP' | 'MEDIUM' | 'AMERICAN';
 }
 
 export interface ProjectTab {

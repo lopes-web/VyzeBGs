@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ImageUpload from './ImageUpload';
 import PositionSelector from './PositionSelector';
 import ReferenceManager from './ReferenceManager';
-import { SubjectPosition, HistoryItem, ReferenceItem, GenerationAttributes, GeneratorMode, AppSection, ColorPalette } from '../types';
+import { SubjectPosition, HistoryItem, ReferenceItem, GenerationAttributes, GeneratorMode, AppSection, ColorPalette, ProjectContext } from '../types';
 import { generateBackground, refineImage, reframeImageForTextLayout, inpaintImage } from '../services/geminiService';
 import MagicEraserCanvas from './MagicEraserCanvas';
 import { uploadImageToStorage } from '../services/storageService';
@@ -146,9 +146,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [batchSize, setBatchSize] = useState<number>(1);
 
     // Project Context (New)
-    const [projectContext, setProjectContext] = useState({
+    const [projectContext, setProjectContext] = useState<ProjectContext>({
         floatingElements3D: false,
-        floatingElementsDescription: ''
+        floatingElementsDescription: '',
+        niche: '',
+        environmentColor: '#1a1a1a', // Dark High-End Neutral
+        rimLightColor: '#FFD700',   // Warm Gold
+        framing: 'MEDIUM'
     });
 
     // InfoProduct Palette
@@ -188,7 +192,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     const increment = prev < 50 ? 5 : prev < 80 ? 2 : 0.5;
                     return Math.min(prev + increment, 95);
                 });
-            }, 200);
+            });
         } else {
             setProgress(100);
             setTimeout(() => setProgress(0), 500); // Reset after completion
@@ -578,10 +582,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             description={getUploadDesc()}
                         />
 
-                        <ReferenceManager
-                            items={referenceItems}
-                            onChange={setReferenceItems}
-                        />
+                        {currentMode !== 'INFOPRODUCT' && (
+                            <ReferenceManager
+                                items={referenceItems}
+                                onChange={setReferenceItems}
+                            />
+                        )}
 
                         <ImageUpload
                             label="Elementos Secundários (Opcional)"
@@ -595,6 +601,20 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* Configuration Panel */}
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
+
+                        {/* Nicho Input (New) */}
+                        <div className="mb-6">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Nicho / Projeto
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Ex: Trader de Elite, Dentista Premium..."
+                                value={projectContext.niche || ''}
+                                onChange={(e) => setProjectContext(prev => ({ ...prev, niche: e.target.value }))}
+                                className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-lime-500 outline-none"
+                            />
+                        </div>
 
                         {/* Project Context - 3D Elements */}
                         <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
@@ -631,45 +651,78 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         </div>
 
                         <div className="mb-6">
-                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Posição do Sujeito</label>
-                            <PositionSelector value={position} onChange={setPosition} />
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Enquadramento</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {[
+                                    { id: 'CLOSE_UP', label: 'Close-up', icon: 'fa-user-circle' },
+                                    { id: 'MEDIUM', label: 'Médio', icon: 'fa-user' },
+                                    { id: 'AMERICAN', label: 'Americano', icon: 'fa-user-tie' }
+                                ].map((opt) => (
+                                    <button
+                                        key={opt.id}
+                                        onClick={() => setProjectContext(prev => ({ ...prev, framing: opt.id as any }))}
+                                        className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${projectContext.framing === opt.id
+                                            ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                            : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'
+                                            }`}
+                                    >
+                                        <i className={`fas ${opt.icon} mb-1 text-lg`}></i>
+                                        <span className="text-[10px] font-medium">{opt.label}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
-                        {currentMode === 'INFOPRODUCT' && (
-                            <div className="mb-6 space-y-3">
-                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Paleta de Cores (Marca)</label>
-                                <div>
-                                    <label className="block text-xs text-gray-500 mb-1">Fundo (Predominante)</label>
+                        {/* Iluminação & Atmosfera (New Color Pickers) */}
+                        <div className="mb-6 space-y-4">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
+
+                            {/* Cor do Ambiente */}
+                            <div>
+                                <label className="block text-xs text-gray-500 mb-1 flex justify-between">
+                                    <span>Cor do Ambiente (Fundo)</span>
+                                    <span className="text-gray-400">{projectContext.environmentColor}</span>
+                                </label>
+                                <div className="flex gap-2 items-center">
                                     <input
-                                        type="text"
-                                        placeholder="Ex: Preto Luxo, Azul Marinho..."
-                                        value={colorPalette.primary}
-                                        onChange={(e) => setColorPalette(prev => ({ ...prev, primary: e.target.value }))}
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
+                                        type="color"
+                                        value={projectContext.environmentColor || '#1a1a1a'}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, environmentColor: e.target.value }))}
+                                        className="w-10 h-10 rounded cursor-pointer border-0 p-0"
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-xs text-gray-500 mb-1">Luz de Recorte (Profundidade)</label>
                                     <input
                                         type="text"
-                                        placeholder="Ex: Dourado, Ciano, Branco Frio..."
-                                        value={colorPalette.secondary}
-                                        onChange={(e) => setColorPalette(prev => ({ ...prev, secondary: e.target.value }))}
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs text-gray-500 mb-1">Detalhes (Overlays/Partículas)</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Ex: Verde Neon, Laranja..."
-                                        value={colorPalette.accent}
-                                        onChange={(e) => setColorPalette(prev => ({ ...prev, accent: e.target.value }))}
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
+                                        value={projectContext.environmentColor || ''}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, environmentColor: e.target.value }))}
+                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
+                                        placeholder="#1a1a1a"
                                     />
                                 </div>
                             </div>
-                        )}
+
+                            {/* Cor de Destaque */}
+                            <div>
+                                <label className="block text-xs text-gray-500 mb-1 flex justify-between">
+                                    <span>Cor de Destaque (Rim Light)</span>
+                                    <span className="text-gray-400">{projectContext.rimLightColor}</span>
+                                </label>
+                                <div className="flex gap-2 items-center">
+                                    <input
+                                        type="color"
+                                        value={projectContext.rimLightColor || '#FFD700'}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, rimLightColor: e.target.value }))}
+                                        className="w-10 h-10 rounded cursor-pointer border-0 p-0"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={projectContext.rimLightColor || ''}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, rimLightColor: e.target.value }))}
+                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
+                                        placeholder="#FFD700"
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
                         {/* Attributes Toggles */}
                         <div className="mb-6 grid grid-cols-2 gap-3">
@@ -798,130 +851,64 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                 <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]">
                     {generatedImage ? (
                         <div className="relative w-full h-full flex items-center justify-center bg-gray-100 dark:bg-black/20 rounded-xl overflow-hidden p-4">
-                            {/* Image Container with Aspect Ratio Enforcement */}
-                            <div className="relative max-w-full max-h-full aspect-video shadow-2xl">
-                                <img
-                                    src={generatedImage}
-                                    alt="Generated Background"
-                                    className="w-full h-full object-cover rounded-lg"
-                                />
-
-                                {/* Magic Eraser Overlay - Inside the same container to match dimensions */}
-                                {isEraserActive && (
-                                    <div className="absolute inset-0 z-10 rounded-lg overflow-hidden">
-                                        <MagicEraserCanvas
-                                            imageUrl={generatedImage}
-                                            width={1920}
-                                            height={1080}
-                                            onMaskChange={setEraserMask}
-                                            isDrawingEnabled={true}
-                                            brushSize={40}
-                                            onDrawingStateChange={setIsEraserDrawing}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                                <button
-                                    onClick={() => setIsEraserActive(!isEraserActive)}
-                                    className={`p-3 rounded-lg backdrop-blur-md border transition-colors ${isEraserActive
-                                        ? 'bg-lime-500 text-black border-lime-500'
-                                        : 'bg-white/80 dark:bg-black/60 text-gray-900 dark:text-white border-gray-200 dark:border-white/10 hover:bg-lime-500 hover:text-black'
-                                        }`}
-                                    title="Magic Eraser (Borracha Mágica)"
-                                >
-                                    <i className="fas fa-eraser"></i>
-                                </button>
+                            <img
+                                src={generatedImage}
+                                alt="Generated"
+                                className="max-w-full max-h-full object-contain rounded-lg shadow-lg animate-fadeIn"
+                            />
+                            {/* Overlay Actions */}
+                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                     onClick={() => handleDownload(generatedImage)}
-                                    className="bg-white/80 dark:bg-black/60 hover:bg-lime-500 hover:text-black text-gray-900 dark:text-white p-3 rounded-lg backdrop-blur-md border border-gray-200 dark:border-white/10 transition-colors"
-                                    title="Baixar Imagem"
+                                    className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg backdrop-blur-sm transition-all"
+                                    title="Baixar"
                                 >
                                     <i className="fas fa-download"></i>
                                 </button>
+                                <button
+                                    onClick={() => setIsEraserActive(true)}
+                                    className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg backdrop-blur-sm transition-all"
+                                    title="Magic Eraser"
+                                >
+                                    <i className="fas fa-eraser"></i>
+                                </button>
                             </div>
 
-                            {/* Eraser Controls - Floating Bottom Bar */}
-                            {isEraserActive && eraserMask && !isEraserDrawing && (
-                                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-md p-3 rounded-full flex items-center gap-4 border border-white/10 shadow-2xl z-30 animate-fadeIn">
-                                    <div className="flex items-center gap-2 px-2 border-r border-white/10">
-                                        <i className="fas fa-magic text-lime-500"></i>
-                                        <span className="text-white text-xs font-bold uppercase hidden sm:inline">Magic Eraser</span>
-                                    </div>
-
-                                    <input
-                                        type="text"
-                                        value={eraserPrompt}
-                                        onChange={(e) => setEraserPrompt(e.target.value)}
-                                        placeholder="O que alterar? (Opcional)"
-                                        className="bg-transparent border-none text-white text-sm placeholder-gray-400 focus:ring-0 w-48 outline-none"
-                                    />
-
-                                    <button
-                                        onClick={handleInpaint}
-                                        disabled={!eraserMask}
-                                        className="bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 px-4 rounded-full text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                                    >
-                                        {eraserPrompt ? 'Substituir' : 'Apagar'}
-                                    </button>
-
-                                    <button
-                                        onClick={() => setIsEraserActive(false)}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                                    >
-                                        <i className="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            )}
-
-                            {/* Batch Thumbnails Overlay */}
-                            {generatedImages.length > 1 && (
-                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 p-2 bg-black/50 backdrop-blur-md rounded-xl z-10">
-                                    {generatedImages.map((img, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => {
-                                                setGeneratedImage(img);
-                                                setSelectedImageIndex(idx);
-                                            }}
-                                            className={`w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? 'border-lime-500 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
-                                                }`}
-                                        >
-                                            <img src={img} alt={`Variation ${idx + 1}`} className="w-full h-full object-cover" />
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Validation Actions Overlay */}
-                            {!isGenerating && !isEraserActive && (
-                                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="bg-white/90 dark:bg-black/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-4 shadow-2xl">
-                                        <div className="flex-1 w-full">
-                                            <input
-                                                type="text"
-                                                value={verticalPrompt}
-                                                onChange={(e) => setVerticalPrompt(e.target.value)}
-                                                placeholder="Prompt Vertical (Opcional)"
-                                                className="w-full bg-transparent border-b border-gray-400 dark:border-gray-600 px-3 py-2 text-xs text-gray-900 dark:text-white focus:border-lime-500 outline-none"
+                            {/* Magic Eraser Overlay */}
+                            {isEraserActive && (
+                                <div className="absolute inset-0 z-30 bg-black/80 flex items-center justify-center">
+                                    <div className="relative w-full h-full flex flex-col">
+                                        <div className="absolute top-4 left-4 z-40 text-white bg-black/50 px-3 py-1 rounded-full text-sm">
+                                            <i className="fas fa-paint-brush mr-2"></i>
+                                            Pinte a área para remover/alterar
+                                        </div>
+                                        <div className="flex-grow relative overflow-hidden flex items-center justify-center">
+                                            <MagicEraserCanvas
+                                                image={generatedImage}
+                                                onMaskGenerated={setEraserMask}
+                                                isDrawing={isEraserDrawing}
+                                                setIsDrawing={setIsEraserDrawing}
                                             />
                                         </div>
-                                        <div className="flex items-center gap-2 pl-4">
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-xs text-gray-500">H:</span>
-                                                <input
-                                                    type="number"
-                                                    value={verticalHeight}
-                                                    onChange={(e) => setVerticalHeight(Number(e.target.value))}
-                                                    className="w-14 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs px-1 py-1 text-gray-900 dark:text-white text-center"
-                                                />
-                                            </div>
+                                        <div className="p-4 bg-gray-900 border-t border-gray-800 flex gap-4 items-center">
+                                            <input
+                                                type="text"
+                                                value={eraserPrompt}
+                                                onChange={(e) => setEraserPrompt(e.target.value)}
+                                                placeholder="O que fazer nesta área? (Ex: Remover, Trocar por flor...)"
+                                                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                            />
                                             <button
-                                                onClick={handleValidateAndFormat}
-                                                className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors whitespace-nowrap"
+                                                onClick={handleInpaint}
+                                                className="px-6 py-2 bg-lime-500 hover:bg-lime-400 text-black font-bold rounded-lg transition-colors"
                                             >
-                                                <i className="fas fa-mobile-alt"></i> Formatar 9:16
+                                                Aplicar
+                                            </button>
+                                            <button
+                                                onClick={() => setIsEraserActive(false)}
+                                                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                                            >
+                                                Cancelar
                                             </button>
                                         </div>
                                     </div>
@@ -929,137 +916,82 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             )}
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-600 bg-gray-50 dark:bg-black/20 rounded-xl">
-                            {isGenerating ? (
-                                <div className="text-center w-full max-w-md px-8">
-                                    <div className="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                                        <span>Renderizando com Gemini...</span>
-                                        <span>{Math.round(progress)}%</span>
-                                    </div>
-                                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-to-r from-lime-500 to-emerald-500 transition-all duration-200 ease-out"
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-4 animate-pulse">
-                                        Criando detalhes e iluminação...
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="text-center p-8">
-                                    <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user-circle' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-6xl mb-4 text-gray-300 dark:text-gray-800`}></i>
-                                    <p className="text-xl font-medium text-gray-400 dark:text-gray-500">
-                                        {currentMode === 'ENHANCE' ? 'Melhorar Imagem' : currentMode === 'INFOPRODUCT' ? 'Criar Infoproduto' : `Criar ${currentMode === 'HUMAN' ? 'Pessoa' : 'Objeto'} `}
-                                    </p>
-                                </div>
-                            )}
+                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
+                            <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-4 animate-pulse">
+                                <i className="fas fa-image text-4xl opacity-50"></i>
+                            </div>
+                            <p className="text-sm font-medium">Sua criação aparecerá aqui</p>
                         </div>
                     )}
                 </div>
 
-                {/* Refinement Section */}
-                {generatedImage && !isGenerating && (
-                    <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 shadow-lg animate-fadeIn mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex justify-between">
-                            <span><i className="fas fa-sliders-h mr-2 text-lime-600 dark:text-lime-400"></i>Ajustes Finos</span>
-                        </label>
-                        <div className="flex flex-col gap-3">
-                            <div className="flex gap-2 items-start">
-                                <div className="w-24">
-                                    <ImageUpload
-                                        label=""
-                                        value={refineAssets}
-                                        onChange={setRefineAssets}
-                                        multiple={true}
-                                        description=""
-                                        compact={true}
-                                    />
-                                </div>
-                                <div className="flex-1 flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={refinePrompt}
-                                        onChange={(e) => setRefinePrompt(e.target.value)}
-                                        placeholder="Ex: 'Deixe a luz mais quente'..."
-                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none h-12 text-gray-900 dark:text-white"
-                                        onKeyDown={(e) => e.key === 'Enter' && handleRefine()}
-                                    />
-                                    <button
-                                        onClick={handleRefine}
-                                        disabled={!refinePrompt}
-                                        className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 h-12 border border-gray-300 dark:border-gray-700"
-                                    >
-                                        Refinar
-                                    </button>
+                {/* History Strip */}
+                <div className="h-32 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+                    {localHistory.length === 0 ? (
+                        <div className="w-full flex items-center justify-center text-xs text-gray-400">
+                            Histórico vazio
+                        </div>
+                    ) : (
+                        localHistory.map((item) => (
+                            <div
+                                key={item.id}
+                                className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+                                    }`}
+                                onClick={() => restoreFromHistory(item)}
+                            >
+                                <img src={item.url} alt="History" className="w-full h-full object-cover" />
+                                {/* Selection Checkbox for Merge */}
+                                <div
+                                    className={`absolute top-1 right-1 w-5 h-5 rounded-full bg-black/50 border border-white flex items-center justify-center transition-opacity ${selectedHistoryIds.includes(item.id) ? 'opacity-100 bg-lime-500 border-lime-500' : 'opacity-0 group-hover:opacity-100'
+                                        }`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleHistorySelection(item.id);
+                                    }}
+                                >
+                                    {selectedHistoryIds.includes(item.id) && <i className="fas fa-check text-white text-xs"></i>}
                                 </div>
                             </div>
-                        </div>
+                        ))
+                    )}
+                </div>
+
+                {/* Merge Action Bar */}
+                {selectedHistoryIds.length > 1 && (
+                    <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-4 animate-slideUp z-50 backdrop-blur-md border border-white/10">
+                        <span className="text-sm font-medium">{selectedHistoryIds.length} selecionados</span>
+                        <button
+                            onClick={handleMerge}
+                            className="bg-lime-500 hover:bg-lime-400 text-black px-4 py-1.5 rounded-full text-sm font-bold transition-colors"
+                        >
+                            Mesclar
+                        </button>
+                        <button
+                            onClick={() => setSelectedHistoryIds([])}
+                            className="text-gray-400 hover:text-white transition-colors"
+                        >
+                            <i className="fas fa-times"></i>
+                        </button>
                     </div>
                 )}
 
-                {/* Local History Strip */}
-                {localHistory.length > 0 && (
-                    <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-t-2xl p-4 flex flex-col mt-auto shadow-[0_-5px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
-                        <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                                <i className="fas fa-history"></i> Histórico da Aba
-                            </h3>
-                            {selectedHistoryIds.length > 0 && (
-                                <button
-                                    onClick={handleMerge}
-                                    className="text-xs bg-lime-500 hover:bg-lime-400 text-black px-3 py-1 rounded font-bold transition-colors"
-                                >
-                                    <i className="fas fa-object-group mr-1"></i> Mesclar Selecionados ({selectedHistoryIds.length})
-                                </button>
-                            )}
-                        </div>
-                        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 h-28 items-center">
-                            {localHistory.map(item => {
-                                const isSelected = selectedHistoryIds.includes(item.id);
-                                return (
-                                    <div
-                                        key={item.id}
-                                        className={`relative flex-shrink-0 h-24 aspect-[16/9] rounded-lg overflow-hidden border-2 cursor-pointer transition-all group ${isSelected ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'} `}
-                                        onClick={() => restoreFromHistory(item)}
-                                    >
-                                        <img src={item.url} alt="Histórico" className="w-full h-full object-cover" />
-
-                                        {/* Hover Info */}
-                                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-2 text-center">
-                                            <p className="text-[10px] text-gray-300 line-clamp-2 mb-1">{item.prompt || 'Sem prompt'}</p>
-                                            <span className="text-[10px] text-lime-400 font-bold">Clique para Restaurar</span>
-                                        </div>
-
-                                        {/* Select Checkbox */}
-                                        <div
-                                            className="absolute top-1 left-1 z-10"
-                                            onClick={(e) => { e.stopPropagation(); toggleHistorySelection(item.id); }}
-                                        >
-                                            <div className={`w-4 h-4 rounded border ${isSelected ? 'bg-lime-500 border-lime-500' : 'bg-white/50 dark:bg-black/50 border-gray-400'} flex items-center justify-center`}>
-                                                {isSelected && <i className="fas fa-check text-[10px] text-black"></i>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
             </div>
 
             {/* Export Modal */}
             {showExportModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
-                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-200 dark:border-white/10 relative">
                         <button
                             onClick={() => setShowExportModal(false)}
-                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
                         >
-                            <i className="fas fa-times"></i>
+                            <i className="fas fa-times text-xl"></i>
                         </button>
 
-                        <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Exportar Imagem</h3>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                            <i className="fas fa-download text-lime-500"></i>
+                            Exportar Imagem
+                        </h3>
 
                         <div className="space-y-6">
                             <div>
@@ -1069,9 +1001,9 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                         <button
                                             key={fmt}
                                             onClick={() => setExportFormat(fmt as any)}
-                                            className={`py-2 px-4 rounded-lg border text-sm font-bold uppercase transition-all ${exportFormat === fmt
+                                            className={`py-2 px-4 rounded-lg border text-sm font-medium uppercase transition-all ${exportFormat === fmt
                                                 ? 'bg-lime-500 text-black border-lime-500'
-                                                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 border-transparent hover:bg-gray-200 dark:hover:bg-gray-700'
+                                                : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'
                                                 }`}
                                         >
                                             {fmt}
@@ -1081,7 +1013,9 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Qualidade: {Math.round(exportQuality * 100)}%</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Qualidade: {Math.round(exportQuality * 100)}%
+                                </label>
                                 <input
                                     type="range"
                                     min="0.1"
@@ -1091,15 +1025,11 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                     onChange={(e) => setExportQuality(Number(e.target.value))}
                                     className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-lime-500"
                                 />
-                                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Baixa</span>
-                                    <span>Alta</span>
-                                </div>
                             </div>
 
                             <button
                                 onClick={handleExport}
-                                className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-3 rounded-xl transition-colors"
+                                className="w-full py-3 bg-lime-500 hover:bg-lime-400 text-black font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02]"
                             >
                                 Baixar Agora
                             </button>
@@ -1107,6 +1037,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
