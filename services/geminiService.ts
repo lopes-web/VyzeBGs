@@ -1,7 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { MODEL_NAME, POSITION_PROMPTS, DEFAULT_TREATMENT_PROMPT, OBJECT_TREATMENT_PROMPT, ENHANCE_TREATMENT_PROMPT, INFOPRODUCT_TREATMENT_PROMPT, BLUR_PROMPT, GRADIENT_PROMPT } from "../constants";
-import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette } from "../types";
+import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette, ProjectContext } from "../types";
 
 const LOCAL_STORAGE_KEY = 'gemini_api_key';
 
@@ -73,7 +73,8 @@ export const generateBackground = async (
   position: SubjectPosition,
   attributes: GenerationAttributes,
   targetHeight: number = 1080,
-  palette?: ColorPalette // Optional palette for Infoproducts
+  palette?: ColorPalette, // Optional palette for Infoproducts
+  projectContext?: ProjectContext
 ): Promise<{ image: string, finalPrompt: string }> => {
 
   const apiKey = getApiKey();
@@ -178,6 +179,11 @@ export const generateBackground = async (
   }
   if (!attributes.useGradient && !attributes.useBlur && mode !== 'ENHANCE') {
     finalPrompt += `CLARITY ATTRIBUTE: Keep the background relatively detailed and sharp across the frame, using only natural optical depth of field.\n`;
+  }
+
+  // Project Context - 3D Elements
+  if (projectContext?.floatingElements3D) {
+    finalPrompt += `3D DEPTH ENHANCEMENT: Add abstract 3D floating elements (spheres, cubes, or shapes related to the context) in the background. They should have depth of field (bokeh) to create a sense of immersion and high-end 3D design.\n`;
   }
 
   // Specific Mode Guidelines

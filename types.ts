@@ -41,6 +41,13 @@ export interface GenerationAttributes {
   useBlur: boolean;
 }
 
+export interface ProjectContext {
+  floatingElements3D: boolean;
+  niche?: string;
+  environment?: string;
+  useEnvironmentRef?: boolean;
+}
+
 export interface ProjectTab {
   id: string;
   title: string;

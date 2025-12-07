@@ -145,6 +145,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [attributes, setAttributes] = useState<GenerationAttributes>({ useGradient: true, useBlur: false });
     const [batchSize, setBatchSize] = useState<number>(1);
 
+    // Project Context (New)
+    const [projectContext, setProjectContext] = useState({
+        floatingElements3D: false
+    });
+
     // InfoProduct Palette
     const [colorPalette, setColorPalette] = useState<ColorPalette>({
         primary: '',
@@ -353,7 +358,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         position,
                         attributes,
                         customHeight,
-                        currentMode === 'INFOPRODUCT' ? colorPalette : undefined
+                        currentMode === 'INFOPRODUCT' ? colorPalette : undefined,
+                        projectContext
                     )
                 );
             }
@@ -589,6 +595,27 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
 
+                        {/* Project Context - 3D Elements */}
+                        <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                    <i className="fas fa-cube text-lime-500"></i>
+                                    Elementos Flutuantes 3D
+                                </label>
+                                <button
+                                    onClick={() => setProjectContext(prev => ({ ...prev, floatingElements3D: !prev.floatingElements3D }))}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.floatingElements3D ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.floatingElements3D ? 'translate-x-6' : 'translate-x-1'}`}
+                                    />
+                                </button>
+                            </div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                Adiciona formas 3D abstratas e profundidade ao fundo.
+                            </p>
+                        </div>
+
                         <div className="mb-6">
                             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Posição do Sujeito</label>
                             <PositionSelector value={position} onChange={setPosition} />
@@ -785,8 +812,8 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                 <button
                                     onClick={() => setIsEraserActive(!isEraserActive)}
                                     className={`p-3 rounded-lg backdrop-blur-md border transition-colors ${isEraserActive
-                                            ? 'bg-lime-500 text-black border-lime-500'
-                                            : 'bg-white/80 dark:bg-black/60 text-gray-900 dark:text-white border-gray-200 dark:border-white/10 hover:bg-lime-500 hover:text-black'
+                                        ? 'bg-lime-500 text-black border-lime-500'
+                                        : 'bg-white/80 dark:bg-black/60 text-gray-900 dark:text-white border-gray-200 dark:border-white/10 hover:bg-lime-500 hover:text-black'
                                         }`}
                                     title="Magic Eraser (Borracha Mágica)"
                                 >
