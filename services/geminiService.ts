@@ -161,9 +161,9 @@ export const generateBackground = async (
 
   const parts: any[] = [];
 
-  // Master Prompt Generation for InfoProduct Mode
+  // Master Prompt Generation for InfoProduct and Human Mode
   let infoproductMasterPrompt = "";
-  if (mode === 'INFOPRODUCT' && projectContext) {
+  if ((mode === 'INFOPRODUCT' || mode === 'HUMAN') && projectContext) {
     try {
       // Use defaults if projectContext is missing new fields (backward compatibility)
       const colors: LightingColors = projectContext.colors || { ambient: '#0f172a', rim: '#a3e635', complementary: '#6366f1' };
@@ -176,8 +176,10 @@ export const generateBackground = async (
       const floatingElementsPrompt = projectContext.floatingElementsDescription || "";
       const environmentImagesCount = projectContext.environmentImages?.length || 0;
 
+      const defaultNiche = mode === 'INFOPRODUCT' ? "Expert" : "Portrait Subject";
+
       infoproductMasterPrompt = await generateEnhancedPrompt(
-        projectContext.niche || "Expert",
+        projectContext.niche || defaultNiche,
         environment,
         environmentImagesCount,
         subjectDescription,
@@ -259,7 +261,7 @@ export const generateBackground = async (
     finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a ${section === 'LANDING_PAGES' ? 'Landing Page' : 'Design Composition'}.\n`;
   }
 
-  if (mode === 'INFOPRODUCT' && infoproductMasterPrompt) {
+  if ((mode === 'INFOPRODUCT' || mode === 'HUMAN') && infoproductMasterPrompt) {
     finalPrompt += `SCENE DESCRIPTION: ${infoproductMasterPrompt}\n`;
   } else if (userPrompt.trim()) {
     finalPrompt += `User Scenario/Context Instructions: ${userPrompt}\n`;
