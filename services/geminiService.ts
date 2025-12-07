@@ -75,9 +75,17 @@ const generateInfoproductPrompt = async (
   if (!apiKey) return "";
   const ai = new GoogleGenAI({ apiKey });
 
+  const framingMap: Record<string, string> = {
+    'CLOSE_UP': "Extreme Close-Up (Head and Shoulders only, face filling the frame)",
+    'MEDIUM': "Medium Shot (Waist Up, standard portrait)",
+    'AMERICAN': "American Shot (Knees Up, 3/4 view)"
+  };
+
+  const selectedFraming = framingMap[framing] || framing;
+
   const colorInstruction = autoColor
     ? "COLOR STRATEGY: Analyze the niche and choose the BEST psychological color palette (Background + Rim Light) that conveys authority and trust for this specific expert. IGNORE the provided default colors."
-    : `COLOR STRATEGY: STRICTLY USE the provided colors:\n- Environment: ${environmentColor}\n- Rim Light: ${rimLightColor}`;
+    : `COLOR STRATEGY: MANDATORY ENFORCEMENT. You MUST use the exact colors provided below. Do not deviate.\n- Environment (Background): ${environmentColor}\n- Rim Light (Edge): ${rimLightColor}`;
 
   const systemPrompt = `
 ROLE: You are a Master Visual Director for High-End InfoProducts.
@@ -85,7 +93,7 @@ TASK: Construct a rigid, high-converting image prompt based on the user's niche 
 
 INPUTS:
 - Niche: ${niche}
-- Framing: ${framing}
+- Framing: ${selectedFraming}
 - 3D Elements: ${floatingElementsDescription || 'None'}
 ${colorInstruction}
 
@@ -93,7 +101,7 @@ OUTPUT FORMAT:
 Return ONLY the raw prompt string. No explanations.
 
 PROMPT STRUCTURE TO GENERATE:
-"High-end studio portrait of a [${niche} Expert], [${framing}] shot.
+"High-end studio portrait of a [${niche} Expert], [${selectedFraming}].
 Background: Abstract, depth-filled studio environment in [${autoColor ? 'PSYCHOLOGICALLY OPTIMIZED COLOR' : environmentColor}] tones.
 Lighting: Cinematic lighting with strong [${autoColor ? 'COMPLEMENTARY RIM LIGHT' : rimLightColor}] rim light separating subject from background.
 Details: ${floatingElementsDescription ? `Floating 3D elements: ${floatingElementsDescription}, with bokeh depth of field.` : 'Minimalist, clean texture.'}
