@@ -68,11 +68,16 @@ const generateInfoproductPrompt = async (
   environmentColor: string,
   rimLightColor: string,
   framing: string,
+  autoColor: boolean,
   floatingElementsDescription?: string
 ): Promise<string> => {
   const apiKey = getApiKey();
   if (!apiKey) return "";
   const ai = new GoogleGenAI({ apiKey });
+
+  const colorInstruction = autoColor
+    ? "COLOR STRATEGY: Analyze the niche and choose the BEST psychological color palette (Background + Rim Light) that conveys authority and trust for this specific expert. IGNORE the provided default colors."
+    : `COLOR STRATEGY: STRICTLY USE the provided colors:\n- Environment: ${environmentColor}\n- Rim Light: ${rimLightColor}`;
 
   const systemPrompt = `
 ROLE: You are a Master Visual Director for High-End InfoProducts.
@@ -80,18 +85,17 @@ TASK: Construct a rigid, high-converting image prompt based on the user's niche 
 
 INPUTS:
 - Niche: ${niche}
-- Environment Color: ${environmentColor}
-- Rim Light Color: ${rimLightColor}
 - Framing: ${framing}
 - 3D Elements: ${floatingElementsDescription || 'None'}
+${colorInstruction}
 
 OUTPUT FORMAT:
 Return ONLY the raw prompt string. No explanations.
 
 PROMPT STRUCTURE TO GENERATE:
 "High-end studio portrait of a [${niche} Expert], [${framing}] shot.
-Background: Abstract, depth-filled studio environment in [${environmentColor}] tones.
-Lighting: Cinematic lighting with strong [${rimLightColor}] rim light separating subject from background.
+Background: Abstract, depth-filled studio environment in [${autoColor ? 'PSYCHOLOGICALLY OPTIMIZED COLOR' : environmentColor}] tones.
+Lighting: Cinematic lighting with strong [${autoColor ? 'COMPLEMENTARY RIM LIGHT' : rimLightColor}] rim light separating subject from background.
 Details: ${floatingElementsDescription ? `Floating 3D elements: ${floatingElementsDescription}, with bokeh depth of field.` : 'Minimalist, clean texture.'}
 Atmosphere: Professional, authoritative, premium, 8k resolution, highly detailed, sharp focus on face."
 `;
@@ -138,6 +142,7 @@ export const generateBackground = async (
         projectContext.environmentColor || "#1a1a1a",
         projectContext.rimLightColor || "#FFD700",
         projectContext.framing || "MEDIUM",
+        projectContext.autoColor ?? true,
         projectContext.floatingElements3D ? projectContext.floatingElementsDescription : undefined
       );
     } catch (e) {

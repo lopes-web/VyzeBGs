@@ -108,7 +108,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
         onDrop={handleDrop}
         className={`
           relative group flex flex-col items-center justify-center w-full 
-          ${compact ? 'h-16' : (!multiple && value) ? 'h-64' : 'h-64'}
+          ${compact ? 'h-16' : (!multiple && value) ? 'h-40' : 'h-40'}
           rounded-3xl cursor-pointer transition-all duration-300 ease-out
           border-2 border-dashed
           ${isDragging
@@ -120,7 +120,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
         `}
       >
         {!multiple && value ? (
-          <div className="relative w-full h-full overflow-hidden rounded-[22px] group-inner">
+          <div className="relative w-full h-full overflow-hidden rounded-xl group-inner">
             <img
               src={`data:image/png;base64,${value}`}
               alt="Preview"

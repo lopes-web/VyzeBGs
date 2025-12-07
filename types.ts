@@ -48,6 +48,7 @@ export interface ProjectContext {
   environmentColor?: string;
   rimLightColor?: string;
   framing?: 'CLOSE_UP' | 'MEDIUM' | 'AMERICAN';
+  autoColor?: boolean;
 }
 
 export interface ProjectTab {
