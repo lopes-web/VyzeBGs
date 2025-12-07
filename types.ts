@@ -43,6 +43,7 @@ export interface GenerationAttributes {
 
 export interface ProjectContext {
   floatingElements3D: boolean;
+  floatingElementsDescription?: string;
   niche?: string;
   environment?: string;
   useEnvironmentRef?: boolean;

@@ -183,7 +183,8 @@ export const generateBackground = async (
 
   // Project Context - 3D Elements
   if (projectContext?.floatingElements3D) {
-    finalPrompt += `3D DEPTH ENHANCEMENT: Add abstract 3D floating elements (spheres, cubes, or shapes related to the context) in the background. They should have depth of field (bokeh) to create a sense of immersion and high-end 3D design.\n`;
+    const elementDesc = projectContext.floatingElementsDescription || "abstract 3D floating elements (spheres, cubes, or shapes related to the context)";
+    finalPrompt += `3D DEPTH ENHANCEMENT: Add ${elementDesc} in the background. They should have depth of field (bokeh) to create a sense of immersion and high-end 3D design.\n`;
   }
 
   // Specific Mode Guidelines

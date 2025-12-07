@@ -147,7 +147,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     // Project Context (New)
     const [projectContext, setProjectContext] = useState({
-        floatingElements3D: false
+        floatingElements3D: false,
+        floatingElementsDescription: ''
     });
 
     // InfoProduct Palette
@@ -614,6 +615,19 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                                 Adiciona formas 3D abstratas e profundidade ao fundo.
                             </p>
+
+                            {/* Description Input (Conditional) */}
+                            {projectContext.floatingElements3D && (
+                                <div className="mt-3 animate-fadeIn">
+                                    <input
+                                        type="text"
+                                        placeholder="Ex: Ícones de vidro, partículas douradas, moedas..."
+                                        value={projectContext.floatingElementsDescription}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, floatingElementsDescription: e.target.value }))}
+                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <div className="mb-6">
