@@ -76,9 +76,9 @@ const generateInfoproductPrompt = async (
   const ai = new GoogleGenAI({ apiKey });
 
   const framingMap: Record<string, string> = {
-    'CLOSE_UP': "Extreme Close-Up (Head and Shoulders only, face filling the frame)",
-    'MEDIUM': "Medium Shot (Waist Up, standard portrait)",
-    'AMERICAN': "American Shot (Knees Up, 3/4 view)"
+    'CLOSE_UP': "Head and Shoulders Portrait (Face and shoulders only, intimate close-up)",
+    'MEDIUM': "Medium Shot (Waist Up / Bust Portrait, standard professional framing)",
+    'AMERICAN': "Full Body Shot (Head to Toe, showing the entire subject standing)"
   };
 
   const selectedFraming = framingMap[framing] || framing;
@@ -86,6 +86,8 @@ const generateInfoproductPrompt = async (
   const colorInstruction = autoColor
     ? "COLOR STRATEGY: Analyze the niche and choose the BEST psychological color palette (Background + Rim Light) that conveys authority and trust for this specific expert. IGNORE the provided default colors."
     : `COLOR STRATEGY: MANDATORY ENFORCEMENT. You MUST use the exact colors provided below. Do not deviate.\n- Environment (Background): ${environmentColor}\n- Rim Light (Edge): ${rimLightColor}`;
+
+  const mandatoryStyle = "Create an 8K ultra-realistic cinematic action portrait, format 1080x1440, perfectly replicating the subject's physical traits, facial expression, and overall look from the reference image";
 
   const systemPrompt = `
 ROLE: You are a Master Visual Director for High-End InfoProducts.
@@ -101,7 +103,8 @@ OUTPUT FORMAT:
 Return ONLY the raw prompt string. No explanations.
 
 PROMPT STRUCTURE TO GENERATE:
-"High-end studio portrait of a [${niche} Expert], [${selectedFraming}].
+"${mandatoryStyle}.
+High-end studio portrait of a [${niche} Expert], [${selectedFraming}].
 Background: Abstract, depth-filled studio environment in [${autoColor ? 'PSYCHOLOGICALLY OPTIMIZED COLOR' : environmentColor}] tones.
 Lighting: Cinematic lighting with strong [${autoColor ? 'COMPLEMENTARY RIM LIGHT' : rimLightColor}] rim light separating subject from background.
 Details: ${floatingElementsDescription ? `Floating 3D elements: ${floatingElementsDescription}, with bokeh depth of field.` : 'Minimalist, clean texture.'}
