@@ -1,142 +1,71 @@
+
 import React, { useState, useEffect, useRef } from 'react';
+import { GoogleGenAI } from "@google/genai";
 import ImageUpload from './ImageUpload';
-import PositionSelector from './PositionSelector';
 import ReferenceManager from './ReferenceManager';
-import { SubjectPosition, HistoryItem, ReferenceItem, GenerationAttributes, GeneratorMode, AppSection, ColorPalette, ProjectContext } from '../types';
-import { generateBackground, refineImage, reframeImageForTextLayout, inpaintImage } from '../services/geminiService';
 import MagicEraserCanvas from './MagicEraserCanvas';
-import { uploadImageToStorage } from '../services/storageService';
-import { saveGeneration, getProjectHistory } from '../services/databaseService';
-import { useAuth } from './AuthContext';
+import PositionSelector from './PositionSelector';
+import {
+    generateBackground,
+    refineImage,
+    reframeImageForTextLayout,
+    inpaintImage,
+    saveApiKey,
+    checkApiKey,
+    promptApiKeySelection
+} from '../services/geminiService';
+import { uploadImageToStorage, saveGeneration } from '../services/firebaseService';
+import { useAuth } from '../context/AuthContext';
+import {
+    SubjectPosition,
+    ReferenceItem,
+    GenerationAttributes,
+    GeneratorMode,
+    HistoryItem,
+    AppSection,
+    ColorPalette,
+    ProjectContext
+} from '../types';
 
 interface GeneratorWorkspaceProps {
-    mode: GeneratorMode;
     section: AppSection;
+    initialMode?: GeneratorMode;
+    initialImage?: string;
     initialPrompt?: string;
-    initialReference?: File;
-    initialStyleReference?: File;
-    initialGeneratorMode?: GeneratorMode;
-    initialSecondaryElements?: File[];
-    isActive: boolean;
-    setHasKey: (hasKey: boolean) => void;
-    onAddToGlobalHistory: (item: HistoryItem) => void;
-    checkConcurrencyLimit: () => boolean;
-    onGenerationStart: () => void;
-    onGenerationEnd: () => void;
-    projectId?: string;
+    initialReference?: string;
+    initialStyleReference?: string;
+    initialSecondaryElements?: string[];
     shouldAutoGenerate?: boolean;
+    projectId?: string;
+    onAddToGlobalHistory: (item: HistoryItem) => void;
     isOptimistic?: boolean;
 }
 
 const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
-    mode: defaultMode,
     section,
-    initialPrompt,
+    initialMode = 'HUMAN',
+    initialImage,
+    initialPrompt = '',
     initialReference,
     initialStyleReference,
-    initialGeneratorMode,
     initialSecondaryElements,
-    isActive,
-    setHasKey,
-    onAddToGlobalHistory,
-    checkConcurrencyLimit,
-    onGenerationStart,
-    onGenerationEnd,
+    shouldAutoGenerate = false,
     projectId,
-    shouldAutoGenerate,
-    isOptimistic
+    onAddToGlobalHistory,
+    isOptimistic = false
 }) => {
     const { user } = useAuth();
+    const [hasKey, setHasKey] = useState(false);
+    const [currentMode, setCurrentMode] = useState<GeneratorMode>(initialMode);
 
-    // Initialize mode from prop if available, otherwise default
-    const [currentMode, setCurrentMode] = useState<GeneratorMode>(initialGeneratorMode || defaultMode);
-
-    const [userPrompt, setUserPrompt] = useState(initialPrompt || '');
-
-    // Update prompt if initialPrompt changes
+    // Check API Key on mount
     useEffect(() => {
-        if (initialPrompt) {
-            setUserPrompt(initialPrompt);
-        }
-    }, [initialPrompt]);
-
-    // Handle initial reference (Principal Image - Subject)
-    useEffect(() => {
-        if (initialReference) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                const base64 = result.includes(',') ? result.split(',')[1] : result;
-
-                setUserImages(prev => {
-                    if (!prev.includes(base64)) {
-                        return [...prev, base64];
-                    }
-                    return prev;
-                });
-            };
-            reader.readAsDataURL(initialReference);
-        }
-    }, [initialReference]);
-
-    // Handle initial style reference (Style/Example)
-    useEffect(() => {
-        if (initialStyleReference) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                const base64 = result.includes(',') ? result.split(',')[1] : result;
-                const newItem: ReferenceItem = {
-                    id: Date.now().toString(),
-                    image: base64,
-                    description: 'Referência de Estilo (Home Hub)'
-                };
-                setReferenceItems(prev => {
-                    if (!prev.some(item => item.image === base64)) {
-                        return [...prev, newItem];
-                    }
-                    return prev;
-                });
-            };
-            reader.readAsDataURL(initialStyleReference);
-        }
-    }, [initialStyleReference]);
-
-    // Handle initial secondary elements
-    useEffect(() => {
-        if (initialSecondaryElements && initialSecondaryElements.length > 0) {
-            initialSecondaryElements.forEach(file => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const result = reader.result as string;
-                    const base64 = result.includes(',') ? result.split(',')[1] : result;
-                    setAssetImages(prev => {
-                        if (!prev.includes(base64)) {
-                            return [...prev, base64];
-                        }
-                        return prev;
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    }, [initialSecondaryElements]);
-
-    // Load Project History
-    useEffect(() => {
-        if (projectId) {
-            const loadHistory = async () => {
-                const history = await getProjectHistory(projectId);
-                setLocalHistory(history);
-            };
-            loadHistory();
-        } else {
-            setLocalHistory([]);
-        }
-    }, [projectId]);
+        checkApiKey().then(setHasKey);
+    }, []);
 
     // Inputs
-    const [userImages, setUserImages] = useState<string[]>([]);
+    const [userImages, setUserImages] = useState<string[]>(initialImage ? [initialImage] : []);
+    const [userPrompt, setUserPrompt] = useState(initialPrompt);
     const [referenceItems, setReferenceItems] = useState<ReferenceItem[]>([]);
     const [assetImages, setAssetImages] = useState<string[]>([]);
 
@@ -152,7 +81,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         niche: '',
         environmentColor: '#1a1a1a', // Dark High-End Neutral
         rimLightColor: '#FFD700',   // Warm Gold
-        framing: 'MEDIUM'
+        framing: 'MEDIUM',
+        autoColor: true
     });
 
     // InfoProduct Palette
@@ -559,6 +489,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         setShowExportModal(true);
     };
 
+    // Helper to check concurrency (mocked for now, should be from context or prop)
+    const checkConcurrencyLimit = () => true;
+    const onGenerationStart = () => { }; // Placeholder
+    const onGenerationEnd = () => { }; // Placeholder
+    const isActive = true; // Placeholder
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden" style={{ display: isActive ? 'grid' : 'none' }}>
 
@@ -673,12 +609,33 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             </div>
                         </div>
 
+                        <div className="mb-6">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Posição do Sujeito</label>
+                            <PositionSelector value={position} onChange={setPosition} />
+                        </div>
+
                         {/* Iluminação & Atmosfera (New Color Pickers) */}
                         <div className="mb-6 space-y-4">
-                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
+                            <div className="flex items-center justify-between">
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
+                                <div className="flex bg-gray-200 dark:bg-black/40 rounded-lg p-1">
+                                    <button
+                                        onClick={() => setProjectContext(prev => ({ ...prev, autoColor: true }))}
+                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${projectContext.autoColor ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm' : 'text-gray-500'}`}
+                                    >
+                                        Auto (IA)
+                                    </button>
+                                    <button
+                                        onClick={() => setProjectContext(prev => ({ ...prev, autoColor: false }))}
+                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${!projectContext.autoColor ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm' : 'text-gray-500'}`}
+                                    >
+                                        Manual
+                                    </button>
+                                </div>
+                            </div>
 
                             {/* Cor do Ambiente */}
-                            <div>
+                            <div className={`transition-opacity duration-300 ${projectContext.autoColor ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
                                 <label className="block text-xs text-gray-500 mb-1 flex justify-between">
                                     <span>Cor do Ambiente (Fundo)</span>
                                     <span className="text-gray-400">{projectContext.environmentColor}</span>
@@ -701,7 +658,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             </div>
 
                             {/* Cor de Destaque */}
-                            <div>
+                            <div className={`transition-opacity duration-300 ${projectContext.autoColor ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
                                 <label className="block text-xs text-gray-500 mb-1 flex justify-between">
                                     <span>Cor de Destaque (Rim Light)</span>
                                     <span className="text-gray-400">{projectContext.rimLightColor}</span>
