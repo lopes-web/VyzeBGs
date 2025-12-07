@@ -41,14 +41,32 @@ export interface GenerationAttributes {
   useBlur: boolean;
 }
 
+export type FramingType = 'CLOSE_UP' | 'MEDIUM' | 'AMERICAN';
+
+export interface LightingColors {
+  ambient: string;
+  rim: string;
+  complementary: string;
+}
+
+export interface ActiveColors {
+  ambient: boolean;
+  rim: boolean;
+  complementary: boolean;
+}
+
 export interface ProjectContext {
   floatingElements3D: boolean;
   floatingElementsDescription?: string;
   niche?: string;
-  environmentColor?: string;
-  rimLightColor?: string;
-  framing?: 'CLOSE_UP' | 'MEDIUM' | 'AMERICAN';
-  autoColor?: boolean;
+  environment?: string;
+  subjectDescription?: string;
+  colors?: LightingColors;
+  activeColors?: ActiveColors;
+  ambientOpacity?: number;
+  framing?: FramingType;
+  useEnvironmentImages?: boolean;
+  environmentImages?: string[];
 }
 
 export interface ProjectTab {

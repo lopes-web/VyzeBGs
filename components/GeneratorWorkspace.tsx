@@ -25,8 +25,12 @@ import {
     HistoryItem,
     AppSection,
     ColorPalette,
-    ProjectContext
+    ProjectContext,
+    FramingType,
+    LightingColors,
+    ActiveColors
 } from '../types';
+import { FRAMING_OPTIONS } from '../constants';
 
 interface GeneratorWorkspaceProps {
     section: AppSection;
@@ -80,17 +84,22 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         floatingElements3D: false,
         floatingElementsDescription: '',
         niche: '',
-        environmentColor: '#1a1a1a', // Dark High-End Neutral
-        rimLightColor: '#FFD700',   // Warm Gold
+        environment: '',
+        subjectDescription: '',
+        colors: {
+            ambient: '#0f172a',
+            rim: '#a3e635',
+            complementary: '#6366f1'
+        },
+        activeColors: {
+            ambient: false,
+            rim: false,
+            complementary: false
+        },
+        ambientOpacity: 50,
         framing: 'MEDIUM',
-        autoColor: true
-    });
-
-    // InfoProduct Palette
-    const [colorPalette, setColorPalette] = useState<ColorPalette>({
-        primary: '',
-        secondary: '',
-        accent: ''
+        useEnvironmentImages: false,
+        environmentImages: []
     });
 
     const [customHeight, setCustomHeight] = useState<number>(1080);
@@ -294,7 +303,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         position,
                         attributes,
                         customHeight,
-                        currentMode === 'INFOPRODUCT' ? colorPalette : undefined,
+                        undefined,
                         projectContext
                     )
                 );
@@ -590,14 +599,10 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-6">
                             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Enquadramento</label>
                             <div className="grid grid-cols-3 gap-2">
-                                {[
-                                    { id: 'CLOSE_UP', label: 'Close-up', icon: 'fa-user-circle' },
-                                    { id: 'MEDIUM', label: 'Médio', icon: 'fa-user' },
-                                    { id: 'AMERICAN', label: 'Americano', icon: 'fa-user-tie' }
-                                ].map((opt) => (
+                                {FRAMING_OPTIONS.map((opt) => (
                                     <button
                                         key={opt.id}
-                                        onClick={() => setProjectContext(prev => ({ ...prev, framing: opt.id as any }))}
+                                        onClick={() => setProjectContext(prev => ({ ...prev, framing: opt.id }))}
                                         className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${projectContext.framing === opt.id
                                             ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
                                             : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'
@@ -617,67 +622,105 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                         {/* Iluminação & Atmosfera (New Color Pickers) */}
                         <div className="mb-6 space-y-4">
-                            <div className="flex items-center justify-between">
-                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
-                                <div className="flex bg-gray-200 dark:bg-black/40 rounded-lg p-1">
-                                    <button
-                                        onClick={() => setProjectContext(prev => ({ ...prev, autoColor: true }))}
-                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${projectContext.autoColor ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm' : 'text-gray-500'}`}
-                                    >
-                                        Auto (IA)
-                                    </button>
-                                    <button
-                                        onClick={() => setProjectContext(prev => ({ ...prev, autoColor: false }))}
-                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${!projectContext.autoColor ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm' : 'text-gray-500'}`}
-                                    >
-                                        Manual
-                                    </button>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
+
+                            {/* Ambient Color */}
+                            <div className="bg-gray-100 dark:bg-black/30 p-3 rounded-lg border border-gray-200 dark:border-white/5">
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={projectContext.activeColors?.ambient}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                activeColors: { ...prev.activeColors!, ambient: e.target.checked }
+                                            }))}
+                                            className="w-4 h-4 text-lime-500 rounded focus:ring-lime-500"
+                                        />
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Ambiente (Fundo)</span>
+                                    </div>
+                                    {projectContext.activeColors?.ambient && (
+                                        <input
+                                            type="color"
+                                            value={projectContext.colors?.ambient || '#0f172a'}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                colors: { ...prev.colors!, ambient: e.target.value }
+                                            }))}
+                                            className="w-8 h-8 rounded cursor-pointer border-0 p-0"
+                                        />
+                                    )}
+                                </div>
+                                {projectContext.activeColors?.ambient && (
+                                    <div className="mt-2">
+                                        <label className="text-xs text-gray-500 block mb-1">Opacidade: {projectContext.ambientOpacity}%</label>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="100"
+                                            value={projectContext.ambientOpacity}
+                                            onChange={(e) => setProjectContext(prev => ({ ...prev, ambientOpacity: Number(e.target.value) }))}
+                                            className="w-full h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Rim Light */}
+                            <div className="bg-gray-100 dark:bg-black/30 p-3 rounded-lg border border-gray-200 dark:border-white/5">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={projectContext.activeColors?.rim}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                activeColors: { ...prev.activeColors!, rim: e.target.checked }
+                                            }))}
+                                            className="w-4 h-4 text-lime-500 rounded focus:ring-lime-500"
+                                        />
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Luz de Recorte (Rim)</span>
+                                    </div>
+                                    {projectContext.activeColors?.rim && (
+                                        <input
+                                            type="color"
+                                            value={projectContext.colors?.rim || '#a3e635'}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                colors: { ...prev.colors!, rim: e.target.value }
+                                            }))}
+                                            className="w-8 h-8 rounded cursor-pointer border-0 p-0"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
-                            {/* Cor do Ambiente */}
-                            <div className={`transition-opacity duration-300 ${projectContext.autoColor ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
-                                <label className="block text-xs text-gray-500 mb-1 flex justify-between">
-                                    <span>Cor do Ambiente (Fundo)</span>
-                                    <span className="text-gray-400">{projectContext.environmentColor}</span>
-                                </label>
-                                <div className="flex gap-2 items-center">
-                                    <input
-                                        type="color"
-                                        value={projectContext.environmentColor || '#1a1a1a'}
-                                        onChange={(e) => setProjectContext(prev => ({ ...prev, environmentColor: e.target.value }))}
-                                        className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={projectContext.environmentColor || ''}
-                                        onChange={(e) => setProjectContext(prev => ({ ...prev, environmentColor: e.target.value }))}
-                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
-                                        placeholder="#1a1a1a"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Cor de Destaque */}
-                            <div className={`transition-opacity duration-300 ${projectContext.autoColor ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
-                                <label className="block text-xs text-gray-500 mb-1 flex justify-between">
-                                    <span>Cor de Destaque (Rim Light)</span>
-                                    <span className="text-gray-400">{projectContext.rimLightColor}</span>
-                                </label>
-                                <div className="flex gap-2 items-center">
-                                    <input
-                                        type="color"
-                                        value={projectContext.rimLightColor || '#FFD700'}
-                                        onChange={(e) => setProjectContext(prev => ({ ...prev, rimLightColor: e.target.value }))}
-                                        className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={projectContext.rimLightColor || ''}
-                                        onChange={(e) => setProjectContext(prev => ({ ...prev, rimLightColor: e.target.value }))}
-                                        className="flex-1 bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-lime-500 outline-none"
-                                        placeholder="#FFD700"
-                                    />
+                            {/* Complementary Light */}
+                            <div className="bg-gray-100 dark:bg-black/30 p-3 rounded-lg border border-gray-200 dark:border-white/5">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={projectContext.activeColors?.complementary}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                activeColors: { ...prev.activeColors!, complementary: e.target.checked }
+                                            }))}
+                                            className="w-4 h-4 text-lime-500 rounded focus:ring-lime-500"
+                                        />
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Luz Complementar</span>
+                                    </div>
+                                    {projectContext.activeColors?.complementary && (
+                                        <input
+                                            type="color"
+                                            value={projectContext.colors?.complementary || '#6366f1'}
+                                            onChange={(e) => setProjectContext(prev => ({
+                                                ...prev,
+                                                colors: { ...prev.colors!, complementary: e.target.value }
+                                            }))}
+                                            className="w-8 h-8 rounded cursor-pointer border-0 p-0"
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>

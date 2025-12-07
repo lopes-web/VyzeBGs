@@ -1,7 +1,19 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { MODEL_NAME, POSITION_PROMPTS, DEFAULT_TREATMENT_PROMPT, OBJECT_TREATMENT_PROMPT, ENHANCE_TREATMENT_PROMPT, INFOPRODUCT_TREATMENT_PROMPT, BLUR_PROMPT, GRADIENT_PROMPT } from "../constants";
-import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette, ProjectContext } from "../types";
+import {
+  MODEL_NAME,
+  PROMPT_MODEL_NAME,
+  POSITION_PROMPTS,
+  DEFAULT_TREATMENT_PROMPT,
+  OBJECT_TREATMENT_PROMPT,
+  ENHANCE_TREATMENT_PROMPT,
+  INFOPRODUCT_TREATMENT_PROMPT,
+  BLUR_PROMPT,
+  GRADIENT_PROMPT,
+  PROMPT_ENGINEER_SYSTEM_INSTRUCTION,
+  FRAMING_OPTIONS
+} from "../constants";
+import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette, ProjectContext, FramingType, LightingColors, ActiveColors } from "../types";
 
 const LOCAL_STORAGE_KEY = 'gemini_api_key';
 
@@ -63,63 +75,68 @@ const cleanBase64 = (data: string) => {
   return data.replace(/^data:image\/\w+;base64,/, "");
 };
 
-const generateInfoproductPrompt = async (
+// 1. STEP ONE: TEXT PROMPT ENGINEERING
+export const generateEnhancedPrompt = async (
   niche: string,
-  environmentColor: string,
-  rimLightColor: string,
-  framing: string,
-  autoColor: boolean,
-  floatingElementsDescription?: string
+  environment: string,
+  environmentImagesCount: number,
+  subjectDescription: string,
+  colors: LightingColors,
+  activeColors: ActiveColors,
+  ambientOpacity: number,
+  framing: FramingType,
+  useFloatingElements: boolean,
+  floatingElementsPrompt: string,
+  userImagesCount: number,
+  referenceItemsCount: number,
+  attributes: GenerationAttributes
 ): Promise<string> => {
   const apiKey = getApiKey();
   if (!apiKey) return "";
   const ai = new GoogleGenAI({ apiKey });
 
-  const framingMap: Record<string, string> = {
-    'CLOSE_UP': "Head and Shoulders Portrait (Face and shoulders only, intimate close-up)",
-    'MEDIUM': "Medium Shot (Waist Up / Bust Portrait, standard professional framing)",
-    'AMERICAN': "Full Body Shot (Head to Toe, showing the entire subject standing)"
-  };
+  // Convert Framing ID to Description
+  const framingDesc = FRAMING_OPTIONS.find(f => f.id === framing)?.prompt || "Standard portrait framing";
 
-  const selectedFraming = framingMap[framing] || framing;
-
-  const colorInstruction = autoColor
-    ? "COLOR STRATEGY: Analyze the niche and choose the BEST psychological color palette (Background + Rim Light) that conveys authority and trust for this specific expert. IGNORE the provided default colors."
-    : `COLOR STRATEGY: MANDATORY ENFORCEMENT. You MUST use the exact colors provided below. Do not deviate.\n- Environment (Background): ${environmentColor}\n- Rim Light (Edge): ${rimLightColor}`;
-
-  const mandatoryStyle = "Create an 8K ultra-realistic cinematic action portrait, format 1080x1440, perfectly replicating the subject's physical traits, facial expression, and overall look from the reference image";
-
-  const systemPrompt = `
-ROLE: You are a Master Visual Director for High-End InfoProducts.
-TASK: Construct a rigid, high-converting image prompt based on the user's niche and color settings.
-
-INPUTS:
-- Niche: ${niche}
-- Framing: ${selectedFraming}
-- 3D Elements: ${floatingElementsDescription || 'None'}
-${colorInstruction}
-
-OUTPUT FORMAT:
-Return ONLY the raw prompt string. No explanations.
-
-PROMPT STRUCTURE TO GENERATE:
-"${mandatoryStyle}.
-High-end studio portrait of a [${niche} Expert], [${selectedFraming}].
-Background: Abstract, depth-filled studio environment in [${autoColor ? 'PSYCHOLOGICALLY OPTIMIZED COLOR' : environmentColor}] tones.
-Lighting: Cinematic lighting with strong [${autoColor ? 'COMPLEMENTARY RIM LIGHT' : rimLightColor}] rim light separating subject from background.
-Details: ${floatingElementsDescription ? `Floating 3D elements: ${floatingElementsDescription}, with bokeh depth of field.` : 'Minimalist, clean texture.'}
-Atmosphere: Professional, authoritative, premium, 8k resolution, highly detailed, sharp focus on face."
-`;
+  const userMessage = `
+    INPUTS DO USUÁRIO:
+    - Nicho: ${niche}
+    - Descrição do Sujeito: ${subjectDescription || "Não especificado (Usar referência visual ou nicho)"}
+    - Ambiente Específico: ${environment || "Não especificado (Inventar baseado no nicho)"}
+    - Usar Ref. Ambiente: ${environmentImagesCount > 0 ? "SIM" : "NÃO"}
+    
+    CONFIGURAÇÃO DE CORES:
+    - Usar Cor Fundo: ${activeColors.ambient ? "SIM" : "NÃO"} (Cor: ${colors.ambient}, Opacidade: ${ambientOpacity}%)
+    - Usar Cor Recorte: ${activeColors.rim ? "SIM" : "NÃO"} (Cor: ${colors.rim})
+    - Usar Cor Complementar: ${activeColors.complementary ? "SIM" : "NÃO"} (Cor: ${colors.complementary})
+    
+    ATRIBUTOS VISUAIS:
+    - Usar Degradê (Vignette): ${attributes.useGradient ? "SIM" : "NÃO"}
+    - Usar Blur (Foco): ${attributes.useBlur ? "SIM" : "NÃO"}
+    
+    - Enquadramento: ${framingDesc}
+    - Usar Elementos Flutuantes: ${useFloatingElements ? "SIM" : "NÃO"}
+    - Descrição Elementos Flutuantes: ${floatingElementsPrompt || "Não especificado (Inventar se SIM)"}
+    - Imagens do Sujeito fornecidas: ${userImagesCount}
+    - Referências de estilo fornecidas: ${referenceItemsCount}
+    
+    Gere o prompt final seguindo estritamente o template.
+    `;
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-pro-latest",
-      contents: [{ role: 'user', parts: [{ text: systemPrompt }] }]
+      model: PROMPT_MODEL_NAME,
+      contents: [{ role: 'user', parts: [{ text: userMessage }] }],
+      config: {
+        systemInstruction: PROMPT_ENGINEER_SYSTEM_INSTRUCTION
+      }
     });
+
     return response.text || "";
-  } catch (error) {
-    console.error("Prompt Generation Error:", error);
-    return "";
+  } catch (e) {
+    console.error("Prompt Engineering Error:", e);
+    // Fallback prompt if LLM fails
+    return `Create an 8K ultra-realistic cinematic action portrait, format 1080x1440. Subject: Professional ${niche} ${subjectDescription ? `(${subjectDescription})` : ''}. Setting: ${environment || "Abstract Professional background"}. Lighting: Cinematic lighting. Background: ${attributes.useBlur ? "Abstract textured background" : "Detailed realistic background"}.`;
   }
 };
 
@@ -148,14 +165,33 @@ export const generateBackground = async (
   let infoproductMasterPrompt = "";
   if (mode === 'INFOPRODUCT' && projectContext) {
     try {
-      infoproductMasterPrompt = await generateInfoproductPrompt(
+      // Use defaults if projectContext is missing new fields (backward compatibility)
+      const colors: LightingColors = projectContext.colors || { ambient: '#0f172a', rim: '#a3e635', complementary: '#6366f1' };
+      const activeColors: ActiveColors = projectContext.activeColors || { ambient: false, rim: false, complementary: false };
+      const framing: FramingType = projectContext.framing || 'MEDIUM';
+      const ambientOpacity = projectContext.ambientOpacity || 50;
+      const environment = projectContext.environment || "";
+      const subjectDescription = projectContext.subjectDescription || "";
+      const useFloatingElements = projectContext.floatingElements3D || false;
+      const floatingElementsPrompt = projectContext.floatingElementsDescription || "";
+      const environmentImagesCount = projectContext.environmentImages?.length || 0;
+
+      infoproductMasterPrompt = await generateEnhancedPrompt(
         projectContext.niche || "Expert",
-        projectContext.environmentColor || "#1a1a1a",
-        projectContext.rimLightColor || "#FFD700",
-        projectContext.framing || "MEDIUM",
-        projectContext.autoColor ?? true,
-        projectContext.floatingElements3D ? projectContext.floatingElementsDescription : undefined
+        environment,
+        environmentImagesCount,
+        subjectDescription,
+        colors,
+        activeColors,
+        ambientOpacity,
+        framing,
+        useFloatingElements,
+        floatingElementsPrompt,
+        userImagesBase64.length,
+        referenceItems.length,
+        attributes
       );
+      console.log("MASTER PROMPT GENERATED:", infoproductMasterPrompt);
     } catch (e) {
       console.error("Failed to generate master prompt", e);
     }
