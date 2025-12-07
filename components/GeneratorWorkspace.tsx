@@ -14,8 +14,9 @@ import {
     checkApiKey,
     promptApiKeySelection
 } from '../services/geminiService';
-import { uploadImageToStorage, saveGeneration } from '../services/firebaseService';
-import { useAuth } from '../context/AuthContext';
+import { uploadImageToStorage } from '../services/storageService';
+import { saveGeneration } from '../services/databaseService';
+import { useAuth } from './AuthContext';
 import {
     SubjectPosition,
     ReferenceItem,
