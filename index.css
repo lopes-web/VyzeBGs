@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================================
+   DARK THEME - Force #010907 Background
+   ======================================== */
+:root {
+    --app-dark: #010907;
+    --app-dark-lighter: #0a1210;
+}
+
+/* Force dark mode background */
+html.dark,
+html.dark body {
+    background-color: #010907 !important;
+}
+
 /* Custom Scrollbar for Glassmorphism */
 ::-webkit-scrollbar {
     width: 8px;

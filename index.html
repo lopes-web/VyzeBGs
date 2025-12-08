@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -37,6 +37,10 @@
               850: '#262626',
               900: '#1a1a1a',
               950: '#141414',
+            },
+            app: {
+              dark: '#010907',
+              'dark-lighter': '#0a1210',
             }
           },
           backdropBlur: {
@@ -60,7 +64,7 @@
   <link rel="stylesheet" href="/index.css">
 </head>
 
-<body class="bg-gray-950 text-white antialiased overflow-hidden">
+<body class="bg-app-dark text-white antialiased overflow-hidden">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
