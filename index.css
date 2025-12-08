@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 /* ========================================
-   DARK THEME - Force Neutral Dark Background
+   DARK THEME - Force #010907 Background
    ======================================== */
 :root {
-    --app-dark: #0d0d0d;
-    --app-dark-lighter: #1a1a1a;
+    --app-dark: #010907;
+    --app-dark-lighter: #0a1210;
 }
 
 /* Force dark mode background */
 html.dark,
 html.dark body {
-    background-color: #0d0d0d !important;
+    background-color: #010907 !important;
 }
 
 /* Custom Scrollbar for Glassmorphism */
