@@ -7,7 +7,7 @@ export enum SubjectPosition {
 
 export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
 
-export type AppSection = 'LANDING_PAGES' | 'DESIGNS';
+export type AppSection = 'LANDING_PAGES' | 'DESIGNS' | 'REMOVE_BG' | 'WEBP_CONVERTER';
 
 export interface GeneratedImage {
   url: string;

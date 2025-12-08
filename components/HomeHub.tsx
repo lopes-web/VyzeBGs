@@ -313,6 +313,52 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                             </div>
                         </div>
                     </button>
+
+                    {/* Card 4: WebP Converter (New) */}
+                    <button
+                        onClick={() => onSelectSection('WEBP_CONVERTER')}
+                        className="group relative h-80 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-blue-500/50 hover:to-blue-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]"
+                    >
+                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col">
+                            {/* Graphic Area */}
+                            <div className="flex-grow relative flex items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                {/* Converter Graphic */}
+                                <div className="relative w-full h-full flex flex-col items-center justify-center p-8">
+                                    <div className="flex items-center gap-4 relative z-10">
+                                        {/* File Icon */}
+                                        <div className="w-16 h-20 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center relative group-hover:-translate-x-4 transition-transform duration-500">
+                                            <span className="text-[10px] font-bold text-gray-500 absolute top-2 left-2">PNG</span>
+                                            <i className="fas fa-image text-2xl text-gray-600 group-hover:text-gray-400 transition-colors"></i>
+                                        </div>
+
+                                        {/* Arrow */}
+                                        <div className="text-blue-500 text-xl opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-0 group-hover:scale-100">
+                                            <i className="fas fa-arrow-right"></i>
+                                        </div>
+
+                                        {/* WebP Icon */}
+                                        <div className="w-16 h-20 bg-blue-500/10 border border-blue-500/30 rounded-lg flex items-center justify-center relative opacity-50 group-hover:opacity-100 group-hover:translate-x-4 transition-all duration-500">
+                                            <span className="text-[10px] font-bold text-blue-500 absolute top-2 left-2">WEBP</span>
+                                            <i className="fas fa-file-image text-2xl text-blue-400"></i>
+                                            <div className="absolute -bottom-2 -right-2 bg-blue-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg scale-0 group-hover:scale-100 transition-transform delay-100">
+                                                -80%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Text Content */}
+                            <div className="p-6 relative z-10 bg-gradient-to-t from-black/80 to-transparent">
+                                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Conversor WebP</h3>
+                                <p className="text-sm text-gray-400 leading-relaxed">
+                                    Otimize imagens para web com compressão máxima.
+                                </p>
+                            </div>
+                        </div>
+                    </button>
                 </div>
 
                 {/* Input Bar */}
@@ -554,7 +600,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
             <div className="absolute bottom-6 left-0 w-full text-center text-xs text-gray-600">
                 <p>Pressione <kbd className="font-mono bg-white/10 px-1 rounded">Enter</kbd> para gerar</p>
             </div>
-        </div>
+        </div >
     );
 };
 
