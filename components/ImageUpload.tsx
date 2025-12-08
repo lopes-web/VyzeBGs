@@ -114,8 +114,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
           ${isDragging
             ? 'border-[#00ca8c] bg-[#00ca8c]/5 scale-[1.02] shadow-xl shadow-[#00ca8c]/10'
             : (!multiple && value)
-              ? 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50'
-              : 'border-neutral-300 dark:border-neutral-700 hover:border-[#00ca8c]/50 dark:hover:border-[#00ca8c]/50 bg-white/50 dark:bg-neutral-900/30 hover:bg-white/80 dark:hover:bg-neutral-900/50 hover:shadow-2xl hover:shadow-[#00ca8c]/5 hover:scale-[1.01]'
+              ? 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-app-dark'
+              : 'border-neutral-300 dark:border-neutral-700 hover:border-[#00ca8c]/50 dark:hover:border-[#00ca8c]/50 bg-white/50 dark:bg-app-dark hover:bg-white/80 dark:hover:bg-app-dark-lighter hover:shadow-2xl hover:shadow-[#00ca8c]/5 hover:scale-[1.01]'
           }
         `}
       >
@@ -144,7 +144,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
           <div className={`flex flex-col items-center justify-center text-center p-6 transition-transform duration-300 ${isDragging ? 'scale-110' : 'group-hover:scale-105'}`}>
             <div className={`
               w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300
-              ${isDragging ? 'bg-[#00ca8c]/20 text-[#00ca8c]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 group-hover:bg-[#00ca8c]/10 group-hover:text-[#00ca8c]'}
+              ${isDragging ? 'bg-[#00ca8c]/20 text-[#00ca8c]' : 'bg-neutral-100 dark:bg-app-dark-lighter text-neutral-400 dark:text-neutral-500 group-hover:bg-[#00ca8c]/10 group-hover:text-[#00ca8c]'}
             `}>
               <i className={`fas fa-cloud-upload-alt text-3xl`}></i>
             </div>
@@ -157,7 +157,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-[200px]">
                   {multiple ? 'Arraste ou clique para adicionar mais' : 'Arraste e solte ou clique para selecionar'}
                 </p>
-                <div className="mt-4 flex items-center gap-2 text-xs font-medium text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-full">
+                <div className="mt-4 flex items-center gap-2 text-xs font-medium text-neutral-400 bg-neutral-100 dark:bg-app-dark-lighter px-3 py-1 rounded-full">
                   <i className="fas fa-image"></i> PNG, JPG, WEBP
                 </div>
               </>

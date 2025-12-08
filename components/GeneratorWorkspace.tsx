@@ -514,13 +514,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden" style={{ display: isActive ? 'grid' : 'none' }}>
 
             {/* LEFT PANEL: CONTROLS (FIXED FOOTER LAYOUT) */}
-            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-app-dark-lighter/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
+            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-app-dark-lighter backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
 
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 p-6 space-y-6">
 
                     {/* Image Inputs */}
-                    <div className="bg-gray-50 dark:bg-app-dark-lighter/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
                             <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
                             {getModeLabel()}
@@ -919,7 +919,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
             < div className="lg:col-span-8 flex flex-col h-full overflow-hidden" >
 
                 {/* Main Preview */}
-                < div className="bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]" >
+                < div className="bg-white/60 dark:bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]" >
                     {
                         isGenerating ? (
                             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
@@ -1012,7 +1012,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                 </div >
 
                 {/* History Strip */}
-                < div className="h-32 bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700" >
+                < div className="h-32 bg-white/60 dark:bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700" >
                     {
                         localHistory.length === 0 ? (
                             <div className="w-full flex items-center justify-center text-xs text-gray-400">
