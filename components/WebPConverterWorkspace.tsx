@@ -176,9 +176,9 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
     if (!isActive) return null;
 
     return (
-        <div className="h-full flex flex-col bg-gray-50 dark:bg-black/20 animate-fadeIn overflow-hidden">
+        <div className="h-full flex flex-col bg-gray-50 dark:bg-app-dark/20 animate-fadeIn overflow-hidden">
             {/* Header */}
-            <div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 p-6 flex items-center justify-between">
+            <div className="bg-white/60 dark:bg-app-dark-lighter/60 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 p-6 flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
                         <i className="fas fa-images text-lime-500"></i>
@@ -221,7 +221,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
 
             <div className="flex-1 flex overflow-hidden">
                 {/* Sidebar: Settings */}
-                <div className="w-80 bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 p-6 overflow-y-auto">
+                <div className="w-80 bg-white/40 dark:bg-app-dark-lighter/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 p-6 overflow-y-auto">
                     <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">Configurações</h3>
 
                     <div className="space-y-6">
@@ -236,7 +236,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         value={maxWidth}
                                         onChange={(e) => setMaxWidth(e.target.value ? Number(e.target.value) : '')}
                                         placeholder="Auto"
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none"
                                     />
                                 </div>
                                 <div>
@@ -274,7 +274,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                 </div>
 
                 {/* Main Area: Dropzone & List */}
-                <div className="flex-1 flex flex-col bg-gray-100/50 dark:bg-black/20 p-6 overflow-hidden">
+                <div className="flex-1 flex flex-col bg-gray-100/50 dark:bg-app-dark/20 p-6 overflow-hidden">
 
                     {/* Dropzone */}
                     <div
@@ -319,9 +319,9 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         )}
 
                         {files.map(item => (
-                            <div key={item.id} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-xl p-4 flex items-center gap-4 group hover:shadow-md transition-all">
+                            <div key={item.id} className="bg-white dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-xl p-4 flex items-center gap-4 group hover:shadow-md transition-all">
                                 {/* Preview */}
-                                <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-black/40 overflow-hidden flex-shrink-0">
+                                <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-app-dark/40 overflow-hidden flex-shrink-0">
                                     <img src={URL.createObjectURL(item.file)} alt="" className="w-full h-full object-cover" />
                                 </div>
 

@@ -350,10 +350,10 @@ const AppContent: React.FC = () => {
 
     if (currentSection === 'WEBP_CONVERTER') {
         return (
-            <div className="h-[100dvh] w-full relative bg-black">
+            <div className="h-[100dvh] w-full relative bg-app-dark">
                 <button
                     onClick={() => setCurrentSection(null)}
-                    className="absolute top-8 right-8 z-50 w-10 h-10 rounded-full bg-gray-200 dark:bg-black/20 hover:bg-red-500 hover:text-white text-gray-500 dark:text-gray-400 flex items-center justify-center transition-all backdrop-blur-md shadow-lg"
+                    className="absolute top-8 right-8 z-50 w-10 h-10 rounded-full bg-gray-200 dark:bg-app-dark-lighter hover:bg-red-500 hover:text-white text-gray-500 dark:text-gray-400 flex items-center justify-center transition-all backdrop-blur-md shadow-lg"
                     title="Voltar ao Hub"
                 >
                     <i className="fas fa-times"></i>
@@ -365,7 +365,7 @@ const AppContent: React.FC = () => {
 
     // --- WORKSPACE VIEW (EXISTING LOGIC) ---
     return (
-        <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
+        <div className="h-screen flex flex-col bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
 
             {/* HEADER & TABS BAR */}
             <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">

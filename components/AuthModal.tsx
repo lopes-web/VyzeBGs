@@ -39,8 +39,8 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
     };
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-100 dark:bg-[#141414] p-4 font-sans transition-colors duration-300">
-            <div className="w-full max-w-[400px] p-8 relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/5 transition-colors duration-300">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-100 dark:bg-app-dark p-4 font-sans transition-colors duration-300">
+            <div className="w-full max-w-[400px] p-8 relative bg-white dark:bg-app-dark-lighter rounded-2xl shadow-2xl border border-gray-200 dark:border-white/5 transition-colors duration-300">
                 {canClose && (
                     <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-400 transition-colors">
                         <i className="fas fa-times text-xl"></i>
@@ -49,7 +49,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
 
                 {/* Header */}
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-16 h-16 bg-gray-50 dark:bg-[#141414] rounded-2xl flex items-center justify-center mb-6 border border-gray-200 dark:border-white/5 shadow-inner-custom shadow-black/5 dark:shadow-black/40 transition-colors duration-300">
+                    <div className="w-16 h-16 bg-gray-50 dark:bg-app-dark rounded-2xl flex items-center justify-center mb-6 border border-gray-200 dark:border-white/5 shadow-inner-custom shadow-black/5 dark:shadow-black/40 transition-colors duration-300">
                         <img src="/logo.webp" alt="Logo" className="w-8 h-auto" />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -87,7 +87,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="voce@empresa.com"
-                                className="w-full bg-gray-50 dark:bg-[#141414] border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
                                 required
                             />
                         </div>
@@ -112,7 +112,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Digite sua senha"
-                                className="w-full bg-gray-50 dark:bg-[#141414] border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
                                 required
                             />
                             <button

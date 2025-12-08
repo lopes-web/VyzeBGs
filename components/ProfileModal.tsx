@@ -46,8 +46,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
     };
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-100 dark:bg-[#141414] p-4 font-sans transition-colors duration-300">
-            <div className="w-full max-w-[400px] p-8 relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/5 transition-colors duration-300">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-100 dark:bg-app-dark p-4 font-sans transition-colors duration-300">
+            <div className="w-full max-w-[400px] p-8 relative bg-white dark:bg-app-dark-lighter rounded-2xl shadow-2xl border border-gray-200 dark:border-white/5 transition-colors duration-300">
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-400 transition-colors">
                     <i className="fas fa-times text-xl"></i>
                 </button>
@@ -80,7 +80,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
                                 value={apiKey}
                                 onChange={(e) => { setApiKey(e.target.value); setError(null); setSuccess(false); }}
                                 placeholder="Nova API Key (AIza...)"
-                                className="w-full bg-gray-50 dark:bg-[#141414] border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-lime-500 dark:focus:border-lime-500 focus:ring-1 focus:ring-lime-500 outline-none transition-all"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-lime-500 dark:focus:border-lime-500 focus:ring-1 focus:ring-lime-500 outline-none transition-all"
                             />
                             <button
                                 type="button"

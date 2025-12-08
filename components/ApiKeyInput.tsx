@@ -25,8 +25,8 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
-            <div className="max-w-md w-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white p-4 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+            <div className="max-w-md w-full bg-white/60 dark:bg-app-dark-lighter/60 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-lime-600"></div>
 
                 <div className="text-center mb-8">
@@ -50,7 +50,7 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
                             value={key}
                             onChange={(e) => { setKey(e.target.value); setError(''); }}
                             placeholder="AIzaSy..."
-                            className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/50 transition-all font-mono text-sm"
+                            className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/50 transition-all font-mono text-sm"
                         />
                         {error && <p className="text-red-500 dark:text-red-400 text-xs mt-2">{error}</p>}
                     </div>

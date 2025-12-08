@@ -509,13 +509,13 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden" style={{ display: isActive ? 'grid' : 'none' }}>
 
             {/* LEFT PANEL: CONTROLS (FIXED FOOTER LAYOUT) */}
-            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-gray-900/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
+            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-app-dark-lighter/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
 
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 p-6 space-y-6">
 
                     {/* Image Inputs */}
-                    <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-gray-50 dark:bg-app-dark-lighter/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
                             <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
                             {getModeLabel()}
@@ -545,7 +545,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Configuration Panel */}
-                    <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-gray-50 dark:bg-app-dark-lighter/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
 
                         {/* Nicho Input (New) */}
@@ -563,7 +563,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         </div>
 
                         {/* Project Context - 3D Elements */}
-                        <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
+                        <div className="mb-6 p-4 bg-gray-100 dark:bg-app-dark/30 rounded-xl border border-gray-200 dark:border-white/5">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                     <i className="fas fa-cube text-lime-500"></i>
@@ -590,7 +590,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Ícones de vidro, partículas douradas, moedas..."
                                         value={projectContext.floatingElementsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, floatingElementsDescription: e.target.value }))}
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
                                     />
                                 </div>
                             )}

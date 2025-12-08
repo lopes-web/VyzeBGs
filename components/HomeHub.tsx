@@ -188,7 +188,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         onClick={() => onSelectSection('LANDING_PAGES')}
                         className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-[#00ca8c]/50 hover:to-[#00ca8c]/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]"
                     >
-                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
                                 <i className="fas fa-chart-line text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
                             </div>
@@ -204,7 +204,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         onClick={() => onSelectSection('DESIGNS')}
                         className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-purple-500/50 hover:to-purple-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]"
                     >
-                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-purple-500/20 group-hover:border-purple-500/50">
                                 <i className="fas fa-layer-group text-4xl text-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"></i>
                             </div>
@@ -220,7 +220,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         onClick={() => onSelectSection('REMOVE_BG' as any)}
                         className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-[#00ca8c]/50 hover:to-[#00ca8c]/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]"
                     >
-                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
                                 <i className="fas fa-eraser text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
                             </div>
@@ -236,7 +236,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         onClick={() => onSelectSection('WEBP_CONVERTER')}
                         className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-blue-500/50 hover:to-blue-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]"
                     >
-                        <div className="relative h-full w-full bg-[#0a0a0a] rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-blue-500/20 group-hover:border-blue-500/50">
                                 <i className="fas fa-file-image text-4xl text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"></i>
                             </div>

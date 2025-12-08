@@ -71,12 +71,12 @@ Adicione sempre os comandos finais: --ar (aspect ratio), --v 5, --style cinemati
 Adicione textura de pele, iluminação direcional e profundidade cinematográfica em todos os casos.`
   },
   {
-      id: 'creative_assistant',
-      name: 'Creative Assistant',
-      role: 'Design Partner',
-      icon: 'fa-lightbulb',
-      description: 'Ajuda a ter ideias para cenários e composições.',
-      systemInstruction: 'You are a creative design assistant. Help the user brainstorm concepts for landing page backgrounds. Focus on aesthetics, color psychology, and composition rules for web design (negative space for text). Be concise and professional.'
+    id: 'creative_assistant',
+    name: 'Creative Assistant',
+    role: 'Design Partner',
+    icon: 'fa-lightbulb',
+    description: 'Ajuda a ter ideias para cenários e composições.',
+    systemInstruction: 'You are a creative design assistant. Help the user brainstorm concepts for landing page backgrounds. Focus on aesthetics, color psychology, and composition rules for web design (negative space for text). Be concise and professional.'
   }
 ];
 
@@ -109,10 +109,10 @@ const ChatWidget: React.FC = () => {
   const handleAgentChange = (agent: Agent) => {
     setActiveAgent(agent);
     setMessages([{
-        id: Date.now().toString(),
-        role: 'model',
-        text: `Olá! Eu sou o ${agent.name}. ${agent.description}`,
-        timestamp: Date.now()
+      id: Date.now().toString(),
+      role: 'model',
+      text: `Olá! Eu sou o ${agent.name}. ${agent.description}`,
+      timestamp: Date.now()
     }]);
     setIsOpen(true);
   };
@@ -179,132 +179,132 @@ const ChatWidget: React.FC = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
-      
+
       {/* CHAT WINDOW */}
-      <div 
+      <div
         className={`
-          pointer-events-auto bg-gray-900/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl 
+          pointer-events-auto bg-app-dark-lighter/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl 
           w-[400px] max-h-[600px] flex flex-col mb-4 transition-all duration-300 origin-bottom-right overflow-hidden
           ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none hidden'}
         `}
       >
         {/* Header */}
         <div className="bg-white/5 p-4 border-b border-white/5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-lime-500/20 flex items-center justify-center text-lime-400">
-                    <i className={`fas ${activeAgent.icon}`}></i>
-                </div>
-                <div>
-                    <div className="text-sm font-bold text-white flex items-center gap-2">
-                        {activeAgent.name}
-                        <i className="fas fa-chevron-down text-xs text-gray-500 cursor-pointer hover:text-white" title="Mudar Agente"></i>
-                        <select 
-                            className="absolute opacity-0 w-32 cursor-pointer"
-                            onChange={(e) => {
-                                const agent = AGENTS.find(a => a.id === e.target.value);
-                                if (agent) handleAgentChange(agent);
-                            }}
-                            value={activeAgent.id}
-                        >
-                            {AGENTS.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
-                        </select>
-                    </div>
-                    <div className="text-xs text-gray-400">{activeAgent.role}</div>
-                </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-lime-500/20 flex items-center justify-center text-lime-400">
+              <i className={`fas ${activeAgent.icon}`}></i>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
-                <i className="fas fa-times"></i>
-            </button>
+            <div>
+              <div className="text-sm font-bold text-white flex items-center gap-2">
+                {activeAgent.name}
+                <i className="fas fa-chevron-down text-xs text-gray-500 cursor-pointer hover:text-white" title="Mudar Agente"></i>
+                <select
+                  className="absolute opacity-0 w-32 cursor-pointer"
+                  onChange={(e) => {
+                    const agent = AGENTS.find(a => a.id === e.target.value);
+                    if (agent) handleAgentChange(agent);
+                  }}
+                  value={activeAgent.id}
+                >
+                  {AGENTS.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                </select>
+              </div>
+              <div className="text-xs text-gray-400">{activeAgent.role}</div>
+            </div>
+          </div>
+          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+            <i className="fas fa-times"></i>
+          </button>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 bg-black/20">
-            {messages.map((msg) => (
-                <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div 
-                        className={`
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 bg-app-dark/20">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div
+                className={`
                             max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed
-                            ${msg.role === 'user' 
-                                ? 'bg-lime-600 text-white rounded-tr-none' 
-                                : 'bg-gray-800 text-gray-200 rounded-tl-none border border-gray-700'
-                            }
+                            ${msg.role === 'user'
+                    ? 'bg-lime-600 text-white rounded-tr-none'
+                    : 'bg-app-dark-lighter text-gray-200 rounded-tl-none border border-gray-700'
+                  }
                         `}
-                    >
-                        {msg.image && (
-                            <img src={msg.image} alt="Upload" className="rounded-lg mb-2 max-h-40 object-cover border border-white/10" />
-                        )}
-                        <p className="whitespace-pre-wrap">{msg.text}</p>
-                    </div>
+              >
+                {msg.image && (
+                  <img src={msg.image} alt="Upload" className="rounded-lg mb-2 max-h-40 object-cover border border-white/10" />
+                )}
+                <p className="whitespace-pre-wrap">{msg.text}</p>
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="bg-app-dark-lighter rounded-2xl rounded-tl-none p-3 border border-gray-700">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-75"></div>
+                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></div>
                 </div>
-            ))}
-            {isTyping && (
-                <div className="flex justify-start">
-                    <div className="bg-gray-800 rounded-2xl rounded-tl-none p-3 border border-gray-700">
-                        <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-75"></div>
-                            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            <div ref={messagesEndRef} />
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
         <div className="p-3 bg-white/5 border-t border-white/5">
-            {selectedImage && (
-                <div className="flex items-center gap-2 mb-2 bg-black/30 p-2 rounded-lg">
-                    <img src={selectedImage} alt="Selected" className="h-10 w-10 object-cover rounded" />
-                    <span className="text-xs text-gray-400 flex-1 truncate">Imagem selecionada</span>
-                    <button onClick={() => setSelectedImage(null)} className="text-red-400 hover:text-red-300">
-                        <i className="fas fa-times"></i>
-                    </button>
-                </div>
-            )}
-            <div className="flex gap-2">
-                <button 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="text-gray-400 hover:text-lime-400 p-2 transition-colors"
-                >
-                    <i className="fas fa-paperclip"></i>
-                </button>
-                <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    accept="image/*" 
-                    onChange={handleImageUpload} 
-                />
-                <textarea
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSendMessage();
-                        }
-                    }}
-                    placeholder="Digite sua mensagem..."
-                    className="flex-1 bg-black/40 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white focus:border-lime-500 outline-none resize-none h-10 scrollbar-hide"
-                />
-                <button 
-                    onClick={handleSendMessage}
-                    disabled={(!inputText.trim() && !selectedImage) || isTyping}
-                    className="bg-lime-500 text-black rounded-xl w-10 h-10 flex items-center justify-center hover:bg-lime-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    <i className="fas fa-paper-plane"></i>
-                </button>
+          {selectedImage && (
+            <div className="flex items-center gap-2 mb-2 bg-app-dark/30 p-2 rounded-lg">
+              <img src={selectedImage} alt="Selected" className="h-10 w-10 object-cover rounded" />
+              <span className="text-xs text-gray-400 flex-1 truncate">Imagem selecionada</span>
+              <button onClick={() => setSelectedImage(null)} className="text-red-400 hover:text-red-300">
+                <i className="fas fa-times"></i>
+              </button>
             </div>
+          )}
+          <div className="flex gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="text-gray-400 hover:text-lime-400 p-2 transition-colors"
+            >
+              <i className="fas fa-paperclip"></i>
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+            <textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+              placeholder="Digite sua mensagem..."
+              className="flex-1 bg-app-dark/40 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white focus:border-lime-500 outline-none resize-none h-10 scrollbar-hide"
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={(!inputText.trim() && !selectedImage) || isTyping}
+              className="bg-lime-500 text-black rounded-xl w-10 h-10 flex items-center justify-center hover:bg-lime-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <i className="fas fa-paper-plane"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* TOGGLE BUTTON */}
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className={`
             pointer-events-auto w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300
-            ${isOpen ? 'bg-gray-800 text-white rotate-90' : 'bg-gradient-to-br from-lime-400 to-lime-600 text-black hover:scale-110'}
+            ${isOpen ? 'bg-app-dark-lighter text-white rotate-90' : 'bg-gradient-to-br from-lime-400 to-lime-600 text-black hover:scale-110'}
         `}
       >
         {isOpen ? <i className="fas fa-times text-xl"></i> : <i className="fas fa-comments text-2xl"></i>}
