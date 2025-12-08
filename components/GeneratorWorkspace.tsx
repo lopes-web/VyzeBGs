@@ -401,7 +401,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     };
 
     const handleInpaint = async () => {
-        if (!generatedImage || !eraserMask) return;
+        if (!generatedImage) return;
+
+        if (!eraserMask) {
+            setError("Por favor, pinte a área que deseja alterar antes de aplicar.");
+            return;
+        }
 
         if (!checkConcurrencyLimit()) {
             setError("Limite de gerações simultâneas atingido (Max 2).");
@@ -916,7 +921,19 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                 {/* Main Preview */}
                 < div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]" >
                     {
-                        generatedImage ? (
+                        isGenerating ? (
+                            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
+                                <div className="relative w-24 h-24 mb-6">
+                                    <div className="absolute inset-0 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+                                    <div className="absolute inset-0 border-4 border-lime-500 rounded-full border-t-transparent animate-spin"></div>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <i className="fas fa-wand-magic-sparkles text-2xl text-lime-500 animate-pulse"></i>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 animate-pulse">Criando sua imagem...</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Isso pode levar alguns segundos</p>
+                            </div>
+                        ) : generatedImage ? (
                             <div className="relative w-full h-full flex items-center justify-center bg-gray-100 dark:bg-black/20 rounded-xl overflow-hidden p-4" >
                                 <img
                                     src={generatedImage}
