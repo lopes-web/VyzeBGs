@@ -58,6 +58,8 @@ export interface ActiveColors {
 export interface ProjectContext {
   floatingElements3D: boolean;
   floatingElementsDescription?: string;
+  backgroundEffects: boolean;
+  backgroundEffectsDescription?: string;
   niche?: string;
   environment?: string;
   subjectDescription?: string;

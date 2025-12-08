@@ -83,6 +83,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [projectContext, setProjectContext] = useState<ProjectContext>({
         floatingElements3D: false,
         floatingElementsDescription: '',
+        backgroundEffects: false,
+        backgroundEffectsDescription: '',
         niche: '',
         environment: '',
         subjectDescription: '',
@@ -607,6 +609,39 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Ãcones de vidro, partÃ­culas douradas, moedas..."
                                         value={projectContext.floatingElementsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, floatingElementsDescription: e.target.value }))}
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
+                                    />
+                                </div>
+                            )}
+                                                </div>
+
+                        {/* Background Effects Toggle */}
+                        <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                    <i className="fas fa-bolt text-lime-500"></i>
+                                    Efeitos de Fundo
+                                </label>
+                                <button
+                                    onClick={() => setProjectContext(prev => ({ ...prev, backgroundEffects: !prev.backgroundEffects }))}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.backgroundEffects ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.backgroundEffects ? 'translate-x-6' : 'translate-x-1'}`}
+                                    />
+                                </button>
+                            </div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                Adiciona efeitos visuais dinâmicos (raios, partículas, brilho).
+                            </p>
+
+                            {projectContext.backgroundEffects && (
+                                <div className="mt-3 animate-fadeIn">
+                                    <input
+                                        type="text"
+                                        placeholder="Opcional: descreva o efeito (ex: raios dourados, partículas de luz...)"
+                                        value={projectContext.backgroundEffectsDescription}
+                                        onChange={(e) => setProjectContext(prev => ({ ...prev, backgroundEffectsDescription: e.target.value }))}
                                         className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
                                     />
                                 </div>

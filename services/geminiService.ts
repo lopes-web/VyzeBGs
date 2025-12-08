@@ -304,6 +304,12 @@ export const generateBackground = async (
     finalPrompt += `3D DEPTH ENHANCEMENT: Add ${elementDesc} in the background. They should have depth of field (bokeh) to create a sense of immersion and high-end 3D design.\n`;
   }
 
+  // Project Context - Background Effects (Neon, Particles, etc.)
+  if (projectContext?.backgroundEffects) {
+    const effectsDesc = projectContext.backgroundEffectsDescription || "dynamic visual background effects such as: energy trails and lightning bolts, glowing light particles and sparkles, neon geometric lines and light beams, abstract brush strokes, or mystical fire and glow effects";
+    finalPrompt += `CREATIVE BACKGROUND EFFECTS: Add ${effectsDesc}. These effects should complement the subject and harmonize with the dominant lighting colors. Use high-end advertising aesthetic. Do NOT add random 3D geometric shapes (spheres, cubes) unless explicitly requested.\n`;
+  }
+
   // Specific Mode Guidelines
   if (mode === 'HUMAN') {
     finalPrompt += `Quality Guidelines: ${DEFAULT_TREATMENT_PROMPT}\n\n`;
