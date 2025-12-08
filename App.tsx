@@ -365,10 +365,10 @@ const AppContent: React.FC = () => {
 
     // --- WORKSPACE VIEW (EXISTING LOGIC) ---
     return (
-        <div className="h-screen flex flex-col bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
+        <div className="h-screen flex flex-col bg-app-dark text-white font-sans overflow-hidden transition-colors duration-300">
 
             {/* HEADER & TABS BAR */}
-            <div className="bg-white/80 dark:bg-app-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">
+            <div className="bg-app-dark border-b border-white/5 flex flex-col z-50 transition-colors duration-300">
 
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-3">
@@ -468,7 +468,7 @@ const AppContent: React.FC = () => {
             </div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="flex-grow relative overflow-hidden bg-gray-50 dark:bg-gray-950 p-6 transition-colors duration-300">
+            <div className="flex-grow relative overflow-hidden bg-app-dark p-6 transition-colors duration-300">
 
                 {/* Render All Workspaces (Hidden if inactive) to preserve state */}
                 {tabs.map(tab => (
@@ -514,7 +514,7 @@ const AppContent: React.FC = () => {
                             {/* HUMAN CARD */}
                             <div
                                 onClick={() => createTab('HUMAN')}
-                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-app-dark-lighter border border-white/5 rounded-3xl p-6 hover:bg-app-dark hover:border-lime-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
                             >
                                 <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
                                     <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
@@ -531,7 +531,7 @@ const AppContent: React.FC = () => {
                             {/* INFOPRODUCT CARD */}
                             <div
                                 onClick={() => createTab('INFOPRODUCT')}
-                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-amber-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-app-dark-lighter border border-white/5 rounded-3xl p-6 hover:bg-app-dark hover:border-amber-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
                             >
                                 <div className="w-14 h-14 bg-amber-100 dark:bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
                                     <i className="fas fa-chalkboard-teacher text-2xl text-amber-600 dark:text-black"></i>
@@ -548,7 +548,7 @@ const AppContent: React.FC = () => {
                             {/* OBJECT CARD */}
                             <div
                                 onClick={() => createTab('OBJECT')}
-                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-blue-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-app-dark-lighter border border-white/5 rounded-3xl p-6 hover:bg-app-dark hover:border-blue-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
                             >
                                 <div className="w-14 h-14 bg-blue-100 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
                                     <i className="fas fa-cube text-2xl text-blue-600 dark:text-black"></i>
@@ -565,7 +565,7 @@ const AppContent: React.FC = () => {
                             {/* ENHANCE CARD */}
                             <div
                                 onClick={() => createTab('ENHANCE')}
-                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-purple-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-app-dark-lighter border border-white/5 rounded-3xl p-6 hover:bg-app-dark hover:border-purple-500/30 transition-all cursor-pointer group shadow-2xl relative overflow-hidden flex flex-col"
                             >
                                 <div className="w-14 h-14 bg-purple-100 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
                                     <i className="fas fa-wand-magic-sparkles text-2xl text-purple-600 dark:text-black"></i>
@@ -589,10 +589,10 @@ const AppContent: React.FC = () => {
             {/* GLOBAL HISTORY POPUP */}
             {isHistoryOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-8 animate-fadeIn">
-                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 w-full max-w-6xl h-[80vh] rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
+                    <div className="bg-app-dark border border-white/10 w-full max-w-6xl h-[80vh] rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
 
                         {/* Header */}
-                        <div className="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between bg-gray-50 dark:bg-black/20">
+                        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-app-dark-lighter">
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><i className="fas fa-history text-lime-600 dark:text-lime-400 mr-2"></i> Galeria Global {currentSection ? `(${currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'})` : ''}</h2>
                             <button onClick={() => setIsHistoryOpen(false)} className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 text-xl">
                                 <i className="fas fa-times"></i>
