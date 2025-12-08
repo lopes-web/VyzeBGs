@@ -563,7 +563,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 placeholder="Ex: Trader de Elite, Dentista Premium..."
                                 value={projectContext.niche || ''}
                                 onChange={(e) => setProjectContext(prev => ({ ...prev, niche: e.target.value }))}
-                                className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-lime-500 outline-none"
+                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-lime-500 outline-none"
                             />
                         </div>
 
@@ -611,7 +611,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         onClick={() => setProjectContext(prev => ({ ...prev, framing: opt.id }))}
                                         className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${projectContext.framing === opt.id
                                             ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                            : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'
+                                            : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'
                                             }`}
                                     >
                                         <i className={`fas ${opt.icon} mb-1 text-lg`}></i>
@@ -631,8 +631,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <div className="grid grid-cols-1 gap-3">
                                 {/* Ambient Color Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.ambient
-                                    ? 'bg-white dark:bg-gray-900 border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
-                                    : 'bg-gray-50 dark:bg-black/20 border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
+                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4">
                                         <div className="flex items-center justify-between">
@@ -699,8 +699,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                                 {/* Rim Light Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.rim
-                                    ? 'bg-white dark:bg-gray-900 border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
-                                    : 'bg-gray-50 dark:bg-black/20 border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
+                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
@@ -747,8 +747,8 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                                 {/* Complementary Light Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.complementary
-                                    ? 'bg-white dark:bg-gray-900 border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
-                                    : 'bg-gray-50 dark:bg-black/20 border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
+                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
@@ -801,7 +801,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 onClick={() => toggleAttribute('useGradient')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
                                     ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
                                 <i className={`fas ${attributes.useGradient ? 'fa-check-square' : 'fa-check-square'} `}></i>
@@ -811,7 +811,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 onClick={() => toggleAttribute('useBlur')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
                                     ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
-                                    : 'bg-white dark:bg-black/40 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                                    : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
                                 <i className={`fas ${attributes.useBlur ? 'fa-check-square' : 'fa-square'} `}></i>
@@ -827,7 +827,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     type="number"
                                     value={1920}
                                     disabled
-                                    className="w-full bg-gray-100 dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-500 text-sm cursor-not-allowed"
+                                    className="w-full bg-gray-100 dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-500 text-sm cursor-not-allowed"
                                 />
                             </div>
                             <div>
@@ -836,7 +836,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     type="number"
                                     value={customHeight}
                                     onChange={(e) => setCustomHeight(Number(e.target.value))}
-                                    className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                    className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
                                     min={500}
                                     max={2160}
                                 />
@@ -857,7 +857,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             ? "Descreva o nicho (ex: Mentor financeiro, Curso de inglês) e a atmosfera desejada..."
                                             : "Descreva o cenário..."
                                 }
-                                className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-lime-500 focus:border-transparent outline-none transition-all min-h-[100px]"
+                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-lime-500 focus:border-transparent outline-none transition-all min-h-[100px]"
                             />
                         </div>
 
@@ -866,11 +866,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Sticky Footer */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/10 p-4 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+                    <div className="absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-app-dark/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/10 p-4 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
                         {/* BATCH SELECTOR */}
                         <div className="flex items-center justify-between mb-4 px-1">
                             <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                            <div className="flex gap-3 bg-gray-100 dark:bg-black/40 p-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
+                            <div className="flex gap-3 bg-gray-100 dark:bg-app-dark-lighter p-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
                                 {[1, 2, 3, 4].map(num => (
                                     <button
                                         key={num}
@@ -919,7 +919,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
             < div className="lg:col-span-8 flex flex-col h-full overflow-hidden" >
 
                 {/* Main Preview */}
-                < div className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]" >
+                < div className="bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-1 shadow-2xl flex-grow relative overflow-hidden group mb-4 min-h-[400px]" >
                     {
                         isGenerating ? (
                             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
@@ -975,7 +975,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                                         setIsDrawing={setIsEraserDrawing}
                                                     />
                                                 </div>
-                                                <div className="p-4 bg-gray-900 border-t border-gray-800 flex gap-4 items-center">
+                                                <div className="p-4 bg-app-dark border-t border-gray-800 flex gap-4 items-center">
                                                     <input
                                                         type="text"
                                                         value={eraserPrompt}
@@ -1012,7 +1012,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                 </div >
 
                 {/* History Strip */}
-                < div className="h-32 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700" >
+                < div className="h-32 bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700" >
                     {
                         localHistory.length === 0 ? (
                             <div className="w-full flex items-center justify-center text-xs text-gray-400">
@@ -1071,7 +1071,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
             {
                 showExportModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-                        <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-200 dark:border-white/10 relative">
+                        <div className="bg-white dark:bg-app-dark rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-200 dark:border-white/10 relative">
                             <button
                                 onClick={() => setShowExportModal(false)}
                                 className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"

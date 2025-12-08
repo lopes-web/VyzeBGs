@@ -368,7 +368,7 @@ const AppContent: React.FC = () => {
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
 
             {/* HEADER & TABS BAR */}
-            <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">
+            <div className="bg-white/80 dark:bg-app-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">
 
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-3">
@@ -514,7 +514,7 @@ const AppContent: React.FC = () => {
                             {/* HUMAN CARD */}
                             <div
                                 onClick={() => createTab('HUMAN')}
-                                className="bg-white/60 dark:bg-gray-900/40 border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 backdrop-blur-xl rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/60 hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                             >
                                 <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
                                     <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
