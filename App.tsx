@@ -16,6 +16,7 @@ import HomeHub from './components/HomeHub';
 import ProfileModal from './components/ProfileModal';
 import RemoveBgWorkspace from './components/RemoveBgWorkspace';
 import WebPConverterWorkspace from './components/WebPConverterWorkspace';
+import DesignsWorkspace from './components/DesignsWorkspace';
 
 const AppContent: React.FC = () => {
     const { user, signOut, loading } = useAuth();
@@ -337,6 +338,23 @@ const AppContent: React.FC = () => {
                     )
                 }
             </>
+        );
+    }
+
+    if (currentSection === 'DESIGNS') {
+        return (
+            <div className="h-[100dvh] w-full relative bg-app-dark">
+                <button
+                    onClick={() => setCurrentSection(null)}
+                    className="absolute top-8 right-8 z-50 w-10 h-10 rounded-full bg-gray-200 dark:bg-app-dark-lighter hover:bg-red-500 hover:text-white text-gray-500 dark:text-gray-400 flex items-center justify-center transition-all backdrop-blur-md shadow-lg"
+                    title="Voltar ao Hub"
+                >
+                    <i className="fas fa-times"></i>
+                </button>
+                <div className="h-full pt-20 px-8 pb-8">
+                    <DesignsWorkspace onAddToGlobalHistory={handleAddToGlobalHistory} />
+                </div>
+            </div>
         );
     }
 

@@ -610,3 +610,102 @@ export const inpaintImage = async (
     throw new Error(error.message || "Failed to inpaint image");
   }
 };
+
+// Design Asset Generation
+export const generateDesignAsset = async (
+  category: 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS',
+  inputs: any
+): Promise<{ image: string, finalPrompt: string }> => {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error("API Key not found");
+  const ai = new GoogleGenAI({ apiKey });
+
+  let prompt = "";
+
+  switch (category) {
+    case 'MOCKUPS':
+      prompt = `Generate a photorealistic ${inputs.deviceType} mockup in a professional studio setting.
+Angle: ${inputs.angle} view. The device should appear premium and high-end.
+${inputs.screenImage ? 'The screen should display the provided image.' : 'The screen should be white/blank or show a placeholder UI.'}
+Background: Solid/gradient color ${inputs.bgColor}. 
+Lighting: Soft studio light with subtle shadows. 8K quality, commercial advertising aesthetic.`;
+      break;
+
+    case 'ICONS':
+      prompt = `Create a single 3D icon of a ${inputs.iconDescription}.
+Style: ${inputs.iconStyle} - glossy, volumetric, soft shadows, high-end advertising aesthetic.
+Primary color: ${inputs.iconColor}. The icon should be centered on a transparent or solid dark background.
+Format: Square composition (1024x1024), the icon should fill most of the frame.
+Quality: 8K ultra-detailed, perfect for app icons or social media.`;
+      break;
+
+    case 'PRODUCTS':
+      prompt = `Generate a photorealistic product shot of a premium ${inputs.productType} for ${inputs.brandName || 'a luxury brand'} in the ${inputs.niche || 'lifestyle'} industry.
+The packaging should feature colors: ${inputs.productColors.join(', ')}.
+${inputs.logoImage ? 'Apply the provided logo on the product.' : 'The product should have elegant, minimal branding.'}
+Background: Clean studio gradient. Floating composition with soft shadows.
+Lighting: Professional product photography, ray-traced quality. 8K resolution.`;
+      break;
+
+    case 'LOGOS':
+      prompt = `Design a ${inputs.logoStyle} logo for "${inputs.logoName}" in the ${inputs.logoNiche} industry.
+${inputs.includeIcon ? 'The logo should include a relevant icon/symbol alongside the text.' : 'The logo should be text-only (wordmark).'}
+Colors: ${inputs.logoColors.join(' and ')}.
+Style: Clean, professional, memorable, vector-style appearance.
+Background: Pure white. The logo should be centered and clearly visible.
+Generate a single, polished logo design.`;
+      break;
+  }
+
+  const parts: any[] = [];
+
+  // Add uploaded images if any
+  if (inputs.screenImage) {
+    parts.push({
+      inlineData: {
+        data: inputs.screenImage.replace(/^data:image\/\w+;base64,/, ""),
+        mimeType: 'image/png',
+      },
+    });
+  }
+
+  if (inputs.logoImage) {
+    parts.push({
+      inlineData: {
+        data: inputs.logoImage.replace(/^data:image\/\w+;base64,/, ""),
+        mimeType: 'image/png',
+      },
+    });
+  }
+
+  parts.push({ text: prompt });
+
+  try {
+    const response = await ai.models.generateContent({
+      model: MODEL_NAME,
+      contents: [{ role: 'user', parts }],
+      config: {
+        responseModalities: ['image', 'text'],
+        imageConfig: {
+          aspectRatio: category === 'LOGOS' ? "1:1" : "16:9",
+          imageSize: "2K"
+        }
+      },
+    });
+
+    if (response.candidates && response.candidates[0]?.content?.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          return {
+            image: `data:image/png;base64,${part.inlineData.data}`,
+            finalPrompt: prompt
+          };
+        }
+      }
+    }
+    throw new Error("No image data found in response.");
+  } catch (error: any) {
+    console.error("Design Asset Generation Error:", error);
+    throw new Error(error.message || "Failed to generate design asset");
+  }
+};

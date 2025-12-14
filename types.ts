@@ -5,6 +5,8 @@ export enum SubjectPosition {
   RIGHT = 'RIGHT',
 }
 
+export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS';
+
 export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
 
 export type AppSection = 'LANDING_PAGES' | 'DESIGNS' | 'REMOVE_BG' | 'WEBP_CONVERTER';
