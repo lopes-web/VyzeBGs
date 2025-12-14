@@ -352,7 +352,7 @@ const AppContent: React.FC = () => {
                     <i className="fas fa-times"></i>
                 </button>
                 <div className="h-full pt-20 px-8 pb-8">
-                    <DesignsWorkspace onAddToGlobalHistory={handleAddToGlobalHistory} />
+                    <DesignsWorkspace onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])} />
                 </div>
             </div>
         );
