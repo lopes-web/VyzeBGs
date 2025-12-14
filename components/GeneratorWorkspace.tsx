@@ -303,7 +303,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         try {
             const requests = [];
             for (let i = 0; i < batchSize; i++) {
-                const variationNoise = batchSize > 1 ? ` (Variation ${i + 1}: slightly vary lighting details)` : "";
+                const variationNoise = batchSize > 1 ? ` [VARIATION ${i + 1}/${batchSize}: Slightly vary ONLY the background lighting and environment details. CRITICAL: The subject face, identity, and physical features must remain EXACTLY the same across all variations.]` : "";
                 const effectivePrompt = userPrompt + variationNoise;
 
                 requests.push(
