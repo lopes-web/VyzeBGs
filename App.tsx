@@ -520,6 +520,40 @@ const AppContent: React.FC = () => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl px-4 relative z-10">
+
+                            {currentSection === 'DESIGNS' ? (
+                                <>
+                                    {/* MOCKUPS CARD */}
+                                    <div onClick={() => createTab('OBJECT')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-cyan-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
+                                        <div className='w-14 h-14 bg-cyan-100 dark:bg-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-mobile-alt text-2xl text-cyan-600 dark:text-black'></i></div>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors'>Mockups</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personaliz?vel (iPhone, MacBook, iPad).</p>
+                                        <span className='text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    </div>
+                                    {/* ICONS CARD */}
+                                    <div onClick={() => createTab('OBJECT')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-violet-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
+                                        <div className='w-14 h-14 bg-violet-100 dark:bg-violet-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-gem text-2xl text-violet-600 dark:text-black'></i></div>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>?cones 3D</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>?cones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
+                                        <span className='text-violet-600 dark:text-violet-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    </div>
+                                    {/* PRODUCTS CARD */}
+                                    <div onClick={() => createTab('OBJECT')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-emerald-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
+                                        <div className='w-14 h-14 bg-emerald-100 dark:bg-emerald-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-box text-2xl text-emerald-600 dark:text-black'></i></div>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors'>Produtos</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Embalagens, caixas e frascos com branding profissional.</p>
+                                        <span className='text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    </div>
+                                    {/* LOGOS CARD */}
+                                    <div onClick={() => createTab('OBJECT')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-rose-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
+                                        <div className='w-14 h-14 bg-rose-100 dark:bg-rose-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-palette text-2xl text-rose-600 dark:text-black'></i></div>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors'>Logos</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugest?es de logos baseadas no nicho e estilo.</p>
+                                        <span className='text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
                             {/* HUMAN CARD */}
                             <div
                                 onClick={() => createTab('HUMAN')}
@@ -587,6 +621,8 @@ const AppContent: React.FC = () => {
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                 </span>
                             </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
