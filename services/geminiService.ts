@@ -632,10 +632,13 @@ Lighting: Soft studio light with subtle shadows. 8K quality, commercial advertis
       break;
 
     case 'ICONS':
-      prompt = `Create a single 3D icon of a ${inputs.iconDescription}.
+      const bgDesc = inputs.bgColor === 'transparent' ? 'a completely transparent background (alpha channel)' : `a solid ${inputs.bgColor} background`;
+      prompt = `Create a single, isolated 3D icon of a ${inputs.iconDescription}.
+CRITICAL: Generate ONLY ONE icon centered in the frame. DO NOT create patterns, tiles, or multiple copies of the icon. The background must be clean and simple - NO reflections, NO repeated elements, NO other objects.
 Style: ${inputs.iconStyle} - glossy, volumetric, soft shadows, high-end advertising aesthetic.
-Primary color: ${inputs.iconColor}. The icon should be centered on a transparent or solid dark background.
-Format: Square composition (1024x1024), the icon should fill most of the frame.
+Primary color: ${inputs.iconColor}.
+Background: ${bgDesc}. The background must be completely clean with no other elements.
+Format: Square composition (1024x1024), icon centered and filling about 70% of the frame.
 Quality: 8K ultra-detailed, perfect for app icons or social media.`;
       break;
 

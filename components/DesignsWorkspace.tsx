@@ -19,6 +19,13 @@ const ANGLE_OPTIONS = ['Frontal', 'Isométrico', 'Flutuante'];
 const ICON_STYLES = ['Glassmorphism', 'Neon', 'Clay 3D', 'Gradiente'];
 const PRODUCT_TYPES = ['Caixa', 'Frasco', 'Sacola', 'Embalagem', 'Bolsa'];
 const LOGO_STYLES = ['Minimalista', 'Moderno', 'Vintage', 'Tech', 'Elegante'];
+const BG_OPTIONS = [
+    { label: 'Transparente', value: 'transparent' },
+    { label: 'Preto', value: '#000000' },
+    { label: 'Branco', value: '#ffffff' },
+    { label: 'Cinza Escuro', value: '#1a1a2e' },
+    { label: 'Custom', value: 'custom' },
+];
 
 const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory }) => {
     const [selectedCategory, setSelectedCategory] = useState<DesignCategory>('MOCKUPS');
@@ -30,12 +37,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [deviceType, setDeviceType] = useState('iPhone');
     const [screenImage, setScreenImage] = useState<string | null>(null);
     const [angle, setAngle] = useState('Frontal');
-    const [bgColor, setBgColor] = useState('#1a1a2e');
+    const [mockupBgColor, setMockupBgColor] = useState('#1a1a2e');
 
     // Icon inputs
     const [iconDescription, setIconDescription] = useState('');
     const [iconStyle, setIconStyle] = useState('Glassmorphism');
     const [iconColor, setIconColor] = useState('#6366f1');
+    const [iconBgType, setIconBgType] = useState('transparent');
+    const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
 
     // Product inputs
     const [productType, setProductType] = useState('Caixa');
@@ -62,6 +71,16 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
         }
     };
 
+    const handleDownload = () => {
+        if (!generatedImage) return;
+        const link = document.createElement('a');
+        link.href = generatedImage;
+        link.download = `${selectedCategory.toLowerCase()}_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const handleGenerate = async () => {
         setIsGenerating(true);
         setError(null);
@@ -79,10 +98,15 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
             switch (selectedCategory) {
                 case 'MOCKUPS':
-                    inputs = { deviceType, screenImage, angle, bgColor };
+                    inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                     break;
                 case 'ICONS':
-                    inputs = { iconDescription, iconStyle, iconColor };
+                    inputs = {
+                        iconDescription,
+                        iconStyle,
+                        iconColor,
+                        bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType
+                    };
                     break;
                 case 'PRODUCTS':
                     inputs = { productType, brandName, niche, logoImage, productColors };
@@ -120,52 +144,35 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-300 mb-2">Dispositivo</label>
                             <div className="grid grid-cols-5 gap-2">
                                 {DEVICE_OPTIONS.map(device => (
-                                    <button
-                                        key={device}
-                                        onClick={() => setDeviceType(device)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device
-                                            ? 'bg-lime-500 text-black'
-                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-                                    >
+                                    <button key={device} onClick={() => setDeviceType(device)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {device}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Imagem da Tela (Opcional)</label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setScreenImage)}
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300"
-                            />
+                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setScreenImage)}
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
                             {screenImage && <img src={screenImage} alt="Screen preview" className="mt-2 h-20 rounded-lg object-cover" />}
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Ângulo</label>
                             <div className="flex gap-2">
                                 {ANGLE_OPTIONS.map(a => (
-                                    <button
-                                        key={a}
-                                        onClick={() => setAngle(a)}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a
-                                            ? 'bg-lime-500 text-black'
-                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-                                    >
+                                    <button key={a} onClick={() => setAngle(a)}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {a}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cor de Fundo</label>
                             <div className="flex gap-2 items-center">
-                                <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
-                                <input type="text" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
+                                <input type="color" value={mockupBgColor} onChange={(e) => setMockupBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
+                                <input type="text" value={mockupBgColor} onChange={(e) => setMockupBgColor(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
                             </div>
                         </div>
                     </div>
@@ -176,38 +183,44 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Descrição do Ícone *</label>
-                            <input
-                                type="text"
-                                value={iconDescription}
-                                onChange={(e) => setIconDescription(e.target.value)}
+                            <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
                                 placeholder="Ex: foguete, dinheiro, coração, cérebro..."
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500"
-                            />
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Estilo</label>
                             <div className="grid grid-cols-4 gap-2">
                                 {ICON_STYLES.map(style => (
-                                    <button
-                                        key={style}
-                                        onClick={() => setIconStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style
-                                            ? 'bg-lime-500 text-black'
-                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-                                    >
+                                    <button key={style} onClick={() => setIconStyle(style)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor Principal</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor do Ícone</label>
                             <div className="flex gap-2 items-center">
                                 <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
                                 <input type="text" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
                             </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor de Fundo</label>
+                            <div className="grid grid-cols-3 gap-2 mb-2">
+                                {BG_OPTIONS.map(opt => (
+                                    <button key={opt.value} onClick={() => setIconBgType(opt.value)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconBgType === opt.value ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
+                                        {opt.label}
+                                    </button>
+                                ))}
+                            </div>
+                            {iconBgType === 'custom' && (
+                                <div className="flex gap-2 items-center mt-2">
+                                    <input type="color" value={iconBgCustom} onChange={(e) => setIconBgCustom(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
+                                    <input type="text" value={iconBgCustom} onChange={(e) => setIconBgCustom(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
+                                </div>
+                            )}
                         </div>
                     </div>
                 );
@@ -219,67 +232,37 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Produto *</label>
                             <div className="grid grid-cols-5 gap-2">
                                 {PRODUCT_TYPES.map(type => (
-                                    <button
-                                        key={type}
-                                        onClick={() => setProductType(type)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type
-                                            ? 'bg-lime-500 text-black'
-                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-                                    >
+                                    <button key={type} onClick={() => setProductType(type)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {type}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Nome/Marca</label>
-                                <input
-                                    type="text"
-                                    value={brandName}
-                                    onChange={(e) => setBrandName(e.target.value)}
-                                    placeholder="Ex: VyzeSupplements"
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500"
-                                />
+                                <input type="text" value={brandName} onChange={(e) => setBrandName(e.target.value)}
+                                    placeholder="Ex: VyzeSupplements" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Nicho</label>
-                                <input
-                                    type="text"
-                                    value={niche}
-                                    onChange={(e) => setNiche(e.target.value)}
-                                    placeholder="Ex: cosméticos, suplementos..."
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500"
-                                />
+                                <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
+                                    placeholder="Ex: cosméticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Logo (Opcional)</label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setLogoImage)}
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300"
-                            />
+                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setLogoImage)}
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cores</label>
                             <div className="flex gap-2">
                                 {productColors.map((color, i) => (
-                                    <input
-                                        key={i}
-                                        type="color"
-                                        value={color}
-                                        onChange={(e) => {
-                                            const newColors = [...productColors];
-                                            newColors[i] = e.target.value;
-                                            setProductColors(newColors);
-                                        }}
-                                        className="w-10 h-10 rounded cursor-pointer"
-                                    />
+                                    <input key={i} type="color" value={color} onChange={(e) => {
+                                        const newColors = [...productColors]; newColors[i] = e.target.value; setProductColors(newColors);
+                                    }} className="w-10 h-10 rounded cursor-pointer" />
                                 ))}
                             </div>
                         </div>
@@ -292,67 +275,39 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Nome da Marca *</label>
-                                <input
-                                    type="text"
-                                    value={logoName}
-                                    onChange={(e) => setLogoName(e.target.value)}
-                                    placeholder="Ex: VyzeBG"
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500"
-                                />
+                                <input type="text" value={logoName} onChange={(e) => setLogoName(e.target.value)}
+                                    placeholder="Ex: VyzeBG" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Nicho *</label>
-                                <input
-                                    type="text"
-                                    value={logoNiche}
-                                    onChange={(e) => setLogoNiche(e.target.value)}
-                                    placeholder="Ex: tecnologia, fitness..."
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500"
-                                />
+                                <input type="text" value={logoNiche} onChange={(e) => setLogoNiche(e.target.value)}
+                                    placeholder="Ex: tecnologia, fitness..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Estilo</label>
                             <div className="grid grid-cols-5 gap-2">
                                 {LOGO_STYLES.map(style => (
-                                    <button
-                                        key={style}
-                                        onClick={() => setLogoStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style
-                                            ? 'bg-lime-500 text-black'
-                                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-                                    >
+                                    <button key={style} onClick={() => setLogoStyle(style)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cores</label>
                             <div className="flex gap-2">
                                 {logoColors.map((color, i) => (
-                                    <input
-                                        key={i}
-                                        type="color"
-                                        value={color}
-                                        onChange={(e) => {
-                                            const newColors = [...logoColors];
-                                            newColors[i] = e.target.value;
-                                            setLogoColors(newColors);
-                                        }}
-                                        className="w-10 h-10 rounded cursor-pointer"
-                                    />
+                                    <input key={i} type="color" value={color} onChange={(e) => {
+                                        const newColors = [...logoColors]; newColors[i] = e.target.value; setLogoColors(newColors);
+                                    }} className="w-10 h-10 rounded cursor-pointer" />
                                 ))}
                             </div>
                         </div>
-
                         <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => setIncludeIcon(!includeIcon)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-700'}`}
-                            >
+                            <button onClick={() => setIncludeIcon(!includeIcon)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-700'}`}>
                                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
                             </button>
                             <span className="text-sm text-gray-300">Incluir ícone no logo</span>
@@ -363,37 +318,33 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 animate-fadeIn h-full overflow-hidden">
             {/* Left Panel - Controls */}
-            <div className="lg:col-span-4 h-full flex flex-col bg-gray-900/40 backdrop-blur-xl border-r border-white/5 rounded-l-2xl overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    {/* Category Selector */}
-                    <div>
-                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white/90">
-                            <i className="fas fa-layer-group text-lime-400"></i>
-                            Tipo de Asset
-                        </h2>
-                        <div className="grid grid-cols-2 gap-3">
-                            {CATEGORIES.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setSelectedCategory(cat.id)}
-                                    className={`flex flex-col items-center p-4 rounded-xl border transition-all ${selectedCategory === cat.id
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-400'
-                                        : 'bg-gray-800/50 border-gray-700 text-gray-400 hover:bg-gray-800'}`}
-                                >
-                                    <i className={`fas ${cat.icon} text-2xl mb-2`}></i>
-                                    <span className="text-sm font-medium">{cat.label}</span>
-                                    <span className="text-xs text-gray-500 mt-1">{cat.description}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+            <div className="lg:col-span-4 h-full flex flex-col bg-gray-900/60 backdrop-blur-xl border-r border-white/5 overflow-hidden">
+                {/* Category Tabs */}
+                <div className="flex border-b border-white/10">
+                    {CATEGORIES.map(cat => (
+                        <button
+                            key={cat.id}
+                            onClick={() => setSelectedCategory(cat.id)}
+                            className={`flex-1 py-4 text-sm font-medium transition-all relative ${selectedCategory === cat.id
+                                ? 'text-lime-400'
+                                : 'text-gray-500 hover:text-gray-300'}`}
+                        >
+                            <i className={`fas ${cat.icon} mr-2`}></i>
+                            {cat.label}
+                            {selectedCategory === cat.id && (
+                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-lime-500"></div>
+                            )}
+                        </button>
+                    ))}
+                </div>
 
-                    {/* Dynamic Inputs */}
+                {/* Dynamic Inputs */}
+                <div className="flex-1 overflow-y-auto p-6">
                     <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-6">
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">
-                            Configurações
+                            {CATEGORIES.find(c => c.id === selectedCategory)?.description}
                         </h3>
                         {renderCategoryInputs()}
                     </div>
@@ -401,33 +352,23 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                 {/* Generate Button */}
                 <div className="p-4 border-t border-white/10">
-                    <button
-                        onClick={handleGenerate}
-                        disabled={isGenerating}
-                        className="w-full bg-gradient-to-r from-lime-500 to-emerald-500 text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    >
+                    <button onClick={handleGenerate} disabled={isGenerating}
+                        className="w-full bg-gradient-to-r from-lime-500 to-emerald-500 text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                         {isGenerating ? (
-                            <>
-                                <i className="fas fa-spinner fa-spin"></i>
-                                Gerando...
-                            </>
+                            <><i className="fas fa-spinner fa-spin"></i> Gerando...</>
                         ) : (
-                            <>
-                                <i className="fas fa-magic"></i>
-                                Gerar {CATEGORIES.find(c => c.id === selectedCategory)?.label}
-                            </>
+                            <><i className="fas fa-magic"></i> Gerar {CATEGORIES.find(c => c.id === selectedCategory)?.label}</>
                         )}
                     </button>
                 </div>
             </div>
 
             {/* Right Panel - Preview */}
-            <div className="lg:col-span-8 h-full flex flex-col bg-gray-900/20 rounded-r-2xl overflow-hidden">
-                <div className="flex-1 flex items-center justify-center p-8">
+            <div className="lg:col-span-8 h-full flex flex-col bg-gray-900/20 overflow-hidden">
+                <div className="flex-1 flex items-center justify-center p-8 relative">
                     {error && (
                         <div className="text-red-400 bg-red-900/20 border border-red-500/30 rounded-xl p-4">
-                            <i className="fas fa-exclamation-circle mr-2"></i>
-                            {error}
+                            <i className="fas fa-exclamation-circle mr-2"></i>{error}
                         </div>
                     )}
 
@@ -446,11 +387,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     )}
 
                     {generatedImage && (
-                        <img
-                            src={generatedImage}
-                            alt="Generated asset"
-                            className="max-h-full max-w-full rounded-xl shadow-2xl"
-                        />
+                        <div className="relative">
+                            <img src={generatedImage} alt="Generated asset" className="max-h-[70vh] max-w-full rounded-xl shadow-2xl" />
+                            {/* Download Button */}
+                            <button onClick={handleDownload}
+                                className="absolute top-4 right-4 bg-lime-500 hover:bg-lime-400 text-black font-bold px-4 py-2 rounded-lg shadow-lg transition-all flex items-center gap-2">
+                                <i className="fas fa-download"></i> Download
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>
