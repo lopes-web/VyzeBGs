@@ -1,4 +1,4 @@
-Ôªø
+
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
@@ -117,7 +117,8 @@ const AppContent: React.FC = () => {
             title: title,
             mode: mode,
             section: currentSection,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            initialData: designCategory ? { designCategory } : undefined
         };
         setTabs([...tabs, newTab]);
         setActiveTabId(newTab.id);
@@ -181,9 +182,9 @@ const AppContent: React.FC = () => {
                     <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                         <i className="fas fa-exclamation-triangle text-3xl text-red-500"></i>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configura√ß√£o Pendente</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">ConfiguraÁ„o Pendente</h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        As vari√°veis de ambiente do Supabase n√£o foram encontradas.
+                        As vari·veis de ambiente do Supabase n„o foram encontradas.
                     </p>
                     <div className="bg-gray-100 dark:bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-gray-200 dark:border-white/5">
                         <p className="mb-2">Adicione na Vercel:</p>
@@ -278,7 +279,7 @@ const AppContent: React.FC = () => {
                         const tempId = crypto.randomUUID();
                         const newTab: ProjectTab = {
                             id: tempId,
-                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (Hist√≥rico)`,
+                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (HistÛrico)`,
                             mode: generatorMode || 'HUMAN',
                             section: section,
                             createdAt: Date.now(),
@@ -400,7 +401,7 @@ const AppContent: React.FC = () => {
                             onClick={() => setIsHistoryOpen(true)}
                             className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
                         >
-                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Hist√≥rico
+                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> HistÛrico
                         </button>
 
                         <ThemeToggle />
@@ -483,6 +484,7 @@ const AppContent: React.FC = () => {
                             <DesignsWorkspace
                                 onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
                                 projectId={tab.id}
+                                initialCategory={tab.initialData?.designCategory}
                             />
                         ) : (
                         <GeneratorWorkspace
@@ -514,8 +516,8 @@ const AppContent: React.FC = () => {
                             <h2 className="text-4xl font-bold mb-4 relative z-10 text-gray-900 dark:text-white">Novo Projeto</h2>
                             <p className="text-gray-600 dark:text-gray-400 relative z-10 max-w-lg mx-auto">
                                 {currentSection === 'LANDING_PAGES'
-                                    ? 'Crie backgrounds focados em convers√£o.'
-                                    : 'Crie assets gr√°ficos e designs criativos.'}
+                                    ? 'Crie backgrounds focados em convers„o.'
+                                    : 'Crie assets gr·ficos e designs criativos.'}
                             </p>
                         </div>
 
@@ -527,14 +529,14 @@ const AppContent: React.FC = () => {
                                     <div onClick={() => createTab('OBJECT', 'MOCKUPS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-cyan-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-cyan-100 dark:bg-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-mobile-alt text-2xl text-cyan-600 dark:text-black'></i></div>
                                         <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors'>Mockups</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personaliz√°vel (iPhone, MacBook, iPad).</p>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personaliz·vel (iPhone, MacBook, iPad).</p>
                                         <span className='text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                     {/* ICONS CARD */}
                                     <div onClick={() => createTab('OBJECT', 'ICONS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-violet-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-violet-100 dark:bg-violet-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-gem text-2xl text-violet-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>√çcones 3D</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>√çcones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>Õcones 3D</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Õcones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
                                         <span className='text-violet-600 dark:text-violet-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                     {/* PRODUCTS CARD */}
@@ -548,7 +550,7 @@ const AppContent: React.FC = () => {
                                     <div onClick={() => createTab('OBJECT', 'LOGOS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-rose-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-rose-100 dark:bg-rose-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-palette text-2xl text-rose-600 dark:text-black'></i></div>
                                         <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors'>Logos</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugest√µes de logos baseadas no nicho e estilo.</p>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugestıes de logos baseadas no nicho e estilo.</p>
                                         <span className='text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                 </>
@@ -564,7 +566,7 @@ const AppContent: React.FC = () => {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Ideal para especialistas e retratos. Mant√©m a fisionomia e express√µes com fidelidade.
+                                    Ideal para especialistas e retratos. MantÈm a fisionomia e expressıes com fidelidade.
                                 </p>
                                 <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -581,7 +583,7 @@ const AppContent: React.FC = () => {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Foco em cursos e mentorias. Gera camadas de profundidade, luzes de est√∫dio e melhora a postura/roupa do expert.
+                                    Foco em cursos e mentorias. Gera camadas de profundidade, luzes de est˙dio e melhora a postura/roupa do expert.
                                 </p>
                                 <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -598,7 +600,7 @@ const AppContent: React.FC = () => {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Foco em geometria, materiais e ilumina√ß√£o realista (Ray-tracing) para objetos.
+                                    Foco em geometria, materiais e iluminaÁ„o realista (Ray-tracing) para objetos.
                                 </p>
                                 <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -615,7 +617,7 @@ const AppContent: React.FC = () => {
                                 </div>
                                 <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Melhore imagens existentes. Aumente detalhes e ilumina√ß√£o mantendo a composi√ß√£o original.
+                                    Melhore imagens existentes. Aumente detalhes e iluminaÁ„o mantendo a composiÁ„o original.
                                 </p>
                                 <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
                                     Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -649,7 +651,7 @@ const AppContent: React.FC = () => {
                             {displayedHistory.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                                     <i className="fas fa-images text-4xl mb-4 opacity-50"></i>
-                                    <p>Nenhuma imagem encontrada nesta se√ß√£o.</p>
+                                    <p>Nenhuma imagem encontrada nesta seÁ„o.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
