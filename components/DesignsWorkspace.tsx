@@ -34,6 +34,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    // Local History
+    const [localHistory, setLocalHistory] = useState<{id: string; url: string; category: string; timestamp: number}[]>([]);
+
     // Mockup inputs
     const [deviceType, setDeviceType] = useState('iPhone');
     const [screenImage, setScreenImage] = useState<string | null>(null);
