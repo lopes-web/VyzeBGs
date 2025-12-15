@@ -35,7 +35,18 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [error, setError] = useState<string | null>(null);
 
     // Local History
-    const [localHistory, setLocalHistory] = useState<{id: string; url: string; category: string; timestamp: number}[]>([]);
+    const [localHistory, setLocalHistory] = useState<{id: string; url: string; prompt?: string; category?: string; timestamp: number}[]>([]);
+
+    // Load history from Supabase on mount
+    useEffect(() => {
+        if (projectId) {
+            getProjectHistory(projectId).then(history => {
+                if (history && history.length > 0) {
+                    setLocalHistory(history);
+                }
+            });
+        }
+    }, [projectId]);
 
     // Mockup inputs
     const [deviceType, setDeviceType] = useState('iPhone');
