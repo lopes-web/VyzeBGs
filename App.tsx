@@ -1,4 +1,4 @@
-
+ï»¿
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
@@ -182,9 +182,9 @@ const AppContent: React.FC = () => {
                     <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                         <i className="fas fa-exclamation-triangle text-3xl text-red-500"></i>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configuração Pendente</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configuraï¿½ï¿½o Pendente</h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        As variáveis de ambiente do Supabase não foram encontradas.
+                        As variï¿½veis de ambiente do Supabase nï¿½o foram encontradas.
                     </p>
                     <div className="bg-gray-100 dark:bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-gray-200 dark:border-white/5">
                         <p className="mb-2">Adicione na Vercel:</p>
@@ -279,7 +279,7 @@ const AppContent: React.FC = () => {
                         const tempId = crypto.randomUUID();
                         const newTab: ProjectTab = {
                             id: tempId,
-                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (Histórico)`,
+                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (Histï¿½rico)`,
                             mode: generatorMode || 'HUMAN',
                             section: section,
                             createdAt: Date.now(),
@@ -401,7 +401,7 @@ const AppContent: React.FC = () => {
                             onClick={() => setIsHistoryOpen(true)}
                             className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
                         >
-                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Histórico
+                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Histï¿½rico
                         </button>
 
                         <ThemeToggle />
@@ -487,24 +487,24 @@ const AppContent: React.FC = () => {
                                 initialCategory={tab.initialData?.designCategory}
                             />
                         ) : (
-                        <GeneratorWorkspace
-                            mode={tab.mode}
-                            section={tab.section}
-                            initialPrompt={tab.initialData?.prompt}
-                            initialReference={tab.initialData?.referenceImage || undefined}
-                            initialStyleReference={tab.initialData?.styleReferenceImage || undefined}
-                            initialGeneratorMode={tab.initialData?.generatorMode}
-                            initialSecondaryElements={tab.initialData?.secondaryElements}
-                            shouldAutoGenerate={tab.initialData?.shouldAutoGenerate}
-                            isActive={activeTabId === tab.id}
-                            setHasKey={setHasKey}
-                            onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
-                            checkConcurrencyLimit={checkConcurrencyLimit}
-                            onGenerationStart={() => setGeneratingCount(c => c + 1)}
-                            onGenerationEnd={() => setGeneratingCount(c => Math.max(0, c - 1))}
-                            projectId={tab.id}
-                            isOptimistic={tab.isOptimistic}
-                        />
+                            <GeneratorWorkspace
+                                mode={tab.mode}
+                                section={tab.section}
+                                initialPrompt={tab.initialData?.prompt}
+                                initialReference={tab.initialData?.referenceImage || undefined}
+                                initialStyleReference={tab.initialData?.styleReferenceImage || undefined}
+                                initialGeneratorMode={tab.initialData?.generatorMode}
+                                initialSecondaryElements={tab.initialData?.secondaryElements}
+                                shouldAutoGenerate={tab.initialData?.shouldAutoGenerate}
+                                isActive={activeTabId === tab.id}
+                                setHasKey={setHasKey}
+                                onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
+                                checkConcurrencyLimit={checkConcurrencyLimit}
+                                onGenerationStart={() => setGeneratingCount(c => c + 1)}
+                                onGenerationEnd={() => setGeneratingCount(c => Math.max(0, c - 1))}
+                                projectId={tab.id}
+                                isOptimistic={tab.isOptimistic}
+                            />
                         )}
                     </div>
                 ))}
@@ -516,8 +516,8 @@ const AppContent: React.FC = () => {
                             <h2 className="text-4xl font-bold mb-4 relative z-10 text-gray-900 dark:text-white">Novo Projeto</h2>
                             <p className="text-gray-600 dark:text-gray-400 relative z-10 max-w-lg mx-auto">
                                 {currentSection === 'LANDING_PAGES'
-                                    ? 'Crie backgrounds focados em conversão.'
-                                    : 'Crie assets gráficos e designs criativos.'}
+                                    ? 'Crie backgrounds focados em conversao.'
+                                    : 'Crie assets graficos e designs criativos.'}
                             </p>
                         </div>
 
@@ -529,14 +529,14 @@ const AppContent: React.FC = () => {
                                     <div onClick={() => createTab('OBJECT', 'MOCKUPS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-cyan-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-cyan-100 dark:bg-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-mobile-alt text-2xl text-cyan-600 dark:text-black'></i></div>
                                         <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors'>Mockups</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personalizável (iPhone, MacBook, iPad).</p>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personalizavel (iPhone, MacBook, iPad).</p>
                                         <span className='text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                     {/* ICONS CARD */}
                                     <div onClick={() => createTab('OBJECT', 'ICONS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-violet-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-violet-100 dark:bg-violet-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-gem text-2xl text-violet-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>Ícones 3D</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Ícones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
+                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>Icones 3D</h3>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Icones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
                                         <span className='text-violet-600 dark:text-violet-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                     {/* PRODUCTS CARD */}
@@ -550,79 +550,79 @@ const AppContent: React.FC = () => {
                                     <div onClick={() => createTab('OBJECT', 'LOGOS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-rose-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
                                         <div className='w-14 h-14 bg-rose-100 dark:bg-rose-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-palette text-2xl text-rose-600 dark:text-black'></i></div>
                                         <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors'>Logos</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugestões de logos baseadas no nicho e estilo.</p>
+                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugestoes de logos baseadas no nicho e estilo.</p>
                                         <span className='text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                 </>
                             ) : (
                                 <>
-                            {/* HUMAN CARD */}
-                            <div
-                                onClick={() => createTab('HUMAN')}
-                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
-                            >
-                                <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Ideal para especialistas e retratos. Mantém a fisionomia e expressões com fidelidade.
-                                </p>
-                                <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
-                                    Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                </span>
-                            </div>
+                                    {/* HUMAN CARD */}
+                                    <div
+                                        onClick={() => createTab('HUMAN')}
+                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                    >
+                                        <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                            Ideal para especialistas e retratos. Mantï¿½m a fisionomia e expressï¿½es com fidelidade.
+                                        </p>
+                                        <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
+                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                        </span>
+                                    </div>
 
-                            {/* INFOPRODUCT CARD */}
-                            <div
-                                onClick={() => createTab('INFOPRODUCT')}
-                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-amber-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
-                            >
-                                <div className="w-14 h-14 bg-amber-100 dark:bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-chalkboard-teacher text-2xl text-amber-600 dark:text-black"></i>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Foco em cursos e mentorias. Gera camadas de profundidade, luzes de estúdio e melhora a postura/roupa do expert.
-                                </p>
-                                <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
-                                    Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                </span>
-                            </div>
+                                    {/* INFOPRODUCT CARD */}
+                                    <div
+                                        onClick={() => createTab('INFOPRODUCT')}
+                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-amber-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                    >
+                                        <div className="w-14 h-14 bg-amber-100 dark:bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-chalkboard-teacher text-2xl text-amber-600 dark:text-black"></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                            Foco em cursos e mentorias. Gera camadas de profundidade, luzes de estï¿½dio e melhora a postura/roupa do expert.
+                                        </p>
+                                        <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
+                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                        </span>
+                                    </div>
 
-                            {/* OBJECT CARD */}
-                            <div
-                                onClick={() => createTab('OBJECT')}
-                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-blue-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
-                            >
-                                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-cube text-2xl text-blue-600 dark:text-black"></i>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Foco em geometria, materiais e iluminação realista (Ray-tracing) para objetos.
-                                </p>
-                                <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
-                                    Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                </span>
-                            </div>
+                                    {/* OBJECT CARD */}
+                                    <div
+                                        onClick={() => createTab('OBJECT')}
+                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-blue-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                    >
+                                        <div className="w-14 h-14 bg-blue-100 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-cube text-2xl text-blue-600 dark:text-black"></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                            Foco em geometria, materiais e iluminaï¿½ï¿½o realista (Ray-tracing) para objetos.
+                                        </p>
+                                        <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
+                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                        </span>
+                                    </div>
 
-                            {/* ENHANCE CARD */}
-                            <div
-                                onClick={() => createTab('ENHANCE')}
-                                className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-purple-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
-                            >
-                                <div className="w-14 h-14 bg-purple-100 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
-                                    <i className="fas fa-wand-magic-sparkles text-2xl text-purple-600 dark:text-black"></i>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                    Melhore imagens existentes. Aumente detalhes e iluminação mantendo a composição original.
-                                </p>
-                                <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
-                                    Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                </span>
-                            </div>
+                                    {/* ENHANCE CARD */}
+                                    <div
+                                        onClick={() => createTab('ENHANCE')}
+                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-purple-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                    >
+                                        <div className="w-14 h-14 bg-purple-100 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-wand-magic-sparkles text-2xl text-purple-600 dark:text-black"></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
+                                            Melhore imagens existentes. Aumente detalhes e iluminaï¿½ï¿½o mantendo a composiï¿½ï¿½o original.
+                                        </p>
+                                        <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
+                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                                        </span>
+                                    </div>
                                 </>
                             )}
                         </div>
@@ -651,7 +651,7 @@ const AppContent: React.FC = () => {
                             {displayedHistory.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                                     <i className="fas fa-images text-4xl mb-4 opacity-50"></i>
-                                    <p>Nenhuma imagem encontrada nesta seção.</p>
+                                    <p>Nenhuma imagem encontrada nesta seï¿½ï¿½o.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">

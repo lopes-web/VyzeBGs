@@ -87,6 +87,7 @@ export interface ProjectTab {
     secondaryElements?: File[];
     shouldAutoGenerate?: boolean;
     generatorMode?: GeneratorMode;
+    designCategory?: string;
   };
 }
 
