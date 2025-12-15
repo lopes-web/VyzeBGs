@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { DesignCategory } from '../types';
 import { generateDesignAsset } from '../services/geminiService';
 import { checkApiKey } from '../services/geminiService';
@@ -28,8 +28,8 @@ const BG_OPTIONS = [
     { label: 'Custom', value: 'custom' },
 ];
 
-const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory, projectId }) => {
-    const [selectedCategory, setSelectedCategory] = useState<DesignCategory>('MOCKUPS');
+const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory, projectId, initialCategory }) => {
+    const [selectedCategory, setSelectedCategory] = useState<DesignCategory>((initialCategory as DesignCategory) || 'MOCKUPS');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
