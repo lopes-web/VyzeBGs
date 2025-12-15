@@ -1,7 +1,10 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { DesignCategory } from '../types';
 import { generateDesignAsset } from '../services/geminiService';
 import { checkApiKey } from '../services/geminiService';
+import { useAuth } from './AuthContext';
+import { uploadImageToStorage } from '../services/storageService';
+import { saveGeneration, getProjectHistory } from '../services/databaseService';
 
 interface DesignsWorkspaceProps {
     onAddToGlobalHistory: (item: any) => void;
