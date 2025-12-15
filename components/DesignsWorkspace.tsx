@@ -5,6 +5,7 @@ import { checkApiKey } from '../services/geminiService';
 
 interface DesignsWorkspaceProps {
     onAddToGlobalHistory: (item: any) => void;
+    projectId?: string;
 }
 
 const CATEGORIES: { id: DesignCategory; label: string; icon: string; description: string }[] = [
@@ -27,7 +28,7 @@ const BG_OPTIONS = [
     { label: 'Custom', value: 'custom' },
 ];
 
-const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory }) => {
+const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory, projectId }) => {
     const [selectedCategory, setSelectedCategory] = useState<DesignCategory>('MOCKUPS');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -64,9 +65,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setter(reader.result as string);
-            };
+            reader.onloadend = () => setter(reader.result as string);
             reader.readAsDataURL(file);
         }
     };
@@ -95,18 +94,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             }
 
             let inputs: any = {};
-
             switch (selectedCategory) {
                 case 'MOCKUPS':
                     inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                     break;
                 case 'ICONS':
-                    inputs = {
-                        iconDescription,
-                        iconStyle,
-                        iconColor,
-                        bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType
-                    };
+                    inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType };
                     break;
                 case 'PRODUCTS':
                     inputs = { productType, brandName, niche, logoImage, productColors };
@@ -125,9 +118,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 prompt: result.finalPrompt,
                 timestamp: Date.now(),
                 mode: 'OBJECT',
-                section: 'DESIGNS'
+                section: 'DESIGNS',
+                projectId
             });
-
         } catch (err: any) {
             setError(err.message || 'Erro ao gerar asset.');
         } finally {
@@ -155,7 +148,6 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-300 mb-2">Imagem da Tela (Opcional)</label>
                             <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setScreenImage)}
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
-                            {screenImage && <img src={screenImage} alt="Screen preview" className="mt-2 h-20 rounded-lg object-cover" />}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Ângulo</label>
@@ -184,12 +176,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Descrição do Ícone *</label>
                             <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
-                                placeholder="Ex: foguete, dinheiro, coração, cérebro..."
+                                placeholder="Ex: foguete, dinheiro, coração..."
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-4 gap-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 {ICON_STYLES.map(style => (
                                     <button key={style} onClick={() => setIconStyle(style)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
@@ -202,7 +194,6 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cor do Ícone</label>
                             <div className="flex gap-2 items-center">
                                 <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
-                                <input type="text" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
                             </div>
                         </div>
                         <div>
@@ -210,16 +201,13 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2 mb-2">
                                 {BG_OPTIONS.map(opt => (
                                     <button key={opt.value} onClick={() => setIconBgType(opt.value)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconBgType === opt.value ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
                                         {opt.label}
                                     </button>
                                 ))}
                             </div>
                             {iconBgType === 'custom' && (
-                                <div className="flex gap-2 items-center mt-2">
-                                    <input type="color" value={iconBgCustom} onChange={(e) => setIconBgCustom(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
-                                    <input type="text" value={iconBgCustom} onChange={(e) => setIconBgCustom(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white" />
-                                </div>
+                                <input type="color" value={iconBgCustom} onChange={(e) => setIconBgCustom(e.target.value)} className="w-10 h-10 rounded cursor-pointer mt-2" />
                             )}
                         </div>
                     </div>
@@ -229,8 +217,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 return (
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Produto *</label>
-                            <div className="grid grid-cols-5 gap-2">
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Produto</label>
+                            <div className="grid grid-cols-3 gap-2">
                                 {PRODUCT_TYPES.map(type => (
                                     <button key={type} onClick={() => setProductType(type)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
@@ -239,22 +227,15 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 ))}
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Nome/Marca</label>
-                                <input type="text" value={brandName} onChange={(e) => setBrandName(e.target.value)}
-                                    placeholder="Ex: VyzeSupplements" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Nicho</label>
-                                <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
-                                    placeholder="Ex: cosméticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
-                            </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Nome/Marca</label>
+                            <input type="text" value={brandName} onChange={(e) => setBrandName(e.target.value)}
+                                placeholder="Ex: VyzeSupplements" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Logo (Opcional)</label>
-                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setLogoImage)}
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Nicho</label>
+                            <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
+                                placeholder="Ex: cosméticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cores</label>
@@ -272,21 +253,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             case 'LOGOS':
                 return (
                     <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Nome da Marca *</label>
-                                <input type="text" value={logoName} onChange={(e) => setLogoName(e.target.value)}
-                                    placeholder="Ex: VyzeBG" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Nicho *</label>
-                                <input type="text" value={logoNiche} onChange={(e) => setLogoNiche(e.target.value)}
-                                    placeholder="Ex: tecnologia, fitness..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
-                            </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Nome da Marca *</label>
+                            <input type="text" value={logoName} onChange={(e) => setLogoName(e.target.value)}
+                                placeholder="Ex: VyzeBG" className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Nicho *</label>
+                            <input type="text" value={logoNiche} onChange={(e) => setLogoNiche(e.target.value)}
+                                placeholder="Ex: tecnologia, fitness..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-5 gap-2">
+                            <div className="grid grid-cols-3 gap-2">
                                 {LOGO_STYLES.map(style => (
                                     <button key={style} onClick={() => setLogoStyle(style)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
@@ -310,7 +289,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-700'}`}>
                                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
                             </button>
-                            <span className="text-sm text-gray-300">Incluir ícone no logo</span>
+                            <span className="text-sm text-gray-300">Incluir ícone</span>
                         </div>
                     </div>
                 );
@@ -319,33 +298,31 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 animate-fadeIn h-full overflow-hidden">
-            {/* Left Panel - Controls */}
+            {/* Left Panel */}
             <div className="lg:col-span-4 h-full flex flex-col bg-gray-900/60 backdrop-blur-xl border-r border-white/5 overflow-hidden">
-                {/* Category Tabs */}
-                <div className="flex border-b border-white/10">
-                    {CATEGORIES.map(cat => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            className={`flex-1 py-4 text-sm font-medium transition-all relative ${selectedCategory === cat.id
-                                ? 'text-lime-400'
-                                : 'text-gray-500 hover:text-gray-300'}`}
-                        >
-                            <i className={`fas ${cat.icon} mr-2`}></i>
-                            {cat.label}
-                            {selectedCategory === cat.id && (
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-lime-500"></div>
-                            )}
-                        </button>
-                    ))}
-                </div>
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    {/* Category Selector - 2 columns */}
+                    <div>
+                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white/90">
+                            <i className="fas fa-layer-group text-lime-400"></i>
+                            Tipo de Asset
+                        </h2>
+                        <div className="grid grid-cols-2 gap-3">
+                            {CATEGORIES.map(cat => (
+                                <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
+                                    className={`flex flex-col items-center p-4 rounded-xl border transition-all ${selectedCategory === cat.id
+                                        ? 'bg-lime-500/10 border-lime-500 text-lime-400'
+                                        : 'bg-gray-800/50 border-gray-700 text-gray-400 hover:bg-gray-800'}`}>
+                                    <i className={`fas ${cat.icon} text-2xl mb-2`}></i>
+                                    <span className="text-sm font-medium">{cat.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
 
-                {/* Dynamic Inputs */}
-                <div className="flex-1 overflow-y-auto p-6">
-                    <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-6">
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">
-                            {CATEGORIES.find(c => c.id === selectedCategory)?.description}
-                        </h3>
+                    {/* Dynamic Inputs */}
+                    <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-5">
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
                         {renderCategoryInputs()}
                     </div>
                 </div>
@@ -353,45 +330,28 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 {/* Generate Button */}
                 <div className="p-4 border-t border-white/10">
                     <button onClick={handleGenerate} disabled={isGenerating}
-                        className="w-full bg-gradient-to-r from-lime-500 to-emerald-500 text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                        {isGenerating ? (
-                            <><i className="fas fa-spinner fa-spin"></i> Gerando...</>
-                        ) : (
-                            <><i className="fas fa-magic"></i> Gerar {CATEGORIES.find(c => c.id === selectedCategory)?.label}</>
-                        )}
+                        className="w-full bg-gradient-to-r from-lime-500 to-emerald-500 text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] disabled:opacity-50 flex items-center justify-center gap-2">
+                        {isGenerating ? <><i className="fas fa-spinner fa-spin"></i> Gerando...</> : <><i className="fas fa-magic"></i> Gerar</>}
                     </button>
                 </div>
             </div>
 
-            {/* Right Panel - Preview */}
+            {/* Right Panel */}
             <div className="lg:col-span-8 h-full flex flex-col bg-gray-900/20 overflow-hidden">
                 <div className="flex-1 flex items-center justify-center p-8 relative">
-                    {error && (
-                        <div className="text-red-400 bg-red-900/20 border border-red-500/30 rounded-xl p-4">
-                            <i className="fas fa-exclamation-circle mr-2"></i>{error}
-                        </div>
-                    )}
-
+                    {error && <div className="text-red-400 bg-red-900/20 border border-red-500/30 rounded-xl p-4"><i className="fas fa-exclamation-circle mr-2"></i>{error}</div>}
                     {!generatedImage && !error && !isGenerating && (
                         <div className="text-center text-gray-500">
                             <i className="fas fa-image text-6xl mb-4 opacity-20"></i>
                             <p>Selecione as opções e clique em Gerar</p>
                         </div>
                     )}
-
-                    {isGenerating && (
-                        <div className="text-center text-gray-400">
-                            <i className="fas fa-spinner fa-spin text-4xl mb-4 text-lime-400"></i>
-                            <p>Gerando seu asset...</p>
-                        </div>
-                    )}
-
+                    {isGenerating && <div className="text-center text-gray-400"><i className="fas fa-spinner fa-spin text-4xl mb-4 text-lime-400"></i><p>Gerando...</p></div>}
                     {generatedImage && (
                         <div className="relative">
-                            <img src={generatedImage} alt="Generated asset" className="max-h-[70vh] max-w-full rounded-xl shadow-2xl" />
-                            {/* Download Button */}
+                            <img src={generatedImage} alt="Generated" className="max-h-[70vh] max-w-full rounded-xl shadow-2xl" />
                             <button onClick={handleDownload}
-                                className="absolute top-4 right-4 bg-lime-500 hover:bg-lime-400 text-black font-bold px-4 py-2 rounded-lg shadow-lg transition-all flex items-center gap-2">
+                                className="absolute top-4 right-4 bg-lime-500 hover:bg-lime-400 text-black font-bold px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
                                 <i className="fas fa-download"></i> Download
                             </button>
                         </div>

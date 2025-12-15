@@ -495,6 +495,12 @@ const AppContent: React.FC = () => {
                         className={`h-full w-full ${activeTabId === tab.id ? 'animate-fadeIn' : ''}`}
                         style={{ display: activeTabId === tab.id ? 'block' : 'none' }}
                     >
+                        {tab.section === 'DESIGNS' ? (
+                            <DesignsWorkspace
+                                onAddToGlobalHistory={(item) => setGlobalHistory(prev => [item, ...prev])}
+                                projectId={tab.id}
+                            />
+                        ) : (
                         <GeneratorWorkspace
                             mode={tab.mode}
                             section={tab.section}
@@ -513,6 +519,7 @@ const AppContent: React.FC = () => {
                             projectId={tab.id}
                             isOptimistic={tab.isOptimistic}
                         />
+                        )}
                     </div>
                 ))}
 
