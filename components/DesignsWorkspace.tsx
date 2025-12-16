@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DesignCategory } from '../types';
 import { generateDesignAsset } from '../services/geminiService';
 import { checkApiKey } from '../services/geminiService';
@@ -12,14 +12,14 @@ interface DesignsWorkspaceProps {
 }
 
 const CATEGORIES: { id: DesignCategory; label: string; icon: string; description: string }[] = [
-    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos com tela personalizável' },
-    { id: 'ICONS', label: 'Ícones 3D', icon: 'fa-gem', description: 'Ícones estilizados em 3D' },
+    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos com tela personaliz�vel' },
+    { id: 'ICONS', label: '�cones 3D', icon: 'fa-gem', description: '�cones estilizados em 3D' },
     { id: 'PRODUCTS', label: 'Produtos', icon: 'fa-box', description: 'Embalagens e produtos' },
-    { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Sugestões de logos' },
+    { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Sugest�es de logos' },
 ];
 
 const DEVICE_OPTIONS = ['iPhone', 'MacBook', 'iPad', 'Android', 'Monitor'];
-const ANGLE_OPTIONS = ['Frontal', 'Isométrico', 'Flutuante'];
+const ANGLE_OPTIONS = ['Frontal', 'Isom�trico', 'Flutuante'];
 const ICON_STYLES = ['Glassmorphism', 'Neon', 'Clay 3D', 'Gradiente'];
 const PRODUCT_TYPES = ['Caixa', 'Frasco', 'Sacola', 'Embalagem', 'Bolsa'];
 const LOGO_STYLES = ['Minimalista', 'Moderno', 'Vintage', 'Tech', 'Elegante'];
@@ -32,13 +32,14 @@ const BG_OPTIONS = [
 ];
 
 const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory, projectId, initialCategory }) => {
+    const { user } = useAuth();
     const [selectedCategory, setSelectedCategory] = useState<DesignCategory>((initialCategory as DesignCategory) || 'MOCKUPS');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     // Local History
-    const [localHistory, setLocalHistory] = useState<{id: string; url: string; prompt?: string; category?: string; timestamp: number}[]>([]);
+    const [localHistory, setLocalHistory] = useState<{ id: string; url: string; prompt?: string; category?: string; timestamp: number }[]>([]);
 
     // Load history from Supabase on mount
     useEffect(() => {
@@ -105,7 +106,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
         try {
             const hasKey = await checkApiKey();
             if (!hasKey) {
-                setError('API Key não configurada.');
+                setError('API Key n�o configurada.');
                 setIsGenerating(false);
                 return;
             }
@@ -129,15 +130,26 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             const result = await generateDesignAsset(selectedCategory, inputs);
             setGeneratedImage(result.image);
 
-            onAddToGlobalHistory({
+
+            // Save to Supabase if user is logged in
+            let savedUrl = result.image;
+            if (user) {
+                const publicUrl = await uploadImageToStorage(result.image, user.id);
+                if (publicUrl) {
+                    savedUrl = publicUrl;
+                    await saveGeneration(user.id, publicUrl, result.finalPrompt, 'OBJECT', 'DESIGNS', projectId);
+                }
+            }
+
+            const historyItem = {
                 id: Date.now().toString(),
-                url: result.image,
+                url: savedUrl,
                 prompt: result.finalPrompt,
-                timestamp: Date.now(),
-                mode: 'OBJECT',
-                section: 'DESIGNS',
-                projectId
-            });
+                timestamp: Date.now()
+            };
+            setLocalHistory(prev => [historyItem, ...prev]);
+
+            onAddToGlobalHistory(historyItem);
         } catch (err: any) {
             setError(err.message || 'Erro ao gerar asset.');
         } finally {
@@ -167,7 +179,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Ângulo</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">�ngulo</label>
                             <div className="flex gap-2">
                                 {ANGLE_OPTIONS.map(a => (
                                     <button key={a} onClick={() => setAngle(a)}
@@ -191,9 +203,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 return (
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Descrição do Ícone *</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Descri��o do �cone *</label>
                             <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
-                                placeholder="Ex: foguete, dinheiro, coração..."
+                                placeholder="Ex: foguete, dinheiro, cora��o..."
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
@@ -208,7 +220,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor do Ícone</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor do �cone</label>
                             <div className="flex gap-2 items-center">
                                 <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
                             </div>
@@ -252,7 +264,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Nicho</label>
                             <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
-                                placeholder="Ex: cosméticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
+                                placeholder="Ex: cosm�ticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cores</label>
@@ -306,7 +318,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-700'}`}>
                                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
                             </button>
-                            <span className="text-sm text-gray-300">Incluir ícone</span>
+                            <span className="text-sm text-gray-300">Incluir �cone</span>
                         </div>
                     </div>
                 );
@@ -339,7 +351,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                     {/* Dynamic Inputs */}
                     <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-5">
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configura��es</h3>
                         {renderCategoryInputs()}
                     </div>
                 </div>
@@ -360,7 +372,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     {!generatedImage && !error && !isGenerating && (
                         <div className="text-center text-gray-500">
                             <i className="fas fa-image text-6xl mb-4 opacity-20"></i>
-                            <p>Selecione as opções e clique em Gerar</p>
+                            <p>Selecione as op��es e clique em Gerar</p>
                         </div>
                     )}
                     {isGenerating && <div className="text-center text-gray-400"><i className="fas fa-spinner fa-spin text-4xl mb-4 text-lime-400"></i><p>Gerando...</p></div>}
@@ -372,6 +384,25 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 <i className="fas fa-download"></i> Download
                             </button>
                         </div>
+                    )}
+                </div>
+
+                {/* History Strip */}
+                <div className="h-32 bg-white/60 dark:bg-app-dark-lighter backdrop-blur-xl border-t border-gray-200 dark:border-white/10 p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-700">
+                    {localHistory.length === 0 ? (
+                        <div className="w-full flex items-center justify-center text-xs text-gray-500">
+                            <i className="fas fa-history mr-2"></i> Historico vazio - gere imagens para ver aqui
+                        </div>
+                    ) : (
+                        localHistory.map((item) => (
+                            <div
+                                key={item.id}
+                                className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-600'}`}
+                                onClick={() => setGeneratedImage(item.url)}
+                            >
+                                <img src={item.url} alt="History" className="w-full h-full object-cover" />
+                            </div>
+                        ))
                     )}
                 </div>
             </div>
