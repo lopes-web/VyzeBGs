@@ -264,6 +264,28 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 placeholder="Ex: cosmeticos, suplementos..." className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo (Opcional)</label>
+                            {logoImage ? (
+                                <div className="relative group">
+                                    <img src={logoImage} alt="Logo" className="w-full h-24 object-contain bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700" />
+                                    <button
+                                        onClick={() => setLogoImage(null)}
+                                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <i className="fas fa-cloud-upload-alt text-gray-400 text-xl mb-1"></i>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">Clique para upload</span>
+                                    </div>
+                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setLogoImage)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cores</label>
                             <div className="flex gap-2">
                                 {productColors.map((color, i) => (
