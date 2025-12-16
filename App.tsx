@@ -651,7 +651,7 @@ const AppContent: React.FC = () => {
                             {displayedHistory.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full text-gray-500">
                                     <i className="fas fa-images text-4xl mb-4 opacity-50"></i>
-                                    <p>Nenhuma imagem encontrada nesta se��o.</p>
+                                    <p>Nenhuma imagem encontrada nesta secao.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">

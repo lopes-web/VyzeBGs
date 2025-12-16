@@ -12,8 +12,8 @@ interface DesignsWorkspaceProps {
 }
 
 const CATEGORIES: { id: DesignCategory; label: string; icon: string; description: string }[] = [
-    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos com tela personaliz�vel' },
-    { id: 'ICONS', label: '�cones 3D', icon: 'fa-gem', description: '�cones estilizados em 3D' },
+    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos com tela personalizavel' },
+    { id: 'ICONS', label: 'Icones 3D', icon: 'fa-gem', description: 'Icones estilizados em 3D' },
     { id: 'PRODUCTS', label: 'Produtos', icon: 'fa-box', description: 'Embalagens e produtos' },
     { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Sugest�es de logos' },
 ];
@@ -179,7 +179,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300" />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">�ngulo</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Angulo</label>
                             <div className="flex gap-2">
                                 {ANGLE_OPTIONS.map(a => (
                                     <button key={a} onClick={() => setAngle(a)}
@@ -203,9 +203,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 return (
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Descri��o do �cone *</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Descricao do Icone *</label>
                             <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
-                                placeholder="Ex: foguete, dinheiro, cora��o..."
+                                placeholder="Ex: foguete, dinheiro, coracao..."
                                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
@@ -220,7 +220,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor do �cone</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Cor do Icone</label>
                             <div className="flex gap-2 items-center">
                                 <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
                             </div>
@@ -264,7 +264,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Nicho</label>
                             <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
-                                placeholder="Ex: cosm�ticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
+                                placeholder="Ex: cosmeticos, suplementos..." className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Cores</label>
@@ -318,7 +318,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-700'}`}>
                                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
                             </button>
-                            <span className="text-sm text-gray-300">Incluir �cone</span>
+                            <span className="text-sm text-gray-300">Incluir Icone</span>
                         </div>
                     </div>
                 );
@@ -351,7 +351,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                     {/* Dynamic Inputs */}
                     <div className="bg-gray-900/60 border border-white/5 rounded-2xl p-5">
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configura��es</h3>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Configuracoes</h3>
                         {renderCategoryInputs()}
                     </div>
                 </div>
