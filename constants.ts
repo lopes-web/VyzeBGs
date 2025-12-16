@@ -1,4 +1,4 @@
-
+import { FramingType } from './types';
 
 export const MODEL_NAME = 'gemini-3-pro-image-preview';
 
