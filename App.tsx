@@ -54,7 +54,7 @@ const AppContent: React.FC = () => {
     // Load Projects and History on Auth
     useEffect(() => {
         if (user) {
-            // Only run if user ID has changed (prevents reset on window focus/token refresh)
+            // Only run if user ID has changed (prevents resecaon window focus/token refresh)
             if (lastUserId.current === user.id) return;
             lastUserId.current = user.id;
 
@@ -85,7 +85,7 @@ const AppContent: React.FC = () => {
             lastUserId.current = null;
             setTabs([]);
             setGlobalHistory([]);
-            setCurrentSection(null); // Also reset on logout
+            setCurrentSection(null); // Also resecaon logout
         }
     }, [user]);
 
@@ -279,7 +279,7 @@ const AppContent: React.FC = () => {
                         const tempId = crypto.randomUUID();
                         const newTab: ProjectTab = {
                             id: tempId,
-                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (Hist�rico)`,
+                            title: `Projeto ${tabs.filter(t => t.section === section).length + 1} (Historico)`,
                             mode: generatorMode || 'HUMAN',
                             section: section,
                             createdAt: Date.now(),
@@ -401,7 +401,7 @@ const AppContent: React.FC = () => {
                             onClick={() => setIsHistoryOpen(true)}
                             className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
                         >
-                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Hist�rico
+                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Historico
                         </button>
 
                         <ThemeToggle />
@@ -566,7 +566,7 @@ const AppContent: React.FC = () => {
                                         </div>
                                         <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
                                         <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Ideal para especialistas e retratos. Mant�m a fisionomia e express�es com fidelidade.
+                                            Ideal para especialistas e retratos. Mantem a fisionomia e expressoes com fidelidade.
                                         </p>
                                         <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
                                             Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -583,7 +583,7 @@ const AppContent: React.FC = () => {
                                         </div>
                                         <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
                                         <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Foco em cursos e mentorias. Gera camadas de profundidade, luzes de est�dio e melhora a postura/roupa do expert.
+                                            Foco em cursos e mentorias. Gera camadas de profundidade, luzes de estudio e melhora a postura/roupa do expert.
                                         </p>
                                         <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
                                             Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -600,7 +600,7 @@ const AppContent: React.FC = () => {
                                         </div>
                                         <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
                                         <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Foco em geometria, materiais e ilumina��o realista (Ray-tracing) para objetos.
+                                            Foco em geometria, materiais e iluminacao realista (Ray-tracing) para objetos.
                                         </p>
                                         <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
                                             Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
@@ -617,7 +617,7 @@ const AppContent: React.FC = () => {
                                         </div>
                                         <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
                                         <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Melhore imagens existentes. Aumente detalhes e ilumina��o mantendo a composi��o original.
+                                            Melhore imagens existentes. Aumente detalhes e iluminacao mantendo a composicao original.
                                         </p>
                                         <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
                                             Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>

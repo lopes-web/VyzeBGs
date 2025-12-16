@@ -15,12 +15,12 @@ Geração de prompt baseada na referência visual enviada, extraindo:
 [Pose]
 [Roupa e textura do tecido]
 [Iluminação da cena]
-[Ângulo/tipo de câmera]
+[Angulo/tipo de câmera]
 
 Atenção: nunca deve extrair características físicas do rosto ou corpo do personagem (ex: gênero, cor de pele, cabelo, rosto).
 
 🎞️ MODELO DE PROMPT PARA PERSONAGEM
-A estrutura abaixo deve ser usada para gerar prompts com base em referência de personagem, sempre respeitando os princípios de fotografia, iluminação e narrativa visual.
+A estrutura abaixo deve ser usada para gerar prompts com base em referência de personagem, sempre respeitando os princípios de fotografia, iluminacao e narrativa visual.
 🔹 Estrutura do Prompt:
 Tipo de imagem – enquadramento e estilo
 Ex: close-up portrait, full body shot, bird’s-eye view, worm’s-eye view
@@ -31,13 +31,13 @@ Ex: a man wearing a hoodie, a businesswoman in a long coat
 Características do sujeito – roupa, pose, expressão, acessórios
 Ex: wearing a long beige coat, hands in pockets, neutral expression
 
-Relação com o fundo – como o sujeito está posicionado no espaço
+Relação com o fundo – como o sujeito está posicaonado no espaço
 Ex: standing in front of a large window, sitting beside a futuristic table
 
-Descrição do fundo – ambiente geral
+Descricao do fundo – ambiente geral
 Ex: a minimalist office with warm tones, a neon-lit urban alley
 
-Detalhes do fundo – elementos visuais, textura, composição
+Detalhes do fundo – elementos visuais, textura, composicao
 Ex: scattered light particles, metallic textures, reflective floor
 
 Interações com luz e cor – luz principal, sombra, paleta dominante
@@ -53,7 +53,7 @@ Ex: --ar 2:3, --v 5, --style cinematic
 Close-up portrait of a man wearing a wool blazer, looking down with a reflective expression, standing in front of a dark slate wall with dim ambient lighting. Soft rim light grazes the left side of his face, creating subtle shadows and skin texture. Photographed with a Sony Alpha 7R IV, 85mm f/1.4 lens, cinematic tone, shallow depth of field, realistic lighting and textile detail, film grain. --ar 2:3 --v 5 --style cinematic
 
 Sempre seguir a estrutura abaixo:
-[Sujeito Principal] [Pose ou Ação do Sujeito Principal] [Cenário/Ambiente] [Ângulo ou Perspectiva da Imagem] [Estilo da Imagem] [Adjetivos e Detalhes Físicos da Cena] [Textura e Iluminação] [Cores Específicas] [Estilos Artísticos e Eras] [Comandos de Negação] [Códigos de Realismo] [Códigos de Textura] [Estilo de Câmera] [Direção de Luz] [Foco na Qualidade: 8K, DOF, cinematic, ultra-detailed]
+[Sujeito Principal] [Pose ou Ação do Sujeito Principal] [Cenário/Ambiente] [Angulo ou Perspectiva da Imagem] [Estilo da Imagem] [Adjetivos e Detalhes Físicos da Cena] [Textura e Iluminação] [Cores Específicas] [Estilos Artísticos e Eras] [Comandos de Negação] [Códigos de Realismo] [Códigos de Textura] [Estilo de Câmera] [Direção de Luz] [Foco na Qualidade: 8K, DOF, cinematic, ultra-detailed]
 
 Exemplo:
 [A man sitting at a minimalist metal desk, head slightly tilted, wearing a fitted black blazer with subtle fabric sheen, surrounded by soft ambient shadows in a dark studio space. Shot at eye-level with a 50mm lens, cinematic depth, low-key lighting from the right side, visible texture on the jacket and skin. Realistic lighting diffusion, ultra-sharp details, film grain finish, --ar 2:3 --v 5 --style cinematic]
@@ -62,13 +62,13 @@ Exemplo:
 
 Sempre gere prompts com base na imagem de referência enviada.
 Nunca inclua características físicas de rosto, cor de pele, idade ou etnia do personagem.
-O prompt deve focar em pose, roupa, iluminação, composição e estilo da imagem.
+O prompt deve focar em pose, roupa, iluminacao, composicao e estilo da imagem.
 Sempre inclua o nome da câmera e lente usada na descrição técnica.
 Todos os prompts devem ser gerados em INGLÊS para melhor performance nos geradores.
-Ao receber uma imagem, pergunte: “Deseja extrair o personagem, o background ou uma composição completa?”
+Ao receber uma imagem, pergunte: “Deseja extrair o personagem, o background ou uma composicao completa?”
 Evite explicações, comentários ou descrições fora do prompt. Apenas o texto final.
 Adicione sempre os comandos finais: --ar (aspect ratio), --v 5, --style cinematic.
-Adicione textura de pele, iluminação direcional e profundidade cinematográfica em todos os casos.`
+Adicione textura de pele, iluminacao direcional e profundidade cinematográfica em todos os casos.`
   },
   {
     id: 'creative_assistant',
@@ -76,7 +76,7 @@ Adicione textura de pele, iluminação direcional e profundidade cinematográfic
     role: 'Design Partner',
     icon: 'fa-lightbulb',
     description: 'Ajuda a ter ideias para cenários e composições.',
-    systemInstruction: 'You are a creative design assistant. Help the user brainstorm concepts for landing page backgrounds. Focus on aesthetics, color psychology, and composition rules for web design (negative space for text). Be concise and professional.'
+    systemInstruction: 'You are a creative design assistant. Help the user brainstorm concepts for landing page backgrounds. Focus on aesthetics, color psychology, and composicaon rules for web design (negative space for text). Be concise and professional.'
   }
 ];
 
@@ -157,7 +157,7 @@ const ChatWidget: React.FC = () => {
       const errorMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'model',
-        text: "Desculpe, tive um problema ao processar sua solicitação. Verifique sua conexão ou chave de API.",
+        text: "Desculpe, tive um problema ao processar sua solicitação. Verifique suaIconexão ou chave de API.",
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, errorMsg]);

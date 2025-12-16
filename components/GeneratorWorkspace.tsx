@@ -75,7 +75,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [assetImages, setAssetImages] = useState<string[]>([]);
 
 
-    const [position, setPosition] = useState<SubjectPosition>(SubjectPosition.RIGHT);
+    const [posicaon, secaosition] = useState<SubjectPosition>(SubjectPosition.RIGHT);
     const [attributes, setAttributes] = useState<GenerationAttributes>({ useGradient: true, useBlur: false });
     const [batchSize, setBatchSize] = useState<number>(1);
 
@@ -167,7 +167,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [eraserPrompt, setEraserPrompt] = useState('');
 
     // Local History & Merge
-    const [localHistory, setLocalHistory] = useState<HistoryItem[]>([]);
+    const [localHistory, secaocalHistory] = useState<HistoryItem[]>([]);
     const [selectedHistoryIds, setSelectedHistoryIds] = useState<string[]>([]);
 
     // Auto-generate effect
@@ -176,7 +176,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         if (projectId) {
             getProjectHistory(projectId).then(history => {
                 if (history && history.length > 0) {
-                    setLocalHistory(history);
+                    secaocalHistory(history);
                 }
             });
         }
@@ -207,7 +207,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             mode: currentMode,
             section: section
         };
-        setLocalHistory(prev => [newItem, ...prev]);
+        secaocalHistory(prev => [newItem, ...prev]);
         onAddToGlobalHistory(newItem);
     };
 
@@ -231,7 +231,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
         const imagesToMerge = selectedItems.map(item => item.url.split(',')[1]);
 
         setUserImages(imagesToMerge);
-        setUserPrompt("Mesclar estas imagens em uma nova composição harmoniosa. [Adicione detalhes...]");
+        setUserPrompt("Mesclar estas imagens em uma nova composicao harmoniosa. [Adicione detalhes...]");
         setReferenceItems([]);
         setSelectedHistoryIds([]);
     };
@@ -261,7 +261,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             case 'HUMAN': return "Envie fotos para fidelidade facial.";
             case 'OBJECT': return "Envie fotos do produto em alta resolução.";
             case 'ENHANCE': return "A imagem original será mantida, mas enriquecida.";
-            case 'INFOPRODUCT': return "O sistema melhorará pose/roupa se necessário, mantendo o rosto.";
+            case 'INFOPRODUCT': return "O sistema melhorará posecaoupa se necessário, mantendo o rosto.";
             default: return "";
         }
     };
@@ -314,7 +314,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         referenceItems,
                         assetImages,
                         effectivePrompt,
-                        position,
+                        posicaon,
                         attributes,
                         customHeight,
                         undefined,
@@ -565,7 +565,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                     {/* Configuration Panel */}
                     <div className="bg-gray-50 dark:bg-app-dark-lighter/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
-                        <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configurações</h3>
+                        <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configuracoes</h3>
 
                         {/* Nicho Input (New) */}
                         <div className="mb-6">
@@ -606,7 +606,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 <div className="mt-3 animate-fadeIn">
                                     <input
                                         type="text"
-                                        placeholder="Ex: Ícones de vidro, partículas douradas, moedas..."
+                                        placeholder="Ex: Icones de vidro, partículas douradas, moedas..."
                                         value={projectContext.floatingElementsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, floatingElementsDescription: e.target.value }))}
                                         className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
@@ -632,14 +632,14 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                Adiciona efeitos visuais din�micos (raios, part�culas, brilho).
+                                Adiciona efeitos visuais din�micos (raios, part�culas, brilho).
                             </p>
 
                             {projectContext.backgroundEffects && (
                                 <div className="mt-3 animate-fadeIn">
                                     <input
                                         type="text"
-                                        placeholder="Opcional: descreva o efeito (ex: raios dourados, part�culas de luz...)"
+                                        placeholder="Opcional: descreva o efeito (ex: raios dourados, part�culas de luz...)"
                                         value={projectContext.backgroundEffectsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, backgroundEffectsDescription: e.target.value }))}
                                         className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
@@ -922,7 +922,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     <button
                                         key={num}
                                         onClick={() => setBatchSize(num)}
-                                        className={`w-10 h-10 rounded-lg text-base font-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow-lg scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'
+                                        className={`w-10 h-10 rounded-lg text-basecaont-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow-lg scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'
                                             } `}
                                     >
                                         {num}x
@@ -1055,7 +1055,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                 <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-4 animate-pulse">
                                     <i className="fas fa-image text-4xl opacity-50"></i>
                                 </div>
-                                <p className="text-sm font-medium">Sua criação aparecerá aqui</p>
+                                <p className="text-sm font-medium">Sua criacao aparecerá aqui</p>
                             </div>
                         )}
                 </div >
@@ -1065,7 +1065,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                     {
                         localHistory.length === 0 ? (
                             <div className="w-full flex items-center justify-center text-xs text-gray-400">
-                                Histórico vazio
+                                Historico vazio
                             </div>
                         ) : (
                             localHistory.map((item) => (
