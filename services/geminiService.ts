@@ -13,7 +13,7 @@ import {
   PROMPT_ENGINEER_SYSTEM_INSTRUCTION,
   FRAMING_OPTIONS
 } from "../constants";
-import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette, ProjectContext, FramingType, LightingColors, ActiveColors } from "../types";
+import { SubjectPosition, ReferenceItem, GenerationAttributes, GeneratorMode, ChatMessage, AppSection, ColorPalette, ProjectContext, FramingType, LightingColors, ActiveColors, CreativeText, TextAlignment, TypographyStyle, AspectRatioCreative } from "../types";
 
 const LOCAL_STORAGE_KEY = 'gemini_api_key';
 
@@ -710,5 +710,193 @@ Generate a single, polished logo design.`;
   } catch (error: any) {
     console.error("Design Asset Generation Error:", error);
     throw new Error(error.message || "Failed to generate design asset");
+  }
+};
+
+// Creative Generation with Text
+export const generateCreative = async (
+  userImagesBase64: string[],
+  visualReferences: ReferenceItem[],
+  textReferences: ReferenceItem[],
+  assetImagesBase64: string[],
+  creativeText: CreativeText,
+  userPrompt: string,
+  position: SubjectPosition,
+  attributes: GenerationAttributes & { useMainColor?: boolean; mainColor?: string },
+  aspectRatio: AspectRatioCreative
+): Promise<{ image: string, finalPrompt: string }> => {
+
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error("API Key not configured");
+
+  const ai = new GoogleGenAI({ apiKey });
+  const parts: any[] = [];
+
+  // 1. User Images (Subject)
+  userImagesBase64.forEach((img) => {
+    parts.push({
+      inlineData: { data: cleanBase64(img), mimeType: 'image/png' },
+    });
+  });
+
+  // 2. Visual References (Background/Vibe)
+  let visualRefPrompt = "";
+  if (visualReferences.length > 0) {
+    visualReferences.forEach((item, index) => {
+      parts.push({ inlineData: { data: cleanBase64(item.image), mimeType: 'image/png' } });
+      const desc = item.description ? `(Note: "${item.description}")` : "(Note: Extract style)";
+      visualRefPrompt += `Visual Reference ${index + 1}: ${desc}.\n`;
+    });
+  }
+
+  // 3. Text/Layout References
+  let textRefPrompt = "";
+  if (creativeText.includeText && textReferences.length > 0) {
+    textReferences.forEach((item, index) => {
+      parts.push({ inlineData: { data: cleanBase64(item.image), mimeType: 'image/png' } });
+      const desc = item.description ? `(Note: "${item.description}")` : "(Note: Use for font style)";
+      textRefPrompt += `Typography Reference ${index + 1}: ${desc}.\n`;
+    });
+  }
+
+  // 4. Asset Images (Logos)
+  assetImagesBase64.forEach((img) => {
+    parts.push({ inlineData: { data: cleanBase64(img), mimeType: 'image/png' } });
+  });
+
+  // --- PROMPT CONSTRUCTION ---
+  let finalPrompt = `Task: Create a finished High-End Advertising Creative${creativeText.includeText ? ' (Image + Text)' : ' (Background Image Only)'}. \n`;
+  finalPrompt += `Aspect Ratio: ${aspectRatio}. \n\n`;
+
+  // A. SUBJECT
+  if (userImagesBase64.length > 0) {
+    finalPrompt += `SUBJECT INSTRUCTIONS: Use the person(s) or object(s) in the first ${userImagesBase64.length} images provided. Maintain 100% facial and physical fidelity. \n`;
+    finalPrompt += `Positioning: ${POSITION_PROMPTS[position]}\n\n`;
+  }
+
+  // B. VISUAL STYLE
+  if (visualReferences.length > 0) {
+    finalPrompt += `VISUAL STYLE SYNTHESIS: You have been provided with ${visualReferences.length} visual reference images. \n`;
+    finalPrompt += `${visualRefPrompt}\n`;
+    finalPrompt += `INSTRUCTION: Synthesize the best elements (lighting, environment, color palette) of these visual references. Merge them into a cohesive background composition.\n`;
+  }
+
+  // Optional Color Injection
+  if (attributes.useMainColor && attributes.mainColor) {
+    finalPrompt += `COLOR PALETTE INSTRUCTION: The primary/dominant color MUST be based on this specific color: ${attributes.mainColor}. Ensure the text contrasts well.\n`;
+  }
+
+  // C. TEXT RENDERING
+  if (creativeText.includeText) {
+    finalPrompt += `\nTEXT RENDERING INSTRUCTIONS:\n`;
+    finalPrompt += `1. **MARGIN RULE (CRITICAL)**: Preserve minimum margin of **150px** from TOP and BOTTOM edges.\n`;
+    finalPrompt += `2. **ALIGNMENT**: Text must be **${creativeText.alignment}** aligned.\n`;
+    finalPrompt += `3. **STYLE**: Typography style: **${creativeText.style}**.\n`;
+    finalPrompt += `4. **NEGATIVE PROMPT**: Do NOT write labels like "Headline", "CTA". ONLY render the actual text content.\n`;
+
+    finalPrompt += `\nTEXT CONTENT & COLORS:\n`;
+    if (creativeText.headline) {
+      finalPrompt += ` - Headline: "${creativeText.headline}". Color: ${creativeText.headlineColor}.\n`;
+    }
+    if (creativeText.subheadline) {
+      finalPrompt += ` - Subheadline: "${creativeText.subheadline}". Color: ${creativeText.subheadlineColor}.\n`;
+    }
+    if (creativeText.cta) {
+      finalPrompt += ` - CTA Button: "${creativeText.cta}". Color: ${creativeText.ctaColor}.\n`;
+    }
+
+    if (textReferences.length > 0) {
+      finalPrompt += `\nUse the Typography References for font family and effects.\n${textRefPrompt}\n`;
+    }
+
+    if (attributes.useGradient) {
+      finalPrompt += `Add a soft gradient or overlay behind text area for readability.\n`;
+    }
+
+    finalPrompt += `\nFINAL CHECK: Ensure spelling is correct. Text must not overlap the subject's face.\n`;
+  } else {
+    finalPrompt += `\nNO TEXT INSTRUCTION: Do NOT generate any text. Focus on photographic composition.\n`;
+    finalPrompt += `Create ample negative space on the ${position === 'LEFT' ? 'RIGHT' : (position === 'RIGHT' ? 'LEFT' : 'SIDES')} for future text placement.\n`;
+  }
+
+  // D. ASSETS
+  if (assetImagesBase64.length > 0) {
+    finalPrompt += `Integrate the provided logos/assets naturally in a corner or anchored position.\n`;
+  }
+
+  if (userPrompt.trim()) {
+    finalPrompt += `\nAdditional Context: ${userPrompt}\n`;
+  }
+
+  parts.push({ text: finalPrompt });
+
+  try {
+    const response = await ai.models.generateContent({
+      model: MODEL_NAME,
+      contents: { parts },
+      config: {
+        responseModalities: ["IMAGE", "TEXT"],
+      },
+    });
+
+    if (response.candidates && response.candidates[0] && response.candidates[0].content && response.candidates[0].content.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          return {
+            image: `data:image/png;base64,${part.inlineData.data}`,
+            finalPrompt: finalPrompt
+          };
+        }
+      }
+    }
+
+    throw new Error("No image data found in response.");
+
+  } catch (error: any) {
+    console.error("Creative Generation Error:", error);
+    throw new Error(error.message || "Failed to generate creative");
+  }
+};
+
+// Refine Creative with Mask
+export const refineCreative = async (
+  originalImageBase64: string,
+  editInstructions: string,
+  maskImageBase64?: string | null
+): Promise<string> => {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error("API Key not configured");
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const parts: any[] = [
+    { inlineData: { data: cleanBase64(originalImageBase64), mimeType: 'image/png' } },
+  ];
+
+  let prompt = `Edit this image. Instructions: ${editInstructions}. Maintain original composition and text unless asked to change.`;
+
+  if (maskImageBase64) {
+    parts.push({ inlineData: { data: cleanBase64(maskImageBase64), mimeType: 'image/png' } });
+    prompt += ` \nIMPORTANT: A binary mask image has been provided (the second image). WHITE areas represent the region to edit. BLACK areas must remain unchanged.`;
+  }
+
+  parts.push({ text: prompt });
+
+  try {
+    const response = await ai.models.generateContent({
+      model: MODEL_NAME,
+      contents: { parts },
+      config: {
+        responseModalities: ["IMAGE", "TEXT"],
+      },
+    });
+    if (response.candidates?.[0]?.content?.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
+      }
+    }
+    throw new Error("No image data found.");
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to refine creative");
   }
 };

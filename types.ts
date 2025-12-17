@@ -6,7 +6,7 @@ export enum SubjectPosition {
 }
 
 
-export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS';
+export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS' | 'CRIATIVOS';
 
 export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
 
@@ -45,6 +45,39 @@ export interface GenerationAttributes {
 }
 
 export type FramingType = 'CLOSE_UP' | 'MEDIUM' | 'AMERICAN';
+
+// Creative Types
+export enum TextAlignment {
+  LEFT = 'LEFT',
+  CENTER = 'CENTER',
+  RIGHT = 'RIGHT',
+}
+
+export enum TypographyStyle {
+  MODERN = 'Modern Sans-Serif',
+  BOLD = 'Bold Impact',
+  SERIF = 'Classic Serif',
+  HANDWRITTEN = 'Handwritten',
+  FUTURISTIC = 'Tech/Futuristic'
+}
+
+export enum AspectRatioCreative {
+  SQUARE = '1:1',
+  PORTRAIT = '4:5',
+  STORY = '9:16',
+}
+
+export interface CreativeText {
+  includeText: boolean;
+  headline: string;
+  headlineColor: string;
+  subheadline: string;
+  subheadlineColor: string;
+  cta: string;
+  ctaColor: string;
+  alignment: TextAlignment;
+  style: TypographyStyle;
+}
 
 export interface LightingColors {
   ambient: string;

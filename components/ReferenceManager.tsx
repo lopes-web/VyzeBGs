@@ -4,9 +4,11 @@ import { ReferenceItem } from '../types';
 interface ReferenceManagerProps {
   items: ReferenceItem[];
   onChange: (items: ReferenceItem[]) => void;
+  label?: string;
+  description?: string;
 }
 
-const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange }) => {
+const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, label, description }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -81,10 +83,10 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange }) 
   return (
     <div className="mb-6">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        Referências de Estilo
+        {label || 'Referências de Estilo'}
       </label>
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-        Envie múltiplas referências. Arraste para adicionar ou use as setas para reordenar a prioridade.
+        {description || 'Envie múltiplas referências. Arraste para adicionar ou use as setas para reordenar a prioridade.'}
       </p>
 
       {/* Container for Drag & Drop */}

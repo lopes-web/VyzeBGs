@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { DesignCategory } from '../types';
-import { generateDesignAsset } from '../services/geminiService';
-import { checkApiKey } from '../services/geminiService';
+import { DesignCategory, CreativeText, TextAlignment, TypographyStyle, AspectRatioCreative, SubjectPosition, ReferenceItem } from '../types';
+import { generateDesignAsset, generateCreative, refineCreative, checkApiKey } from '../services/geminiService';
 import { useAuth } from './AuthContext';
 import { uploadImageToStorage } from '../services/storageService';
 import { saveGeneration, getProjectHistory } from '../services/databaseService';
+import TextManager from './TextManager';
+import DimensionSelector from './DimensionSelector';
+import ReferenceManager from './ReferenceManager';
 
 interface DesignsWorkspaceProps {
     onAddToGlobalHistory: (item: any) => void;
@@ -13,10 +15,11 @@ interface DesignsWorkspaceProps {
 }
 
 const CATEGORIES: { id: DesignCategory; label: string; icon: string; description: string }[] = [
-    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos com tela personalizavel' },
-    { id: 'ICONS', label: 'Icones 3D', icon: 'fa-gem', description: 'Icones estilizados em 3D' },
-    { id: 'PRODUCTS', label: 'Produtos', icon: 'fa-box', description: 'Embalagens e produtos' },
-    { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Sugestoes de logos' },
+    { id: 'MOCKUPS', label: 'Mockups', icon: 'fa-mobile-alt', description: 'Dispositivos' },
+    { id: 'ICONS', label: 'Icones 3D', icon: 'fa-gem', description: 'Icones 3D' },
+    { id: 'PRODUCTS', label: 'Produtos', icon: 'fa-box', description: 'Embalagens' },
+    { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Logos' },
+    { id: 'CRIATIVOS', label: 'Criativos', icon: 'fa-paint-brush', description: 'Anuncios' },
 ];
 
 const DEVICE_OPTIONS = ['iPhone', 'MacBook', 'iPad', 'Android', 'Monitor'];
@@ -80,12 +83,50 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [logoColors, setLogoColors] = useState(['#000000', '#6366f1']);
     const [includeIcon, setIncludeIcon] = useState(true);
 
+    // CRIATIVOS inputs
+    const [creativeImages, setCreativeImages] = useState<string[]>([]);
+    const [creativeText, setCreativeText] = useState<CreativeText>({
+        includeText: true,
+        headline: '',
+        headlineColor: '#ffffff',
+        subheadline: '',
+        subheadlineColor: '#e5e7eb',
+        cta: '',
+        ctaColor: '#bef264',
+        alignment: TextAlignment.CENTER,
+        style: TypographyStyle.MODERN
+    });
+    const [aspectRatio, setAspectRatio] = useState<AspectRatioCreative>(AspectRatioCreative.PORTRAIT);
+    const [creativePosition, setCreativePosition] = useState<SubjectPosition>(SubjectPosition.RIGHT);
+    const [visualReferences, setVisualReferences] = useState<ReferenceItem[]>([]);
+    const [textReferences, setTextReferences] = useState<ReferenceItem[]>([]);
+    const [assetImages, setAssetImages] = useState<string[]>([]);
+    const [creativePrompt, setCreativePrompt] = useState('');
+    const [useMainColor, setUseMainColor] = useState(false);
+    const [mainColor, setMainColor] = useState('#000000');
+    const [useGradient, setUseGradient] = useState(true);
+
+    // Refinement
+    const [refinePrompt, setRefinePrompt] = useState('');
+    const [isRefining, setIsRefining] = useState(false);
+
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string | null) => void) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => setter(reader.result as string);
             reader.readAsDataURL(file);
+        }
+    };
+
+    const handleMultiFileUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+        const files = e.target.files;
+        if (files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onloadend = () => setter(prev => [...prev, reader.result as string]);
+                reader.readAsDataURL(file);
+            });
         }
     };
 
@@ -112,26 +153,47 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 return;
             }
 
-            let inputs: any = {};
-            switch (selectedCategory) {
-                case 'MOCKUPS':
-                    inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
-                    break;
-                case 'ICONS':
-                    inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType };
-                    break;
-                case 'PRODUCTS':
-                    inputs = { productType, brandName, niche, logoImage, productColors };
-                    break;
-                case 'LOGOS':
-                    inputs = { logoName, logoNiche, logoStyle, logoColors, includeIcon };
-                    break;
+            let result: { image: string; finalPrompt: string };
+
+            if (selectedCategory === 'CRIATIVOS') {
+                if (creativeImages.length === 0) {
+                    setError('Envie pelo menos uma imagem principal.');
+                    setIsGenerating(false);
+                    return;
+                }
+                result = await generateCreative(
+                    creativeImages,
+                    visualReferences,
+                    textReferences,
+                    assetImages,
+                    creativeText,
+                    creativePrompt,
+                    creativePosition,
+                    { useGradient, useBlur: false, useMainColor, mainColor },
+                    aspectRatio
+                );
+            } else {
+                let inputs: any = {};
+                switch (selectedCategory) {
+                    case 'MOCKUPS':
+                        inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
+                        break;
+                    case 'ICONS':
+                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType };
+                        break;
+                    case 'PRODUCTS':
+                        inputs = { productType, brandName, niche, logoImage, productColors };
+                        break;
+                    case 'LOGOS':
+                        inputs = { logoName, logoNiche, logoStyle, logoColors, includeIcon };
+                        break;
+                }
+                result = await generateDesignAsset(selectedCategory, inputs);
             }
 
-            const result = await generateDesignAsset(selectedCategory, inputs);
             setGeneratedImage(result.image);
 
-            // Save to Supabase if user is logged in
+            // Save to Supabase
             let savedUrl = result.image;
             if (user) {
                 const publicUrl = await uploadImageToStorage(result.image, user.id);
@@ -153,6 +215,29 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             setError(err.message || 'Erro ao gerar asset.');
         } finally {
             setIsGenerating(false);
+        }
+    };
+
+    const handleRefine = async () => {
+        if (!generatedImage || !refinePrompt) return;
+        setIsRefining(true);
+        setError(null);
+        try {
+            const refined = await refineCreative(generatedImage, refinePrompt);
+            setGeneratedImage(refined);
+            setRefinePrompt('');
+
+            const historyItem = {
+                id: Date.now().toString(),
+                url: refined,
+                prompt: `Ajuste: ${refinePrompt}`,
+                timestamp: Date.now()
+            };
+            setLocalHistory(prev => [historyItem, ...prev]);
+        } catch (err: any) {
+            setError(err.message || 'Erro ao refinar.');
+        } finally {
+            setIsRefining(false);
         }
     };
 
@@ -268,10 +353,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             {logoImage ? (
                                 <div className="relative group">
                                     <img src={logoImage} alt="Logo" className="w-full h-24 object-contain bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700" />
-                                    <button
-                                        onClick={() => setLogoImage(null)}
-                                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
+                                    <button onClick={() => setLogoImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                                         <i className="fas fa-times"></i>
                                     </button>
                                 </div>
@@ -341,6 +423,97 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                     </div>
                 );
+
+            case 'CRIATIVOS':
+                return (
+                    <div className="space-y-6">
+                        {/* Dimension Selector */}
+                        <DimensionSelector value={aspectRatio} onChange={setAspectRatio} />
+
+                        {/* Subject Images */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <i className="fas fa-user text-lime-500 mr-2"></i>Imagem Principal *
+                            </label>
+                            {creativeImages.length > 0 ? (
+                                <div className="grid grid-cols-3 gap-2">
+                                    {creativeImages.map((img, i) => (
+                                        <div key={i} className="relative group">
+                                            <img src={img} alt="Subject" className="w-full h-20 object-cover rounded-lg" />
+                                            <button onClick={() => setCreativeImages(prev => prev.filter((_, idx) => idx !== i))}
+                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i className="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <label className="flex items-center justify-center h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <i className="fas fa-plus text-gray-400"></i>
+                                        <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setCreativeImages)} className="hidden" />
+                                    </label>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i className="fas fa-cloud-upload-alt text-gray-400 text-2xl mb-2"></i>
+                                    <span className="text-sm text-gray-500">Foto da pessoa ou produto</span>
+                                    <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setCreativeImages)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Visual References */}
+                        <ReferenceManager
+                            items={visualReferences}
+                            onChange={setVisualReferences}
+                            label="Referencias de Estilo Visual"
+                            description="Imagens para inspirar cor, luz e ambiente"
+                        />
+
+                        {/* Position */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Posicao do Sujeito</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {[
+                                    { id: SubjectPosition.LEFT, label: 'Esquerda', icon: 'fa-arrow-left' },
+                                    { id: SubjectPosition.CENTER, label: 'Centro', icon: 'fa-arrows-alt-h' },
+                                    { id: SubjectPosition.RIGHT, label: 'Direita', icon: 'fa-arrow-right' },
+                                ].map(pos => (
+                                    <button key={pos.id} onClick={() => setCreativePosition(pos.id)}
+                                        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${creativePosition === pos.id ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        <i className={`fas ${pos.icon}`}></i>{pos.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Text Manager */}
+                        <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-4">
+                            <TextManager text={creativeText} onChange={setCreativeText} />
+                        </div>
+
+                        {/* Color Control */}
+                        <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                            <div className="flex items-center gap-2">
+                                <i className="fas fa-palette text-lime-500"></i>
+                                <span className="text-sm text-gray-700 dark:text-gray-300">Cor Dominante</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {useMainColor && <input type="color" value={mainColor} onChange={(e) => setMainColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />}
+                                <button onClick={() => setUseMainColor(!useMainColor)}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useMainColor ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useMainColor ? 'translate-x-6' : 'translate-x-1'}`} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Additional Prompt */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descricao Adicional</label>
+                            <textarea value={creativePrompt} onChange={(e) => setCreativePrompt(e.target.value)}
+                                placeholder="Descreva o cenario ou contexto adicional..."
+                                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 h-20" />
+                        </div>
+                    </div>
+                );
         }
     };
 
@@ -354,19 +527,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 p-6 space-y-6">
 
                     {/* Category Selector */}
-                    <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
+                    <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-4 shadow-sm">
+                        <h2 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-900 dark:text-white/90">
                             <i className="fas fa-layer-group text-lime-600 dark:text-lime-400"></i>
                             Tipo de Asset
                         </h2>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-5 gap-2">
                             {CATEGORIES.map(cat => (
                                 <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
-                                    className={`flex flex-col items-center p-4 rounded-xl border transition-all ${selectedCategory === cat.id
+                                    className={`flex flex-col items-center p-3 rounded-xl border transition-all ${selectedCategory === cat.id
                                         ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
                                         : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
-                                    <i className={`fas ${cat.icon} text-2xl mb-2`}></i>
-                                    <span className="text-sm font-medium">{cat.label}</span>
+                                    <i className={`fas ${cat.icon} text-lg mb-1`}></i>
+                                    <span className="text-xs font-medium">{cat.label}</span>
                                 </button>
                             ))}
                         </div>
@@ -412,7 +585,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     )}
                     {generatedImage && (
                         <div className="relative group">
-                            <img src={generatedImage} alt="Generated" className="max-h-[65vh] max-w-full rounded-xl shadow-2xl" />
+                            <img src={generatedImage} alt="Generated" className="max-h-[55vh] max-w-full rounded-xl shadow-2xl" />
                             <button onClick={handleDownload}
                                 className="absolute top-4 right-4 bg-lime-500 hover:bg-lime-400 text-black font-bold px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <i className="fas fa-download"></i> Download
@@ -421,8 +594,28 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     )}
                 </div>
 
+                {/* Refine Section (for CRIATIVOS) */}
+                {generatedImage && selectedCategory === 'CRIATIVOS' && (
+                    <div className="p-4 bg-white/60 dark:bg-app-dark-lighter border-t border-gray-200 dark:border-white/5">
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                value={refinePrompt}
+                                onChange={(e) => setRefinePrompt(e.target.value)}
+                                placeholder="Ajuste: 'Mude a cor do texto', 'Adicione mais brilho'..."
+                                className="flex-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white"
+                                onKeyDown={(e) => e.key === 'Enter' && handleRefine()}
+                            />
+                            <button onClick={handleRefine} disabled={isRefining || !refinePrompt}
+                                className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg text-sm font-medium disabled:opacity-50">
+                                {isRefining ? <i className="fas fa-spinner fa-spin"></i> : 'Refinar'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* History Strip */}
-                <div className="h-32 bg-white/60 dark:bg-app-dark backdrop-blur-xl border-t border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+                <div className="h-28 bg-white/60 dark:bg-app-dark backdrop-blur-xl border-t border-gray-200 dark:border-white/5 p-3 overflow-x-auto flex gap-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
                     {localHistory.length === 0 ? (
                         <div className="w-full flex items-center justify-center text-xs text-gray-400">
                             Historico vazio
@@ -431,7 +624,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         localHistory.map((item) => (
                             <div
                                 key={item.id}
-                                className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'}`}
+                                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'}`}
                                 onClick={() => setGeneratedImage(item.url)}
                             >
                                 <img src={item.url} alt="History" className="w-full h-full object-cover" />
