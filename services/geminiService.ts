@@ -75,6 +75,28 @@ const cleanBase64 = (data: string) => {
   return data.replace(/^data:image\/\w+;base64,/, "");
 };
 
+// Helper to convert URL to base64
+const urlToBase64 = async (url: string): Promise<string> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
+// Helper to ensure image is in base64 format
+const ensureBase64 = async (imageData: string): Promise<string> => {
+  // If it's a URL (starts with http), fetch and convert
+  if (imageData.startsWith('http')) {
+    return await urlToBase64(imageData);
+  }
+  // Already base64
+  return imageData;
+};
+
 // 1. STEP ONE: TEXT PROMPT ENGINEERING
 export const generateEnhancedPrompt = async (
   niche: string,
@@ -860,7 +882,7 @@ export const generateCreative = async (
 
 // Refine Creative with Mask
 export const refineCreative = async (
-  originalImageBase64: string,
+  originalImage: string,
   editInstructions: string,
   maskImageBase64?: string | null
 ): Promise<string> => {
@@ -869,8 +891,11 @@ export const refineCreative = async (
 
   const ai = new GoogleGenAI({ apiKey });
 
+  // Convert URL to base64 if needed
+  const imageBase64 = await ensureBase64(originalImage);
+
   const parts: any[] = [
-    { inlineData: { data: cleanBase64(originalImageBase64), mimeType: 'image/png' } },
+    { inlineData: { data: cleanBase64(imageBase64), mimeType: 'image/png' } },
   ];
 
   let prompt = `Edit this image. Instructions: ${editInstructions}. Maintain original composition and text unless asked to change.`;
