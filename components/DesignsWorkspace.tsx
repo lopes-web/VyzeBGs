@@ -207,7 +207,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 id: Date.now().toString(),
                 url: savedUrl,
                 prompt: result.finalPrompt,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                mode: 'OBJECT' as const,
+                section: 'DESIGNS' as const
             };
             setLocalHistory(prev => [historyItem, ...prev]);
             onAddToGlobalHistory(historyItem);
@@ -227,13 +229,26 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             setGeneratedImage(refined);
             setRefinePrompt('');
 
+            // Save to Supabase
+            let savedUrl = refined;
+            if (user) {
+                const publicUrl = await uploadImageToStorage(refined, user.id);
+                if (publicUrl) {
+                    savedUrl = publicUrl;
+                    await saveGeneration(user.id, publicUrl, `Ajuste: ${refinePrompt}`, 'OBJECT', 'DESIGNS', projectId);
+                }
+            }
+
             const historyItem = {
                 id: Date.now().toString(),
-                url: refined,
+                url: savedUrl,
                 prompt: `Ajuste: ${refinePrompt}`,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                mode: 'OBJECT' as const,
+                section: 'DESIGNS' as const
             };
             setLocalHistory(prev => [historyItem, ...prev]);
+            onAddToGlobalHistory(historyItem);
         } catch (err: any) {
             setError(err.message || 'Erro ao refinar.');
         } finally {
