@@ -7,6 +7,20 @@ export default {
         "./components/**/*.{js,ts,jsx,tsx}",
         "./**/*.{js,ts,jsx,tsx}",
     ],
+    safelist: [
+        'bg-app-dark',
+        'bg-app-dark-lighter',
+        'dark:bg-app-dark',
+        'dark:bg-app-dark-lighter',
+        'bg-accent',
+        'bg-accent-light',
+        'bg-accent-dark',
+        'text-accent',
+        'text-accent-light',
+        'text-accent-dark',
+        'border-accent',
+        'ring-accent',
+    ],
     theme: {
         extend: {
             colors: {
