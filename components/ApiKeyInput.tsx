@@ -27,11 +27,11 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white p-4 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
             <div className="max-w-md w-full bg-white/60 dark:bg-app-dark-lighter/60 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-lime-600"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-light to-accent-dark"></div>
 
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-lime-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-lime-500/20">
-                        <i className="fas fa-key text-2xl text-lime-600 dark:text-lime-400"></i>
+                    <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-accent/20">
+                        <i className="fas fa-key text-2xl text-accent-dark dark:text-accent-light"></i>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Configurar Gemini API</h2>
                     <p className="text-gray-500 dark:text-gray-400 text-sm">
@@ -50,14 +50,14 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
                             value={key}
                             onChange={(e) => { setKey(e.target.value); setError(''); }}
                             placeholder="AIzaSy..."
-                            className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-lime-500/50 focus:ring-1 focus:ring-lime-500/50 transition-all font-mono text-sm"
+                            className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all font-mono text-sm"
                         />
                         {error && <p className="text-red-500 dark:text-red-400 text-xs mt-2">{error}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-lime-500 hover:bg-lime-400 text-black font-bold py-3 px-4 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-lime-500/20"
+                        className="w-full bg-accent hover:bg-accent-light text-black font-bold py-3 px-4 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg shadow-accent/20"
                     >
                         Salvar e Continuar
                     </button>
@@ -68,7 +68,7 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
                         href="https://aistudio.google.com/app/apikey"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-gray-500 hover:text-lime-600 dark:hover:text-lime-400 transition-colors flex items-center justify-center gap-1"
+                        className="text-xs text-gray-500 hover:text-accent-dark dark:hover:text-accent-light transition-colors flex items-center justify-center gap-1"
                     >
                         Não tem uma chave? <span className="underline">Gerar no Google AI Studio</span> <i className="fas fa-external-link-alt text-[10px]"></i>
                     </a>
@@ -79,3 +79,4 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ onKeySet }) => {
 };
 
 export default ApiKeyInput;
+

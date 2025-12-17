@@ -181,7 +181,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
             <div className="bg-white/60 dark:bg-app-dark-lighter/60 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 p-6 flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                        <i className="fas fa-images text-lime-500"></i>
+                        <i className="fas fa-images text-accent"></i>
                         Conversor WebP
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -201,7 +201,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         disabled={isProcessing || files.filter(f => f.status === 'PENDING').length === 0}
                         className={`px-6 py-2 rounded-xl font-bold text-white shadow-lg transition-all ${isProcessing || files.filter(f => f.status === 'PENDING').length === 0
                             ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-lime-500 hover:bg-lime-400 hover:scale-105'
+                            : 'bg-accent hover:bg-accent-light hover:scale-105'
                             }`}
                     >
                         {isProcessing ? <><i className="fas fa-circle-notch fa-spin mr-2"></i> Convertendo...</> : 'Converter Tudo'}
@@ -236,7 +236,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         value={maxWidth}
                                         onChange={(e) => setMaxWidth(e.target.value ? Number(e.target.value) : '')}
                                         placeholder="Auto"
-                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent outline-none"
                                     />
                                 </div>
                                 <div>
@@ -246,7 +246,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         value={maxHeight}
                                         onChange={(e) => setMaxHeight(e.target.value ? Number(e.target.value) : '')}
                                         placeholder="Auto"
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent outline-none"
                                     />
                                 </div>
                             </div>
@@ -256,7 +256,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         <div>
                             <div className="flex justify-between mb-2">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Qualidade</label>
-                                <span className="text-sm font-bold text-lime-600 dark:text-lime-400">{quality}%</span>
+                                <span className="text-sm font-bold text-accent-dark dark:text-accent-light">{quality}%</span>
                             </div>
                             <input
                                 type="range"
@@ -264,7 +264,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                 max="100"
                                 value={quality}
                                 onChange={(e) => setQuality(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-accent"
                             />
                             <p className="text-xs text-gray-500 mt-2">
                                 {quality > 80 ? 'Alta qualidade, arquivo maior' : quality < 60 ? 'Baixa qualidade, arquivo menor' : 'Equilíbrio recomendado'}
@@ -285,8 +285,8 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         className={`
                             border-2 border-dashed rounded-2xl p-8 mb-6 text-center cursor-pointer transition-all
                             ${isDragging
-                                ? 'border-lime-500 bg-lime-500/10 scale-[1.01]'
-                                : 'border-gray-300 dark:border-gray-700 hover:border-lime-500 hover:bg-white/5'
+                                ? 'border-accent bg-accent/10 scale-[1.01]'
+                                : 'border-gray-300 dark:border-gray-700 hover:border-accent hover:bg-white/5'
                             }
                         `}
                     >
@@ -333,7 +333,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         {item.convertedSize && (
                                             <>
                                                 <i className="fas fa-arrow-right text-gray-300"></i>
-                                                <span className="text-lime-600 dark:text-lime-400 font-bold">{formatSize(item.convertedSize)}</span>
+                                                <span className="text-accent-dark dark:text-accent-light font-bold">{formatSize(item.convertedSize)}</span>
                                                 <span className="bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300 px-1.5 rounded text-[10px]">
                                                     -{Math.round((1 - item.convertedSize / item.originalSize) * 100)}%
                                                 </span>
@@ -349,7 +349,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                     {item.status === 'DONE' && (
                                         <button
                                             onClick={() => downloadSingle(item)}
-                                            className="text-xs font-bold text-lime-600 hover:text-lime-500 flex items-center gap-1 bg-lime-50 dark:bg-lime-900/20 px-3 py-1.5 rounded-lg transition-colors"
+                                            className="text-xs font-bold text-accent-dark hover:text-accent flex items-center gap-1 bg-lime-50 dark:bg-lime-900/20 px-3 py-1.5 rounded-lg transition-colors"
                                         >
                                             <i className="fas fa-check"></i> Baixar
                                         </button>
@@ -373,3 +373,4 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
 };
 
 export default WebPConverterWorkspace;
+

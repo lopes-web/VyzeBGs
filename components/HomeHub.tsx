@@ -154,7 +154,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         <div className="flex items-center gap-3 pl-3 border-l border-white/10">
                             <button
                                 onClick={onOpenProfile}
-                                className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-lime-500/20"
+                                className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-light to-accent-dark flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-accent/20"
                                 title="Meu Perfil"
                             >
                                 {userEmail.substring(0, 2).toUpperCase()}
@@ -261,7 +261,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                 >
                                     {selectedMode === 'LANDING_PAGES' ? (
                                         <>
-                                            <i className="fas fa-laptop-code text-lime-500"></i>
+                                            <i className="fas fa-laptop-code text-accent"></i>
                                             <span>Landing Page</span>
                                         </>
                                     ) : (
@@ -282,7 +282,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                             onClick={() => selectMode('LANDING_PAGES')}
                                             className="w-full text-left px-4 py-3 hover:bg-white/5 flex items-center gap-3 text-sm text-gray-200"
                                         >
-                                            <i className="fas fa-laptop-code text-lime-500"></i>
+                                            <i className="fas fa-laptop-code text-accent"></i>
                                             Landing Page
                                         </button>
                                         <button
@@ -302,7 +302,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                             <div className="relative">
                                 <button
                                     onClick={toggleConfig}
-                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isConfigOpen ? 'bg-lime-500/20 text-lime-400' : 'hover:bg-white/5 text-gray-400 hover:text-gray-300'}`}
+                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isConfigOpen ? 'bg-accent/20 text-accent-light' : 'hover:bg-white/5 text-gray-400 hover:text-gray-300'}`}
                                     title="Configurações de Geração"
                                 >
                                     <i className="fas fa-sliders-h"></i>
@@ -314,7 +314,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                         className="absolute bottom-full left-0 mb-4 w-80 bg-black border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-200 max-h-[500px] overflow-y-auto"
                                     >
                                         <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                                            <i className="fas fa-cog text-lime-500"></i> Configuração
+                                            <i className="fas fa-cog text-accent"></i> Configuração
                                         </h3>
 
                                         {/* Mode Selector */}
@@ -326,7 +326,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                                         key={mode}
                                                         onClick={() => setGeneratorMode(mode)}
                                                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border transition-all ${generatorMode === mode
-                                                            ? 'bg-lime-500/10 border-lime-500 text-lime-400'
+                                                            ? 'bg-accent/10 border-accent text-accent-light'
                                                             : 'bg-white/5 border-transparent hover:bg-white/10 text-gray-300'
                                                             }`}
                                                     >
@@ -352,7 +352,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                                 />
                                                 <button
                                                     onClick={() => principalInputRef.current?.click()}
-                                                    className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-700 flex flex-col items-center justify-center text-gray-400 hover:text-lime-500 hover:border-lime-500 hover:bg-lime-500/10 transition-all"
+                                                    className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-700 flex flex-col items-center justify-center text-gray-400 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all"
                                                     title="Adicionar Imagem Principal"
                                                 >
                                                     <i className="fas fa-user text-lg mb-1"></i>
@@ -442,7 +442,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                                                 ))}
                                                 <button
                                                     onClick={() => secondaryInputRef.current?.click()}
-                                                    className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-600 hover:border-lime-500 flex items-center justify-center text-gray-400 hover:text-lime-500 transition-colors"
+                                                    className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-600 hover:border-accent flex items-center justify-center text-gray-400 hover:text-accent transition-colors"
                                                 >
                                                     <i className="fas fa-plus"></i>
                                                 </button>
@@ -473,7 +473,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
                             <button
                                 onClick={() => prompt.trim() && onPromptSubmit(prompt, selectedMode, principalFile || undefined, styleReferenceFile || undefined, generatorMode, secondaryFiles)}
-                                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-lime-500 hover:text-black text-gray-400 flex items-center justify-center transition-all duration-300"
+                                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-accent hover:text-black text-gray-400 flex items-center justify-center transition-all duration-300"
                             >
                                 <i className="fas fa-arrow-up"></i>
                             </button>
@@ -492,3 +492,4 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 };
 
 export default HomeHub;
+

@@ -536,7 +536,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     {/* Image Inputs */}
                     <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-lime-600 dark:text-lime-400`}></i>
+                            <i className={`fas ${currentMode === 'HUMAN' ? 'fa-user' : currentMode === 'OBJECT' ? 'fa-cube' : currentMode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-wand-magic'} text-accent-dark dark:text-accent-light`}></i>
                             {getModeLabel()}
                         </h2>
                         <ImageUpload
@@ -577,7 +577,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 placeholder="Ex: Trader de Elite, Dentista Premium..."
                                 value={projectContext.niche || ''}
                                 onChange={(e) => setProjectContext(prev => ({ ...prev, niche: e.target.value }))}
-                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-lime-500 outline-none"
+                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-accent outline-none"
                             />
                         </div>
 
@@ -585,12 +585,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-6 p-4 bg-gray-100 dark:bg-app-dark/30 rounded-xl border border-gray-200 dark:border-white/5">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                                    <i className="fas fa-cube text-lime-500"></i>
+                                    <i className="fas fa-cube text-accent"></i>
                                     Elementos Flutuantes 3D
                                 </label>
                                 <button
                                     onClick={() => setProjectContext(prev => ({ ...prev, floatingElements3D: !prev.floatingElements3D }))}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.floatingElements3D ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.floatingElements3D ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
                                 >
                                     <span
                                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.floatingElements3D ? 'translate-x-6' : 'translate-x-1'}`}
@@ -609,7 +609,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Ex: Icones de vidro, partículas douradas, moedas..."
                                         value={projectContext.floatingElementsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, floatingElementsDescription: e.target.value }))}
-                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-accent outline-none transition-all"
                                     />
                                 </div>
                             )}
@@ -619,12 +619,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                                    <i className="fas fa-bolt text-lime-500"></i>
+                                    <i className="fas fa-bolt text-accent"></i>
                                     Efeitos de Fundo
                                 </label>
                                 <button
                                     onClick={() => setProjectContext(prev => ({ ...prev, backgroundEffects: !prev.backgroundEffects }))}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.backgroundEffects ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.backgroundEffects ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
                                 >
                                     <span
                                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.backgroundEffects ? 'translate-x-6' : 'translate-x-1'}`}
@@ -642,7 +642,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         placeholder="Opcional: descreva o efeito (ex: raios dourados, part�culas de luz...)"
                                         value={projectContext.backgroundEffectsDescription}
                                         onChange={(e) => setProjectContext(prev => ({ ...prev, backgroundEffectsDescription: e.target.value }))}
-                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-lime-500 outline-none transition-all"
+                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-accent outline-none transition-all"
                                     />
                                 </div>
                             )}
@@ -657,7 +657,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         key={opt.id}
                                         onClick={() => setProjectContext(prev => ({ ...prev, framing: opt.id }))}
                                         className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${projectContext.framing === opt.id
-                                            ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                            ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
                                             : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'
                                             }`}
                                     >
@@ -671,20 +671,20 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         {/* Iluminação & Atmosfera (Redesigned) */}
                         <div className="mb-8 space-y-4">
                             <div className="flex items-center gap-2 mb-4">
-                                <i className="fas fa-lightbulb text-lime-500"></i>
+                                <i className="fas fa-lightbulb text-accent"></i>
                                 <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Iluminação & Atmosfera</label>
                             </div>
 
                             <div className="grid grid-cols-1 gap-3">
                                 {/* Ambient Color Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.ambient
-                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    ? 'bg-white dark:bg-app-dark border-accent shadow-[0_0_20px_rgba(132,204,22,0.15)]'
                                     : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-3">
-                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.ambient ? 'bg-lime-100 text-lime-600 dark:bg-lime-900/30 dark:text-lime-400' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
+                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.ambient ? 'bg-lime-100 text-accent-dark dark:bg-lime-900/30 dark:text-accent-light' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
                                                     <i className="fas fa-sun text-lg"></i>
                                                 </div>
                                                 <div>
@@ -717,7 +717,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                         ...prev,
                                                         activeColors: { ...prev.activeColors!, ambient: !prev.activeColors?.ambient }
                                                     }))}
-                                                    className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.ambient ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                    className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.ambient ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
                                                 >
                                                     <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.ambient ? 'translate-x-6' : 'translate-x-0'}`} />
                                                 </button>
@@ -729,7 +729,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             <div className="overflow-hidden">
                                                 <div className="flex items-center justify-between mb-2">
                                                     <span className="text-xs font-medium text-gray-500">Intensidade</span>
-                                                    <span className="text-xs font-bold text-lime-600 dark:text-lime-400">{projectContext.ambientOpacity}%</span>
+                                                    <span className="text-xs font-bold text-accent-dark dark:text-accent-light">{projectContext.ambientOpacity}%</span>
                                                 </div>
                                                 <input
                                                     type="range"
@@ -737,7 +737,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     max="100"
                                                     value={projectContext.ambientOpacity}
                                                     onChange={(e) => setProjectContext(prev => ({ ...prev, ambientOpacity: Number(e.target.value) }))}
-                                                    className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-lime-500 hover:accent-lime-400"
+                                                    className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-accent hover:accent-accent-light"
                                                 />
                                             </div>
                                         </div>
@@ -746,12 +746,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                                 {/* Rim Light Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.rim
-                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    ? 'bg-white dark:bg-app-dark border-accent shadow-[0_0_20px_rgba(132,204,22,0.15)]'
                                     : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.rim ? 'bg-lime-100 text-lime-600 dark:bg-lime-900/30 dark:text-lime-400' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.rim ? 'bg-lime-100 text-accent-dark dark:bg-lime-900/30 dark:text-accent-light' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
                                                 <i className="fas fa-bolt text-lg"></i>
                                             </div>
                                             <div>
@@ -784,7 +784,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     ...prev,
                                                     activeColors: { ...prev.activeColors!, rim: !prev.activeColors?.rim }
                                                 }))}
-                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.rim ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.rim ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
                                             >
                                                 <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.rim ? 'translate-x-6' : 'translate-x-0'}`} />
                                             </button>
@@ -794,12 +794,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
                                 {/* Complementary Light Card */}
                                 <div className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${projectContext.activeColors?.complementary
-                                    ? 'bg-white dark:bg-app-dark border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.15)]'
+                                    ? 'bg-white dark:bg-app-dark border-accent shadow-[0_0_20px_rgba(132,204,22,0.15)]'
                                     : 'bg-app-dark-lighter border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10'
                                     }`}>
                                     <div className="p-4 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.complementary ? 'bg-lime-100 text-lime-600 dark:bg-lime-900/30 dark:text-lime-400' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${projectContext.activeColors?.complementary ? 'bg-lime-100 text-accent-dark dark:bg-lime-900/30 dark:text-accent-light' : 'bg-gray-200 text-gray-400 dark:bg-white/5 dark:text-gray-500'}`}>
                                                 <i className="fas fa-palette text-lg"></i>
                                             </div>
                                             <div>
@@ -832,7 +832,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     ...prev,
                                                     activeColors: { ...prev.activeColors!, complementary: !prev.activeColors?.complementary }
                                                 }))}
-                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.complementary ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.complementary ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
                                             >
                                                 <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.complementary ? 'translate-x-6' : 'translate-x-0'}`} />
                                             </button>
@@ -847,7 +847,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useGradient')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useGradient
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
                                     : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
@@ -857,7 +857,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             <button
                                 onClick={() => toggleAttribute('useBlur')}
                                 className={`flex items-center justify-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${attributes.useBlur
-                                    ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                    ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
                                     : 'bg-white dark:bg-app-dark-lighter border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400'
                                     } `}
                             >
@@ -883,7 +883,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     type="number"
                                     value={customHeight}
                                     onChange={(e) => setCustomHeight(Number(e.target.value))}
-                                    className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                    className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-accent outline-none"
                                     min={500}
                                     max={2160}
                                 />
@@ -904,7 +904,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                             ? "Descreva o nicho (ex: Mentor financeiro, Curso de inglês) e a atmosfera desejada..."
                                             : "Descreva o cenário..."
                                 }
-                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-lime-500 focus:border-transparent outline-none transition-all min-h-[100px]"
+                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all min-h-[100px]"
                             />
                         </div>
 
@@ -922,7 +922,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     <button
                                         key={num}
                                         onClick={() => setBatchSize(num)}
-                                        className={`w-10 h-10 rounded-lg text-basecaont-bold transition-all ${batchSize === num ? 'bg-lime-500 text-black shadow-lg scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'
+                                        className={`w-10 h-10 rounded-lg text-basecaont-bold transition-all ${batchSize === num ? 'bg-accent text-black shadow-lg scale-105' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'
                                             } `}
                                     >
                                         {num}x
@@ -939,7 +939,7 @@ w-full py-4 px-6 rounded-xl font-bold text-lg shadow-xl flex items-center justif
 transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                         ${isGenerating || userImages.length === 0
                                     ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-700'
-                                    : 'bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-white dark:text-gray-900 border border-lime-400'
+                                    : 'bg-gradient-to-r from-accent to-accent-dark hover:from-accent-light hover:to-accent text-white dark:text-gray-900 border border-accent-light'
                                 }
 `}
                         >
@@ -972,9 +972,9 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
                                 <div className="relative w-24 h-24 mb-6">
                                     <div className="absolute inset-0 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
-                                    <div className="absolute inset-0 border-4 border-lime-500 rounded-full border-t-transparent animate-spin"></div>
+                                    <div className="absolute inset-0 border-4 border-accent rounded-full border-t-transparent animate-spin"></div>
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <i className="fas fa-wand-magic-sparkles text-2xl text-lime-500 animate-pulse"></i>
+                                        <i className="fas fa-wand-magic-sparkles text-2xl text-accent animate-pulse"></i>
                                     </div>
                                 </div>
                                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 animate-pulse">Criando sua imagem...</h3>
@@ -1030,11 +1030,11 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                                         value={eraserPrompt}
                                                         onChange={(e) => setEraserPrompt(e.target.value)}
                                                         placeholder="O que fazer nesta área? (Ex: Remover, Trocar por flor...)"
-                                                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white text-sm focus:ring-2 focus:ring-lime-500 outline-none"
+                                                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white text-sm focus:ring-2 focus:ring-accent outline-none"
                                                     />
                                                     <button
                                                         onClick={handleInpaint}
-                                                        className="px-6 py-2 bg-lime-500 hover:bg-lime-400 text-black font-bold rounded-lg transition-colors"
+                                                        className="px-6 py-2 bg-accent hover:bg-accent-light text-black font-bold rounded-lg transition-colors"
                                                     >
                                                         Aplicar
                                                     </button>
@@ -1071,14 +1071,14 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             localHistory.map((item) => (
                                 <div
                                     key={item.id}
-                                    className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+                                    className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-accent ring-2 ring-accent/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'
                                         }`}
                                     onClick={() => restoreFromHistory(item)}
                                 >
                                     <img src={item.url} alt="History" className="w-full h-full object-cover" />
                                     {/* Selection Checkbox for Merge */}
                                     <div
-                                        className={`absolute top-1 right-1 w-5 h-5 rounded-full bg-black/50 border border-white flex items-center justify-center transition-opacity ${selectedHistoryIds.includes(item.id) ? 'opacity-100 bg-lime-500 border-lime-500' : 'opacity-0 group-hover:opacity-100'
+                                        className={`absolute top-1 right-1 w-5 h-5 rounded-full bg-black/50 border border-white flex items-center justify-center transition-opacity ${selectedHistoryIds.includes(item.id) ? 'opacity-100 bg-accent border-accent' : 'opacity-0 group-hover:opacity-100'
                                             }`}
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -1100,7 +1100,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             <span className="text-sm font-medium">{selectedHistoryIds.length} selecionados</span>
                             <button
                                 onClick={handleMerge}
-                                className="bg-lime-500 hover:bg-lime-400 text-black px-4 py-1.5 rounded-full text-sm font-bold transition-colors"
+                                className="bg-accent hover:bg-accent-light text-black px-4 py-1.5 rounded-full text-sm font-bold transition-colors"
                             >
                                 Mesclar
                             </button>
@@ -1129,7 +1129,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                             </button>
 
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                                <i className="fas fa-download text-lime-500"></i>
+                                <i className="fas fa-download text-accent"></i>
                                 Exportar Imagem
                             </h3>
 
@@ -1142,7 +1142,7 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                                 key={fmt}
                                                 onClick={() => setExportFormat(fmt as any)}
                                                 className={`py-2 px-4 rounded-lg border text-sm font-medium uppercase transition-all ${exportFormat === fmt
-                                                    ? 'bg-lime-500 text-black border-lime-500'
+                                                    ? 'bg-accent text-black border-accent'
                                                     : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'
                                                     }`}
                                             >
@@ -1163,13 +1163,13 @@ transition-all duration-300 transform hover:scale-[1.01] active:scale-95
                                         step="0.1"
                                         value={exportQuality}
                                         onChange={(e) => setExportQuality(Number(e.target.value))}
-                                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-lime-500"
+                                        className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-accent"
                                     />
                                 </div>
 
                                 <button
                                     onClick={handleExport}
-                                    className="w-full py-3 bg-lime-500 hover:bg-lime-400 text-black font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02]"
+                                    className="w-full py-3 bg-accent hover:bg-accent-light text-black font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02]"
                                 >
                                     Baixar Agora
                                 </button>

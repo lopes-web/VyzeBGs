@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
@@ -182,14 +182,14 @@ const AppContent: React.FC = () => {
                     <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                         <i className="fas fa-exclamation-triangle text-3xl text-red-500"></i>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configura��o Pendente</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Configura??o Pendente</h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        As vari�veis de ambiente do Supabase n�o foram encontradas.
+                        As vari?veis de ambiente do Supabase n?o foram encontradas.
                     </p>
                     <div className="bg-gray-100 dark:bg-black/40 p-4 rounded-xl text-left text-xs font-mono text-gray-500 border border-gray-200 dark:border-white/5">
                         <p className="mb-2">Adicione na Vercel:</p>
-                        <p className="text-lime-600 dark:text-lime-400">VITE_SUPABASE_URL</p>
-                        <p className="text-lime-600 dark:text-lime-400">VITE_SUPABASE_ANON_KEY</p>
+                        <p className="text-accent-dark dark:text-accent-light">VITE_SUPABASE_URL</p>
+                        <p className="text-accent-dark dark:text-accent-light">VITE_SUPABASE_ANON_KEY</p>
                     </div>
                 </div>
             </div>
@@ -200,7 +200,7 @@ const AppContent: React.FC = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
             </div>
         );
     }
@@ -378,7 +378,7 @@ const AppContent: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => { setCurrentSection(null); setActiveTabId(null); }}
-                            className="w-8 h-8 bg-black/5 dark:bg-black/20 hover:bg-black/10 dark:hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-lime-600 dark:hover:text-lime-400 transition-colors border border-transparent hover:border-black/5 dark:hover:border-white/5"
+                            className="w-8 h-8 bg-black/5 dark:bg-black/20 hover:bg-black/10 dark:hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-accent-dark dark:hover:text-accent-light transition-colors border border-transparent hover:border-black/5 dark:hover:border-white/5"
                             title="Voltar para Apps"
                         >
                             <i className="fas fa-th"></i>
@@ -395,13 +395,13 @@ const AppContent: React.FC = () => {
 
                     <div className="flex items-center gap-4">
                         <div className="text-xs text-gray-500 flex items-center gap-2 px-3 py-1 bg-black/5 dark:bg-black/20 rounded-full border border-black/5 dark:border-white/5">
-                            <i className="fas fa-server"></i> Processamento: <span className={generatingCount > 0 ? 'text-lime-600 dark:text-lime-400' : 'text-gray-400'}>{generatingCount}/2</span>
+                            <i className="fas fa-server"></i> Processamento: <span className={generatingCount > 0 ? 'text-accent-dark dark:text-accent-light' : 'text-gray-400'}>{generatingCount}/2</span>
                         </div>
                         <button
                             onClick={() => setIsHistoryOpen(true)}
                             className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
                         >
-                            <i className="fas fa-history text-lime-600 dark:text-lime-400"></i> Historico
+                            <i className="fas fa-history text-accent-dark dark:text-accent-light"></i> Historico
                         </button>
 
                         <ThemeToggle />
@@ -410,7 +410,7 @@ const AppContent: React.FC = () => {
                             <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-white/10">
                                 <button
                                     onClick={() => setShowProfileModal(true)}
-                                    className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-lime-500/20"
+                                    className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-light to-accent-dark flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-accent/20"
                                     title="Meu Perfil"
                                 >
                                     {user.email?.substring(0, 2).toUpperCase()}
@@ -436,7 +436,7 @@ const AppContent: React.FC = () => {
                             className={`
                         group relative flex items-center gap-2 px-4 py-2 rounded-t-xl text-sm font-medium cursor-pointer transition-all min-w-[150px] max-w-[200px] select-none
                         ${activeTabId === tab.id
-                                    ? 'bg-white dark:bg-gray-900/60 text-lime-600 dark:text-lime-400 border-t border-x border-gray-200 dark:border-white/5 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-10'
+                                    ? 'bg-white dark:bg-gray-900/60 text-accent-dark dark:text-accent-light border-t border-x border-gray-200 dark:border-white/5 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-10'
                                     : 'bg-black/5 dark:bg-black/20 text-gray-500 hover:bg-black/10 dark:hover:bg-white/5 hover:text-gray-700 dark:hover:text-gray-300 border-transparent mb-[2px]'
                                 }
                     `}
@@ -452,7 +452,7 @@ const AppContent: React.FC = () => {
 
                             {/* Active Indicator Line */}
                             {activeTabId === tab.id && (
-                                <div className="absolute top-0 left-0 right-0 h-[2px] bg-lime-500 rounded-t-full"></div>
+                                <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent rounded-t-full"></div>
                             )}
                         </div>
                     ))}
@@ -540,8 +540,8 @@ const AppContent: React.FC = () => {
                                         <span className='text-violet-600 dark:text-violet-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
                                     </div>
                                     {/* PRODUCTS CARD */}
-                                    <div onClick={() => createTab('OBJECT', 'PRODUCTS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-emerald-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
-                                        <div className='w-14 h-14 bg-emerald-100 dark:bg-emerald-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-box text-2xl text-emerald-600 dark:text-black'></i></div>
+                                    <div onClick={() => createTab('OBJECT', 'PRODUCTS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-accent/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
+                                        <div className='w-14 h-14 bg-emerald-100 dark:bg-accent rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-accent/20 group-hover:scale-110 transition-transform'><i className='fas fa-box text-2xl text-emerald-600 dark:text-black'></i></div>
                                         <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors'>Produtos</h3>
                                         <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Embalagens, caixas e frascos com branding profissional.</p>
                                         <span className='text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
@@ -559,16 +559,16 @@ const AppContent: React.FC = () => {
                                     {/* HUMAN CARD */}
                                     <div
                                         onClick={() => createTab('HUMAN')}
-                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-lime-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-accent/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
                                     >
-                                        <div className="w-14 h-14 bg-lime-100 dark:bg-lime-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform">
-                                            <i className="fas fa-user-astronaut text-2xl text-lime-600 dark:text-black"></i>
+                                        <div className="w-14 h-14 bg-lime-100 dark:bg-accent rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-accent/20 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-user-astronaut text-2xl text-accent-dark dark:text-black"></i>
                                         </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-lime-600 dark:group-hover:text-lime-400 transition-colors">Pessoa (Simples)</h3>
+                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-accent-dark dark:group-hover:text-accent-light transition-colors">Pessoa (Simples)</h3>
                                         <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
                                             Ideal para especialistas e retratos. Mantem a fisionomia e expressoes com fidelidade.
                                         </p>
-                                        <span className="text-lime-600 dark:text-lime-400 font-bold text-xs flex items-center mt-auto">
+                                        <span className="text-accent-dark dark:text-accent-light font-bold text-xs flex items-center mt-auto">
                                             Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
                                         </span>
                                     </div>
@@ -640,7 +640,7 @@ const AppContent: React.FC = () => {
 
                         {/* Header */}
                         <div className="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between bg-gray-50 dark:bg-app-dark-lighter">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><i className="fas fa-history text-lime-600 dark:text-lime-400 mr-2"></i> Galeria Global {currentSection ? `(${currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'})` : ''}</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><i className="fas fa-history text-accent-dark dark:text-accent-light mr-2"></i> Galeria Global {currentSection ? `(${currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'})` : ''}</h2>
                             <button onClick={() => setIsHistoryOpen(false)} className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 text-xl">
                                 <i className="fas fa-times"></i>
                             </button>
@@ -656,15 +656,15 @@ const AppContent: React.FC = () => {
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                     {displayedHistory.map((item) => (
-                                        <div key={item.id} className="group relative aspect-[9/16] bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden border border-gray-200 dark:border-white/5 hover:border-lime-500/50 transition-all">
+                                        <div key={item.id} className="group relative aspect-[9/16] bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden border border-gray-200 dark:border-white/5 hover:border-accent/50 transition-all">
                                             <img src={item.url} alt="History" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                                                <span className="text-xs font-bold text-lime-400 mb-1 uppercase tracking-wider">{item.mode}</span>
+                                                <span className="text-xs font-bold text-accent-light mb-1 uppercase tracking-wider">{item.mode}</span>
                                                 <p className="text-xs text-gray-300 line-clamp-2 mb-3">{item.prompt}</p>
                                                 <a
                                                     href={item.url}
                                                     download={`design-builder-${item.id}.png`}
-                                                    className="bg-lime-500 text-black text-xs font-bold py-2 px-3 rounded-lg text-center hover:bg-lime-400 transition-colors"
+                                                    className="bg-accent text-black text-xs font-bold py-2 px-3 rounded-lg text-center hover:bg-accent-light transition-colors"
                                                 >
                                                     Baixar
                                                 </a>
@@ -708,3 +708,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

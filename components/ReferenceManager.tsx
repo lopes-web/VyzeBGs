@@ -94,7 +94,7 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, la
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`transition-all duration-200 rounded-xl ${isDragging ? 'bg-lime-500/10 ring-2 ring-lime-500 ring-dashed p-2' : ''}`}
+        className={`transition-all duration-200 rounded-xl ${isDragging ? 'bg-accent/10 ring-2 ring-accent ring-dashed p-2' : ''}`}
       >
         {/* List of active references */}
         <div className="space-y-3 mb-3">
@@ -104,14 +104,14 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, la
                 <button
                   onClick={() => moveItem(idx, 'up')}
                   disabled={idx === 0}
-                  className="text-gray-400 hover:text-lime-600 dark:text-gray-600 dark:hover:text-lime-400 disabled:opacity-30 disabled:hover:text-gray-400 dark:disabled:hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-accent-dark dark:text-gray-600 dark:hover:text-accent-light disabled:opacity-30 disabled:hover:text-gray-400 dark:disabled:hover:text-gray-600 transition-colors"
                 >
                   <i className="fas fa-chevron-up text-xs"></i>
                 </button>
                 <button
                   onClick={() => moveItem(idx, 'down')}
                   disabled={idx === items.length - 1}
-                  className="text-gray-400 hover:text-lime-600 dark:text-gray-600 dark:hover:text-lime-400 disabled:opacity-30 disabled:hover:text-gray-400 dark:disabled:hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-accent-dark dark:text-gray-600 dark:hover:text-accent-light disabled:opacity-30 disabled:hover:text-gray-400 dark:disabled:hover:text-gray-600 transition-colors"
                 >
                   <i className="fas fa-chevron-down text-xs"></i>
                 </button>
@@ -129,7 +129,7 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, la
                   value={item.description}
                   onChange={(e) => updateDescription(item.id, e.target.value)}
                   placeholder="Ex: Luz neon, textura de chão..."
-                  className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded p-2 text-xs text-gray-900 dark:text-white focus:border-lime-500 outline-none resize-none h-16"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded p-2 text-xs text-gray-900 dark:text-white focus:border-accent outline-none resize-none h-16"
                 />
               </div>
               <button
@@ -150,7 +150,7 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, la
             border border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer 
             bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all
             text-gray-500 dark:text-gray-400 text-sm gap-2
-            ${isDragging ? 'bg-gray-100 dark:bg-gray-800 border-lime-500 text-lime-600 dark:text-lime-400' : ''}
+            ${isDragging ? 'bg-gray-100 dark:bg-gray-800 border-accent text-accent-dark dark:text-accent-light' : ''}
             `}
         >
           <i className="fas fa-plus"></i> Adicionar Referência (Clique ou Arraste)

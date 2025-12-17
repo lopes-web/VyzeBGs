@@ -54,7 +54,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
 
                 {/* Header */}
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-20 h-20 bg-gradient-to-br from-lime-400 to-lime-600 rounded-full flex items-center justify-center mb-4 shadow-lg shadow-lime-500/20">
+                    <div className="w-20 h-20 bg-gradient-to-br from-accent-light to-accent-dark rounded-full flex items-center justify-center mb-4 shadow-lg shadow-accent/20">
                         <span className="text-3xl font-bold text-black">
                             {user.email?.substring(0, 2).toUpperCase()}
                         </span>
@@ -80,7 +80,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
                                 value={apiKey}
                                 onChange={(e) => { setApiKey(e.target.value); setError(null); setSuccess(false); }}
                                 placeholder="Nova API Key (AIza...)"
-                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-lime-500 dark:focus:border-lime-500 focus:ring-1 focus:ring-lime-500 outline-none transition-all"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-accent dark:focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all"
                             />
                             <button
                                 type="button"
@@ -92,7 +92,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
                         </div>
 
                         {error && <p className="text-red-500 text-xs">{error}</p>}
-                        {success && <p className="text-lime-500 text-xs"><i className="fas fa-check-circle mr-1"></i> Chave salva com sucesso!</p>}
+                        {success && <p className="text-accent text-xs"><i className="fas fa-check-circle mr-1"></i> Chave salva com sucesso!</p>}
 
                         <button
                             type="submit"
@@ -106,7 +106,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
                             href="https://aistudio.google.com/app/apikey"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[10px] text-gray-500 hover:text-lime-600 dark:hover:text-lime-400 transition-colors inline-flex items-center gap-1"
+                            className="text-[10px] text-gray-500 hover:text-accent-dark dark:hover:text-accent-light transition-colors inline-flex items-center gap-1"
                         >
                             Gerar nova chave no Google AI Studio <i className="fas fa-external-link-alt"></i>
                         </a>
@@ -126,3 +126,4 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ user, onClose, onLogout }) 
 };
 
 export default ProfileModal;
+

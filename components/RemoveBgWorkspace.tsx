@@ -230,3 +230,4 @@ const RemoveBgWorkspace: React.FC<RemoveBgWorkspaceProps> = ({ onBack }) => {
 };
 
 export default RemoveBgWorkspace;
+

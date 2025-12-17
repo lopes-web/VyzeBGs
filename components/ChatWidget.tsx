@@ -191,7 +191,7 @@ const ChatWidget: React.FC = () => {
         {/* Header */}
         <div className="bg-white/5 p-4 border-b border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-lime-500/20 flex items-center justify-center text-lime-400">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent-light">
               <i className={`fas ${activeAgent.icon}`}></i>
             </div>
             <div>
@@ -225,7 +225,7 @@ const ChatWidget: React.FC = () => {
                 className={`
                             max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed
                             ${msg.role === 'user'
-                    ? 'bg-lime-600 text-white rounded-tr-none'
+                    ? 'bg-accent-dark text-white rounded-tr-none'
                     : 'bg-app-dark-lighter text-gray-200 rounded-tl-none border border-gray-700'
                   }
                         `}
@@ -265,7 +265,7 @@ const ChatWidget: React.FC = () => {
           <div className="flex gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="text-gray-400 hover:text-lime-400 p-2 transition-colors"
+              className="text-gray-400 hover:text-accent-light p-2 transition-colors"
             >
               <i className="fas fa-paperclip"></i>
             </button>
@@ -286,12 +286,12 @@ const ChatWidget: React.FC = () => {
                 }
               }}
               placeholder="Digite sua mensagem..."
-              className="flex-1 bg-app-dark/40 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white focus:border-lime-500 outline-none resize-none h-10 scrollbar-hide"
+              className="flex-1 bg-app-dark/40 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white focus:border-accent outline-none resize-none h-10 scrollbar-hide"
             />
             <button
               onClick={handleSendMessage}
               disabled={(!inputText.trim() && !selectedImage) || isTyping}
-              className="bg-lime-500 text-black rounded-xl w-10 h-10 flex items-center justify-center hover:bg-lime-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-accent text-black rounded-xl w-10 h-10 flex items-center justify-center hover:bg-accent-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <i className="fas fa-paper-plane"></i>
             </button>
@@ -304,7 +304,7 @@ const ChatWidget: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`
             pointer-events-auto w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300
-            ${isOpen ? 'bg-app-dark-lighter text-white rotate-90' : 'bg-gradient-to-br from-lime-400 to-lime-600 text-black hover:scale-110'}
+            ${isOpen ? 'bg-app-dark-lighter text-white rotate-90' : 'bg-gradient-to-br from-accent-light to-accent-dark text-black hover:scale-110'}
         `}
       >
         {isOpen ? <i className="fas fa-times text-xl"></i> : <i className="fas fa-comments text-2xl"></i>}
@@ -315,3 +315,4 @@ const ChatWidget: React.FC = () => {
 };
 
 export default ChatWidget;
+

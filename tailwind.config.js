@@ -11,8 +11,13 @@ export default {
         extend: {
             colors: {
                 app: {
-                    dark: '#010907',
-                    'dark-lighter': '#0a1210',
+                    dark: '#171717',
+                    'dark-lighter': '#1F1F1F',
+                },
+                accent: {
+                    DEFAULT: '#00C087',
+                    light: '#00D99A',
+                    dark: '#00A070',
                 }
             }
         },

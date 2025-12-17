@@ -16,7 +16,7 @@ const DimensionSelector: React.FC<DimensionSelectorProps> = ({ value, onChange }
     return (
         <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                <i className="fas fa-crop-alt text-lime-500 mr-2"></i>
+                <i className="fas fa-crop-alt text-accent mr-2"></i>
                 Dimensao do Criativo
             </label>
             <div className="grid grid-cols-3 gap-3">
@@ -25,7 +25,7 @@ const DimensionSelector: React.FC<DimensionSelectorProps> = ({ value, onChange }
                         key={dim.id}
                         onClick={() => onChange(dim.id)}
                         className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${value === dim.id
-                                ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
                                 : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                             }`}
                     >
@@ -40,3 +40,4 @@ const DimensionSelector: React.FC<DimensionSelectorProps> = ({ value, onChange }
 };
 
 export default DimensionSelector;
+

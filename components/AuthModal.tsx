@@ -61,7 +61,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                         </span>
                         <button
                             onClick={() => setIsSignUp(!isSignUp)}
-                            className="text-emerald-600 dark:text-[#039E73] hover:text-emerald-500 dark:hover:text-[#04d49b] font-medium transition-colors"
+                            className="text-emerald-600 dark:text-[#039E73] hover:text-accent dark:hover:text-[#04d49b] font-medium transition-colors"
                         >
                             {isSignUp ? 'Entrar' : 'Criar uma conta'}
                         </button>
@@ -87,7 +87,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="voce@empresa.com"
-                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-accent dark:focus:border-[#039E73] focus:ring-1 focus:ring-accent dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
                                 required
                             />
                         </div>
@@ -112,7 +112,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Digite sua senha"
-                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-emerald-500 dark:focus:border-[#039E73] focus:ring-1 focus:ring-emerald-500 dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
+                                className="w-full bg-gray-50 dark:bg-app-dark border border-gray-200 dark:border-[#262626] rounded-lg py-2.5 pl-10 pr-12 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-700 focus:border-accent dark:focus:border-[#039E73] focus:ring-1 focus:ring-accent dark:focus:ring-[#039E73] outline-none transition-all shadow-inner-custom shadow-black/5 dark:shadow-black/40"
                                 required
                             />
                             <button
@@ -128,7 +128,7 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-[#039E73] dark:hover:bg-[#027a59] text-white font-medium py-2.5 rounded-lg transition-all shadow-lg shadow-emerald-500/20 dark:shadow-[#039E73]/20 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                        className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-[#039E73] dark:hover:bg-[#027a59] text-white font-medium py-2.5 rounded-lg transition-all shadow-lg shadow-accent/20 dark:shadow-[#039E73]/20 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                     >
                         {loading ? (
                             <span className="flex items-center justify-center gap-2">
@@ -149,3 +149,4 @@ const AuthModal: React.FC<{ onClose: () => void; canClose?: boolean }> = ({ onCl
 };
 
 export default AuthModal;
+

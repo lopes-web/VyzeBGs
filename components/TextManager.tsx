@@ -24,12 +24,12 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
             {/* Toggle Include Text */}
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-3">
-                    <i className="fas fa-text-height text-lime-500"></i>
+                    <i className="fas fa-text-height text-accent"></i>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Incluir Texto no Criativo</span>
                 </div>
                 <button
                     onClick={() => updateField('includeText', !text.includeText)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${text.includeText ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-600'}`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${text.includeText ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}
                 >
                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${text.includeText ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
@@ -121,7 +121,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                     key={align.id}
                                     onClick={() => updateField('alignment', align.id)}
                                     className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${text.alignment === align.id
-                                            ? 'bg-lime-500 text-black'
+                                            ? 'bg-accent text-black'
                                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                 >
@@ -143,7 +143,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                     key={style.id}
                                     onClick={() => updateField('style', style.id)}
                                     className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-lg text-xs font-medium transition-all ${text.style === style.id
-                                            ? 'bg-lime-500 text-black'
+                                            ? 'bg-accent text-black'
                                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                 >
@@ -160,3 +160,4 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
 };
 
 export default TextManager;
+

@@ -113,3 +113,4 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
 };
 
 export default MagicEraserCanvas;
+

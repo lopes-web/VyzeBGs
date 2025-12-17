@@ -3,27 +3,31 @@
 @tailwind utilities;
 
 /* ========================================
-   DARK THEME - Force #010907 Background
+   DARK THEME - New Supabase-Style Colors
+   #171717 (dark) | #1F1F1F (lighter) | #00C087 (accent)
    ======================================== */
 :root {
-    --app-dark: #010907;
-    --app-dark-lighter: #0a1210;
+    --app-dark: #171717;
+    --app-dark-lighter: #1F1F1F;
+    --accent: #00C087;
+    --accent-light: #00D99A;
+    --accent-dark: #00A070;
 }
 
 /* Force dark mode background */
 html.dark,
 html.dark body {
-    background-color: #010907 !important;
+    background-color: #171717 !important;
 }
 
-/* Custom Scrollbar for Glassmorphism */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #0a1210;
+    background: #1F1F1F;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -130,4 +134,25 @@ html.dark body {
         linear-gradient(-45deg, transparent 75%, #eee 75%);
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Custom accent color utilities (override lime-500 usage) */
+.bg-accent {
+    background-color: #00C087 !important;
+}
+
+.text-accent {
+    color: #00C087 !important;
+}
+
+.border-accent {
+    border-color: #00C087 !important;
+}
+
+.ring-accent {
+    --tw-ring-color: #00C087 !important;
+}
+
+.shadow-accent {
+    --tw-shadow-color: rgba(0, 192, 135, 0.25) !important;
 }

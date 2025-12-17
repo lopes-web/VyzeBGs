@@ -266,7 +266,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-5 gap-2">
                                 {DEVICE_OPTIONS.map(device => (
                                     <button key={device} onClick={() => setDeviceType(device)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {device}
                                     </button>
                                 ))}
@@ -282,7 +282,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="flex gap-2">
                                 {ANGLE_OPTIONS.map(a => (
                                     <button key={a} onClick={() => setAngle(a)}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {a}
                                     </button>
                                 ))}
@@ -312,7 +312,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-2 gap-2">
                                 {ICON_STYLES.map(style => (
                                     <button key={style} onClick={() => setIconStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
@@ -327,7 +327,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2 mb-2">
                                 {BG_OPTIONS.map(opt => (
                                     <button key={opt.value} onClick={() => setIconBgType(opt.value)}
-                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {opt.label}
                                     </button>
                                 ))}
@@ -347,7 +347,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2">
                                 {PRODUCT_TYPES.map(type => (
                                     <button key={type} onClick={() => setProductType(type)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {type}
                                     </button>
                                 ))}
@@ -413,7 +413,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2">
                                 {LOGO_STYLES.map(style => (
                                     <button key={style} onClick={() => setLogoStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
@@ -431,7 +431,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                         <div className="flex items-center gap-3">
                             <button onClick={() => setIncludeIcon(!includeIcon)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-700'}`}>
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}>
                                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
                             </button>
                             <span className="text-sm text-gray-700 dark:text-gray-300">Incluir Icone</span>
@@ -448,7 +448,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Subject Images */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i className="fas fa-user text-lime-500 mr-2"></i>Imagem Principal *
+                                <i className="fas fa-user text-accent mr-2"></i>Imagem Principal *
                             </label>
                             {creativeImages.length > 0 ? (
                                 <div className="grid grid-cols-3 gap-2">
@@ -493,7 +493,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                     { id: SubjectPosition.RIGHT, label: 'Direita', icon: 'fa-arrow-right' },
                                 ].map(pos => (
                                     <button key={pos.id} onClick={() => setCreativePosition(pos.id)}
-                                        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${creativePosition === pos.id ? 'bg-lime-500 text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${creativePosition === pos.id ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         <i className={`fas ${pos.icon}`}></i>{pos.label}
                                     </button>
                                 ))}
@@ -508,13 +508,13 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Color Control */}
                         <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                             <div className="flex items-center gap-2">
-                                <i className="fas fa-palette text-lime-500"></i>
+                                <i className="fas fa-palette text-accent"></i>
                                 <span className="text-sm text-gray-700 dark:text-gray-300">Cor Dominante</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 {useMainColor && <input type="color" value={mainColor} onChange={(e) => setMainColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />}
                                 <button onClick={() => setUseMainColor(!useMainColor)}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useMainColor ? 'bg-lime-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useMainColor ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}>
                                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useMainColor ? 'translate-x-6' : 'translate-x-1'}`} />
                                 </button>
                             </div>
@@ -544,14 +544,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     {/* Category Selector */}
                     <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-4 shadow-sm">
                         <h2 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-900 dark:text-white/90">
-                            <i className="fas fa-layer-group text-lime-600 dark:text-lime-400"></i>
+                            <i className="fas fa-layer-group text-accent-dark dark:text-accent-light"></i>
                             Tipo de Asset
                         </h2>
                         <div className="grid grid-cols-5 gap-2">
                             {CATEGORIES.map(cat => (
                                 <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
                                     className={`flex flex-col items-center p-3 rounded-xl border transition-all ${selectedCategory === cat.id
-                                        ? 'bg-lime-500/10 border-lime-500 text-lime-600 dark:text-lime-400'
+                                        ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
                                         : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
                                     <i className={`fas ${cat.icon} text-lg mb-1`}></i>
                                     <span className="text-xs font-medium">{cat.label}</span>
@@ -570,7 +570,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 {/* Fixed Footer: Generate Button */}
                 <div className="p-4 border-t border-gray-200 dark:border-white/10 bg-white/80 dark:bg-app-dark-lighter/80 backdrop-blur-sm">
                     <button onClick={handleGenerate} disabled={isGenerating}
-                        className="w-full bg-gradient-to-r from-lime-500 to-emerald-500 text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-lime-500/25">
+                        className="w-full bg-gradient-to-r from-accent to-accent text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-accent/25">
                         {isGenerating ? <><i className="fas fa-spinner fa-spin"></i> Gerando...</> : <><i className="fas fa-magic"></i> Gerar</>}
                     </button>
                 </div>
@@ -594,7 +594,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     )}
                     {isGenerating && (
                         <div className="text-center text-gray-400">
-                            <i className="fas fa-spinner fa-spin text-4xl mb-4 text-lime-500"></i>
+                            <i className="fas fa-spinner fa-spin text-4xl mb-4 text-accent"></i>
                             <p>Gerando...</p>
                         </div>
                     )}
@@ -602,7 +602,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div className="relative group">
                             <img src={generatedImage} alt="Generated" className="max-h-[55vh] max-w-full rounded-xl shadow-2xl" />
                             <button onClick={handleDownload}
-                                className="absolute top-4 right-4 bg-lime-500 hover:bg-lime-400 text-black font-bold px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                className="absolute top-4 right-4 bg-accent hover:bg-accent-light text-black font-bold px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <i className="fas fa-download"></i> Download
                             </button>
                         </div>
@@ -639,7 +639,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         localHistory.map((item) => (
                             <div
                                 key={item.id}
-                                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-lime-500 ring-2 ring-lime-500/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'}`}
+                                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group ${generatedImage === item.url ? 'border-accent ring-2 ring-accent/30' : 'border-transparent hover:border-gray-300 dark:hover:border-gray-600'}`}
                                 onClick={() => setGeneratedImage(item.url)}
                             >
                                 <img src={item.url} alt="History" className="w-full h-full object-cover" />
@@ -653,3 +653,4 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 };
 
 export default DesignsWorkspace;
+
