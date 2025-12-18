@@ -25,8 +25,8 @@ const DimensionSelector: React.FC<DimensionSelectorProps> = ({ value, onChange }
                         key={dim.id}
                         onClick={() => onChange(dim.id)}
                         className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${value === dim.id
-                                ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
-                                : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                            ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
+                            : 'bg-gray-50 dark:bg-[#171717] border-gray-200 dark:border-[#2E2E2E] text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:border-[#3E3E3E]'
                             }`}
                     >
                         <i className={`fas ${dim.icon} text-2xl mb-2`}></i>
