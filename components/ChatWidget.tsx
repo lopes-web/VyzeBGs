@@ -302,10 +302,8 @@ const ChatWidget: React.FC = () => {
       {/* TOGGLE BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`
-            pointer-events-auto w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300
-            ${isOpen ? 'bg-app-dark-lighter text-white rotate-90' : 'bg-gradient-to-br from-accent-light to-accent-dark text-black hover:scale-110'}
-        `}
+        className="pointer-events-auto w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 text-black hover:scale-110"
+        style={{ backgroundColor: isOpen ? '#1F1F1F' : '#00C087', color: isOpen ? '#fff' : '#000' }}
       >
         {isOpen ? <i className="fas fa-times text-xl"></i> : <i className="fas fa-comments text-2xl"></i>}
       </button>

@@ -144,7 +144,8 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                         <div className="flex items-center gap-3 pl-3 border-l border-white/10">
                             <button
                                 onClick={onOpenProfile}
-                                className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-light to-accent-dark flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-accent/20"
+                                className="w-8 h-8 rounded-full flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg"
+                                style={{ backgroundColor: '#00C087' }}
                                 title="Meu Perfil"
                             >
                                 {userEmail.substring(0, 2).toUpperCase()}
