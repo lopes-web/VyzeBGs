@@ -130,14 +130,22 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
         }
     };
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         if (!generatedImage) return;
-        const link = document.createElement('a');
-        link.href = generatedImage;
-        link.download = `${selectedCategory.toLowerCase()}_${Date.now()}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const response = await fetch(generatedImage);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${selectedCategory.toLowerCase()}_${Date.now()}.webp`;
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error('Download failed', e);
+        }
     };
 
     const handleGenerate = async () => {
