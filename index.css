@@ -1,12 +1,32 @@
 @import "tailwindcss";
 
-/* Tailwind v4 Theme Configuration */
+/* Tailwind v4 Theme Configuration - Define custom colors */
 @theme {
-    --color-app-dark: #171717;
-    --color-app-dark-lighter: #1F1F1F;
-    --color-accent: #00C087;
-    --color-accent-light: #00D99A;
-    --color-accent-dark: #00A070;
+    /* Custom app colors - these generate bg-app-dark, text-app-dark, etc */
+    --color-app-dark: oklch(0.145 0 0);
+    --color-app-dark-lighter: oklch(0.178 0 0);
+
+    /* Accent colors */
+    --color-accent: oklch(0.696 0.17 162);
+    --color-accent-light: oklch(0.75 0.18 162);
+    --color-accent-dark: oklch(0.6 0.15 162);
+}
+
+/* Override bg-app-dark classes with correct hex values */
+.bg-app-dark {
+    background-color: #171717 !important;
+}
+
+.dark\:bg-app-dark:is(.dark *) {
+    background-color: #171717 !important;
+}
+
+.bg-app-dark-lighter {
+    background-color: #1F1F1F !important;
+}
+
+.dark\:bg-app-dark-lighter:is(.dark *) {
+    background-color: #1F1F1F !important;
 }
 
 /* ========================================
@@ -21,7 +41,7 @@
     --accent-dark: #00A070;
 }
 
-/* Force dark mode background */
+/* Force dark mode background on html and body */
 html.dark,
 html.dark body {
     background-color: #171717 !important;
@@ -162,4 +182,43 @@ html.dark body {
 
 .shadow-accent {
     --tw-shadow-color: rgba(0, 192, 135, 0.25) !important;
+}
+
+/* Accent light variants */
+.text-accent-light {
+    color: #00D99A !important;
+}
+
+.dark\:text-accent-light:is(.dark *) {
+    color: #00D99A !important;
+}
+
+.bg-accent-light {
+    background-color: #00D99A !important;
+}
+
+/* Accent dark variants */
+.text-accent-dark {
+    color: #00A070 !important;
+}
+
+.bg-accent-dark {
+    background-color: #00A070 !important;
+}
+
+/* Gradient from accent */
+.from-accent-light {
+    --tw-gradient-from: #00D99A;
+}
+
+.to-accent-dark {
+    --tw-gradient-to: #00A070;
+}
+
+.from-accent {
+    --tw-gradient-from: #00C087;
+}
+
+.to-accent {
+    --tw-gradient-to: #00C087;
 }
