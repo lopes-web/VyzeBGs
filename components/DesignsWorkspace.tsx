@@ -122,7 +122,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const handleMultiFileUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
         const files = e.target.files;
         if (files) {
-            Array.from(files).forEach(file => {
+            Array.from(files).forEach((file: File) => {
                 const reader = new FileReader();
                 reader.onloadend = () => setter(prev => [...prev, reader.result as string]);
                 reader.readAsDataURL(file);
