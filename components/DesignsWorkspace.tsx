@@ -536,13 +536,13 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn h-full overflow-hidden">
 
             {/* LEFT PANEL: CONTROLS */}
-            <div className="lg:col-span-4 h-full flex flex-col relative bg-white/60 dark:bg-app-dark-lighter backdrop-blur-xl border-r border-gray-200 dark:border-white/5 rounded-l-2xl overflow-hidden transition-colors duration-300">
+            <div className="lg:col-span-4 h-full flex flex-col relative rounded-l-2xl overflow-hidden transition-colors duration-300" style={{ backgroundColor: '#1F1F1F', borderRight: '1px solid #2E2E2E' }}>
 
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto pr-2 pb-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 p-6 space-y-6">
 
                     {/* Category Selector */}
-                    <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-4 shadow-sm">
+                    <div className="rounded-2xl p-4 shadow-sm" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
                         <h2 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-900 dark:text-white/90">
                             <i className="fas fa-layer-group text-accent-dark dark:text-accent-light"></i>
                             Tipo de Asset
@@ -551,8 +551,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             {CATEGORIES.map(cat => (
                                 <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
                                     className={`flex flex-col items-center p-3 rounded-xl border transition-all ${selectedCategory === cat.id
-                                        ? 'bg-accent/10 border-accent text-accent-dark dark:text-accent-light'
-                                        : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
+                                        ? 'text-white'
+                                        : 'text-gray-400 hover:text-white'}`}
+                                    style={{
+                                        backgroundColor: selectedCategory === cat.id ? 'rgba(0, 192, 135, 0.1)' : '#171717',
+                                        borderColor: selectedCategory === cat.id ? '#00C087' : '#2E2E2E'
+                                    }}>
                                     <i className={`fas ${cat.icon} text-lg mb-1`}></i>
                                     <span className="text-xs font-medium">{cat.label}</span>
                                 </button>
@@ -561,16 +565,17 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     </div>
 
                     {/* Dynamic Inputs */}
-                    <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                    <div className="rounded-2xl p-6 shadow-sm" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
                         <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configuracoes</h3>
                         {renderCategoryInputs()}
                     </div>
                 </div>
 
                 {/* Fixed Footer: Generate Button */}
-                <div className="p-4 border-t border-gray-200 dark:border-white/10 bg-white/80 dark:bg-app-dark-lighter/80 backdrop-blur-sm">
+                <div className="p-4" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
                     <button onClick={handleGenerate} disabled={isGenerating}
-                        className="w-full bg-gradient-to-r from-accent to-accent text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-accent/25">
+                        className="w-full text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
+                        style={{ backgroundColor: '#00C087' }}>
                         {isGenerating ? <><i className="fas fa-spinner fa-spin"></i> Gerando...</> : <><i className="fas fa-magic"></i> Gerar</>}
                     </button>
                 </div>
@@ -580,7 +585,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             <div className="lg:col-span-8 h-full flex flex-col relative overflow-hidden">
 
                 {/* Main Preview Area */}
-                <div className="flex-1 flex items-center justify-center p-8 relative bg-gray-50/50 dark:bg-black/20 rounded-r-2xl">
+                <div className="flex-1 flex items-center justify-center p-8 relative rounded-r-2xl" style={{ backgroundColor: '#171717' }}>
                     {error && (
                         <div className="text-red-500 bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-xl p-4">
                             <i className="fas fa-exclamation-circle mr-2"></i>{error}
@@ -630,7 +635,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 )}
 
                 {/* History Strip */}
-                <div className="h-28 bg-white/60 dark:bg-app-dark backdrop-blur-xl border-t border-gray-200 dark:border-white/5 p-3 overflow-x-auto flex gap-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+                <div className="h-28 p-3 overflow-x-auto flex gap-3 scrollbar-thin" style={{ backgroundColor: '#1F1F1F', borderTop: '1px solid #2E2E2E' }}>
                     {localHistory.length === 0 ? (
                         <div className="w-full flex items-center justify-center text-xs text-gray-400">
                             Historico vazio
