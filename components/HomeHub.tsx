@@ -158,84 +158,105 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
 
 
             {/* Main Content */}
-            <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 -mt-10">
+            <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-8">
 
                 {/* Hero Text */}
-                <div className="text-center mb-16 space-y-4 animate-fadeInDown">
-                    <h1 className="text-6xl md:text-7xl font-black tracking-tight text-white drop-shadow-2xl">
-                        Como posso ajudar?
+                <div className="text-center mb-12 space-y-3 animate-fadeInDown">
+                    <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white">
+                        Como posso <span style={{ color: '#00C087' }}>ajudar</span>?
                     </h1>
-                    <p className="text-lg text-gray-400 max-w-xl mx-auto font-light">
+                    <p className="text-base text-gray-500 max-w-md mx-auto">
                         Crie assets incríveis para seus projetos em segundos.
                     </p>
                 </div>
 
-                {/* Cards Grid - REDESIGNED (SIMPLE) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl w-full mb-16 animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
+                {/* Cards Grid - Supabase Style */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl w-full animate-fadeInUp delay-100 opacity-0" style={{ animationFillMode: 'forwards' }}>
 
                     {/* Card 1: Landing Pages */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
-                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                        className="group text-left p-6 rounded-xl transition-all duration-300 hover:border-[#3E3E3E]"
+                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
-                            <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
-                                <i className="fas fa-chart-line text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 192, 135, 0.1)' }}>
+                                <i className="fas fa-chart-line text-lg" style={{ color: '#00C087' }}></i>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#00ca8c] transition-colors">Landing Pages</h3>
-                            <p className="text-sm text-gray-400 text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-6 px-4">
-                                Gere backgrounds de alta conversão.
-                            </p>
+                            <div className="flex-1">
+                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-[#00C087] transition-colors">
+                                    Landing Pages
+                                </h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">
+                                    Gere <span className="text-gray-300">backgrounds de alta conversão</span> para suas páginas de vendas.
+                                </p>
+                            </div>
                         </div>
                     </button>
 
                     {/* Card 2: Designs */}
                     <button
                         onClick={() => onSelectSection('DESIGNS')}
-                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                        className="group text-left p-6 rounded-xl transition-all duration-300 hover:border-[#3E3E3E]"
+                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
-                            <div className="w-20 h-20 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-purple-500/20 group-hover:border-purple-500/50">
-                                <i className="fas fa-layer-group text-4xl text-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"></i>
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(168, 85, 247, 0.1)' }}>
+                                <i className="fas fa-layer-group text-lg text-purple-500"></i>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Designs</h3>
-                            <p className="text-sm text-gray-400 text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-6 px-4">
-                                Crie assets gráficos artísticos.
-                            </p>
+                            <div className="flex-1">
+                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">
+                                    Designs
+                                </h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">
+                                    Crie <span className="text-gray-300">mockups, ícones 3D, logos</span> e criativos artísticos.
+                                </p>
+                            </div>
                         </div>
                     </button>
 
                     {/* Card 3: Remove BG */}
                     <button
                         onClick={() => onSelectSection('REMOVE_BG' as any)}
-                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                        className="group text-left p-6 rounded-xl transition-all duration-300 hover:border-[#3E3E3E]"
+                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
-                            <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
-                                <i className="fas fa-eraser text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 192, 135, 0.1)' }}>
+                                <i className="fas fa-eraser text-lg" style={{ color: '#00C087' }}></i>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#00ca8c] transition-colors">Remover Fundo</h3>
-                            <p className="text-sm text-gray-400 text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-6 px-4">
-                                Remova fundos instantaneamente.
-                            </p>
+                            <div className="flex-1">
+                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-[#00C087] transition-colors">
+                                    Remover Fundo
+                                </h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">
+                                    Remova <span className="text-gray-300">fundos automaticamente</span> com precisão profissional.
+                                </p>
+                            </div>
                         </div>
                     </button>
 
                     {/* Card 4: WebP Converter */}
                     <button
                         onClick={() => onSelectSection('WEBP_CONVERTER')}
-                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                        className="group text-left p-6 rounded-xl transition-all duration-300 hover:border-[#3E3E3E]"
+                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
-                            <div className="w-20 h-20 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-blue-500/20 group-hover:border-blue-500/50">
-                                <i className="fas fa-file-image text-4xl text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"></i>
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
+                                <i className="fas fa-file-image text-lg text-blue-500"></i>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Conversor WebP</h3>
-                            <p className="text-sm text-gray-400 text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-6 px-4">
-                                Otimize imagens para web.
-                            </p>
+                            <div className="flex-1">
+                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-blue-400 transition-colors">
+                                    Conversor WebP
+                                </h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">
+                                    Otimize suas imagens para <span className="text-gray-300">máxima performance web</span>.
+                                </p>
+                            </div>
                         </div>
                     </button>
+
                 </div>
             </div>
         </div>
