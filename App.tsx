@@ -508,45 +508,94 @@ const AppContent: React.FC = () => {
                 {activeTabId === null && (
                     <div className="h-full flex flex-col items-center justify-center animate-fadeIn pb-20 overflow-y-auto">
                         <div className="text-center mb-12 relative">
-                            <h2 className="text-4xl font-bold mb-4 relative z-10 text-gray-900 dark:text-white">Novo Projeto</h2>
-                            <p className="text-gray-600 dark:text-gray-400 relative z-10 max-w-lg mx-auto">
+                            <h2 className="text-4xl font-bold mb-3 relative z-10 text-white">
+                                Novo <span style={{ color: '#00C087' }}>Projeto</span>
+                            </h2>
+                            <p className="text-gray-500 relative z-10 max-w-lg mx-auto">
                                 {currentSection === 'LANDING_PAGES'
                                     ? 'Crie backgrounds focados em conversao.'
                                     : 'Crie assets graficos e designs criativos.'}
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl px-4 relative z-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl px-4 relative z-10">
 
                             {currentSection === 'DESIGNS' ? (
                                 <>
                                     {/* MOCKUPS CARD */}
-                                    <div onClick={() => createTab('OBJECT', 'MOCKUPS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-cyan-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
-                                        <div className='w-14 h-14 bg-cyan-100 dark:bg-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-mobile-alt text-2xl text-cyan-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors'>Mockups</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Dispositivos com tela personalizavel (iPhone, MacBook, iPad).</p>
-                                        <span className='text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    <div
+                                        onClick={() => createTab('OBJECT', 'MOCKUPS')}
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(6, 182, 212, 0.1)' }}>
+                                                <i className="fas fa-mobile-alt text-lg text-cyan-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-cyan-400 transition-colors">Mockups</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Dispositivos com <span className="text-gray-300">tela personalizavel</span> (iPhone, MacBook, iPad).
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     {/* ICONS CARD */}
-                                    <div onClick={() => createTab('OBJECT', 'ICONS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-violet-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
-                                        <div className='w-14 h-14 bg-violet-100 dark:bg-violet-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-gem text-2xl text-violet-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors'>Icones 3D</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Icones estilizados em 3D (Glassmorphism, Neon, Clay).</p>
-                                        <span className='text-violet-600 dark:text-violet-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    <div
+                                        onClick={() => createTab('OBJECT', 'ICONS')}
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
+                                                <i className="fas fa-gem text-lg text-violet-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-violet-400 transition-colors">Icones 3D</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Icones estilizados em <span className="text-gray-300">3D Glassmorphism, Neon, Clay</span>.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     {/* PRODUCTS CARD */}
-                                    <div onClick={() => createTab('OBJECT', 'PRODUCTS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-accent/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
-                                        <div className='w-14 h-14 bg-emerald-100 dark:bg-accent rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-accent/20 group-hover:scale-110 transition-transform'><i className='fas fa-box text-2xl text-emerald-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors'>Produtos</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Embalagens, caixas e frascos com branding profissional.</p>
-                                        <span className='text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    <div
+                                        onClick={() => createTab('OBJECT', 'PRODUCTS')}
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 192, 135, 0.1)' }}>
+                                                <i className="fas fa-box text-lg" style={{ color: '#00C087' }}></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-[#00C087] transition-colors">Produtos</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Embalagens e frascos com <span className="text-gray-300">branding profissional</span>.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     {/* LOGOS CARD */}
-                                    <div onClick={() => createTab('OBJECT', 'LOGOS')} className='bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-rose-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl flex flex-col'>
-                                        <div className='w-14 h-14 bg-rose-100 dark:bg-rose-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform'><i className='fas fa-palette text-2xl text-rose-600 dark:text-black'></i></div>
-                                        <h3 className='text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors'>Logos</h3>
-                                        <p className='text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow'>Sugestoes de logos baseadas no nicho e estilo.</p>
-                                        <span className='text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center mt-auto'>Criar <i className='fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform'></i></span>
+                                    <div
+                                        onClick={() => createTab('OBJECT', 'LOGOS')}
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(244, 63, 94, 0.1)' }}>
+                                                <i className="fas fa-palette text-lg text-rose-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-rose-400 transition-colors">Logos</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Sugestoes de logos baseadas no <span className="text-gray-300">nicho e estilo</span>.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </>
                             ) : (
@@ -554,69 +603,58 @@ const AppContent: React.FC = () => {
                                     {/* HUMAN CARD */}
                                     <div
                                         onClick={() => createTab('HUMAN')}
-                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-accent/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                                     >
-                                        <div className="w-14 h-14 bg-lime-100 dark:bg-accent rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-accent/20 group-hover:scale-110 transition-transform">
-                                            <i className="fas fa-user-astronaut text-2xl text-accent-dark dark:text-black"></i>
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(0, 192, 135, 0.1)' }}>
+                                                <i className="fas fa-user-astronaut text-lg" style={{ color: '#00C087' }}></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-[#00C087] transition-colors">Pessoa (Simples)</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Mantem a <span className="text-gray-300">fisionomia e expressoes</span> com fidelidade.
+                                                </p>
+                                            </div>
                                         </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-accent-dark dark:group-hover:text-accent-light transition-colors">Pessoa (Simples)</h3>
-                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Ideal para especialistas e retratos. Mantem a fisionomia e expressoes com fidelidade.
-                                        </p>
-                                        <span className="text-accent-dark dark:text-accent-light font-bold text-xs flex items-center mt-auto">
-                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                        </span>
                                     </div>
 
                                     {/* INFOPRODUCT CARD */}
                                     <div
                                         onClick={() => createTab('INFOPRODUCT')}
-                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-amber-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                                     >
-                                        <div className="w-14 h-14 bg-amber-100 dark:bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
-                                            <i className="fas fa-chalkboard-teacher text-2xl text-amber-600 dark:text-black"></i>
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+                                                <i className="fas fa-chalkboard-teacher text-lg text-amber-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Foco em <span className="text-gray-300">cursos e mentorias</span> com luzes de estudio.
+                                                </p>
+                                            </div>
                                         </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Infoprodutos</h3>
-                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Foco em cursos e mentorias. Gera camadas de profundidade, luzes de estudio e melhora a postura/roupa do expert.
-                                        </p>
-                                        <span className="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center mt-auto">
-                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                        </span>
-                                    </div>
-
-                                    {/* OBJECT CARD */}
-                                    <div
-                                        onClick={() => createTab('OBJECT')}
-                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-blue-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
-                                    >
-                                        <div className="w-14 h-14 bg-blue-100 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                                            <i className="fas fa-cube text-2xl text-blue-600 dark:text-black"></i>
-                                        </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Produto</h3>
-                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Foco em geometria, materiais e iluminacao realista (Ray-tracing) para objetos.
-                                        </p>
-                                        <span className="text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center mt-auto">
-                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                        </span>
                                     </div>
 
                                     {/* ENHANCE CARD */}
                                     <div
                                         onClick={() => createTab('ENHANCE')}
-                                        className="bg-white/60 dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-3xl p-6 hover:bg-white/80 dark:hover:bg-app-dark hover:border-purple-500/30 transition-all cursor-pointer group shadow-xl dark:shadow-2xl relative overflow-hidden flex flex-col"
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E]"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                                     >
-                                        <div className="w-14 h-14 bg-purple-100 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
-                                            <i className="fas fa-wand-magic-sparkles text-2xl text-purple-600 dark:text-black"></i>
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(168, 85, 247, 0.1)' }}>
+                                                <i className="fas fa-wand-magic-sparkles text-lg text-purple-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">Enhance</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    Melhore imagens existentes mantendo a <span className="text-gray-300">composicao original</span>.
+                                                </p>
+                                            </div>
                                         </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Enhance</h3>
-                                        <p className="text-gray-600 dark:text-gray-400 mb-6 text-xs leading-relaxed flex-grow">
-                                            Melhore imagens existentes. Aumente detalhes e iluminacao mantendo a composicao original.
-                                        </p>
-                                        <span className="text-purple-600 dark:text-purple-400 font-bold text-xs flex items-center mt-auto">
-                                            Criar <i className="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                                        </span>
                                     </div>
                                 </>
                             )}
