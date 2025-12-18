@@ -564,7 +564,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Configuration Panel */}
-                    <div className="bg-gray-50 dark:bg-app-dark-lighter/60 border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
+                    <div className="rounded-2xl p-6" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
                         <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Configuracoes</h3>
 
                         {/* Nicho Input (New) */}
@@ -577,12 +577,12 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 placeholder="Ex: Trader de Elite, Dentista Premium..."
                                 value={projectContext.niche || ''}
                                 onChange={(e) => setProjectContext(prev => ({ ...prev, niche: e.target.value }))}
-                                className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-accent outline-none"
+                                className="w-full rounded-lg px-4 py-3 text-sm text-white focus:ring-2 focus:ring-[#00C087] outline-none" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                             />
                         </div>
 
                         {/* Project Context - 3D Elements */}
-                        <div className="mb-6 p-4 bg-gray-100 dark:bg-app-dark/30 rounded-xl border border-gray-200 dark:border-white/5">
+                        <div className="mb-6 p-4 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                     <i className="fas fa-cube text-accent"></i>
@@ -613,10 +613,10 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                     />
                                 </div>
                             )}
-                                                </div>
+                        </div>
 
                         {/* Background Effects Toggle */}
-                        <div className="mb-6 p-4 bg-gray-100 dark:bg-black/30 rounded-xl border border-gray-200 dark:border-white/5">
+                        <div className="mb-6 p-4 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                     <i className="fas fa-bolt text-accent"></i>
@@ -913,11 +913,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
 
                     {/* Sticky Footer */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-app-dark/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/10 p-4 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+                    <div className="absolute bottom-0 left-0 right-0 backdrop-blur-xl p-4 z-20" style={{ backgroundColor: '#1F1F1F', borderTop: '1px solid #2E2E2E' }}>
                         {/* BATCH SELECTOR */}
                         <div className="flex items-center justify-between mb-4 px-1">
                             <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                            <div className="flex gap-3 bg-gray-100 dark:bg-app-dark-lighter p-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
+                            <div className="flex gap-3 p-1.5 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                                 {[1, 2, 3, 4].map(num => (
                                     <button
                                         key={num}
@@ -934,14 +934,10 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <button
                             onClick={handleGenerate}
                             disabled={isGenerating || userImages.length === 0}
-                            className={`
-w-full py-4 px-6 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center gap-2
-transition-all duration-300 transform hover:scale-[1.01] active:scale-95
-                        ${isGenerating || userImages.length === 0
-                                    ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-700'
-                                    : 'bg-gradient-to-r from-accent to-accent-dark hover:from-accent-light hover:to-accent text-white dark:text-gray-900 border border-accent-light'
-                                }
-`}
+                            className="w-full py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.01] active:scale-95"
+                            style={isGenerating || userImages.length === 0
+                                ? { backgroundColor: '#2E2E2E', color: '#666', cursor: 'not-allowed' }
+                                : { backgroundColor: '#00C087', color: '#000' }}
                         >
                             {isGenerating ? (
                                 <>
