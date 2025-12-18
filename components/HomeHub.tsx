@@ -132,20 +132,10 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
     };
 
     return (
-        <div className="relative h-[100dvh] w-full overflow-hidden flex flex-col bg-black font-sans transition-colors duration-500">
-            {/* Backgrounds - Dark Mode Only */}
-            <div
-                className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100"
-                style={{
-                    backgroundImage: 'url("/bg-home.avif")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                }}
-            />
+        <div className="relative h-[100dvh] w-full overflow-hidden flex flex-col font-sans transition-colors duration-500" style={{ backgroundColor: '#171717' }}>
 
             {/* Header */}
-            <div className="flex items-center justify-between px-8 py-6 z-10 bg-black/20 backdrop-blur-md border-b border-white/5">
+            <div className="flex items-center justify-between px-8 py-6 z-10" style={{ backgroundColor: '#1F1F1F', borderBottom: '1px solid #2E2E2E' }}>
                 <div className="flex items-center gap-3">
                     <img src="/logo.webp" alt="Vyze Logo" className="h-8 w-auto" />
                 </div>
@@ -164,8 +154,7 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                 </div>
             </div>
 
-            {/* Background Overlay for Contrast */}
-            <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none"></div>
+
 
             {/* Main Content */}
             <div className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 -mt-10">
@@ -186,9 +175,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Card 1: Landing Pages */}
                     <button
                         onClick={() => onSelectSection('LANDING_PAGES')}
-                        className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-[#00ca8c]/50 hover:to-[#00ca8c]/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]"
+                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
                                 <i className="fas fa-chart-line text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
                             </div>
@@ -202,9 +191,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Card 2: Designs */}
                     <button
                         onClick={() => onSelectSection('DESIGNS')}
-                        className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-purple-500/50 hover:to-purple-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]"
+                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-purple-500/20 group-hover:border-purple-500/50">
                                 <i className="fas fa-layer-group text-4xl text-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"></i>
                             </div>
@@ -218,9 +207,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Card 3: Remove BG */}
                     <button
                         onClick={() => onSelectSection('REMOVE_BG' as any)}
-                        className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-[#00ca8c]/50 hover:to-[#00ca8c]/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]"
+                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,202,140,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-[#00ca8c]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#00ca8c]/20 group-hover:border-[#00ca8c]/50">
                                 <i className="fas fa-eraser text-4xl text-[#00ca8c] drop-shadow-[0_0_10px_rgba(0,202,140,0.5)]"></i>
                             </div>
@@ -234,9 +223,9 @@ const HomeHub: React.FC<HomeHubProps> = ({ onSelectSection, onPromptSubmit, user
                     {/* Card 4: WebP Converter */}
                     <button
                         onClick={() => onSelectSection('WEBP_CONVERTER')}
-                        className="group relative h-64 rounded-[32px] p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-blue-500/50 hover:to-blue-500/20 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]"
+                        className="group relative h-64 rounded-[32px] transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
                     >
-                        <div className="relative h-full w-full bg-app-dark rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
+                        <div className="relative h-full w-full rounded-[31px] overflow-hidden flex flex-col items-center justify-center p-6">
                             <div className="w-20 h-20 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-blue-500/20 group-hover:border-blue-500/50">
                                 <i className="fas fa-file-image text-4xl text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"></i>
                             </div>
