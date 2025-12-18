@@ -11,7 +11,6 @@ import { useAuth } from './components/AuthContext';
 import { GeneratorMode, ProjectTab, HistoryItem, AppSection } from './types';
 
 import { ThemeProvider } from './components/ThemeContext';
-import ThemeToggle from './components/ThemeToggle';
 import HomeHub from './components/HomeHub';
 import ProfileModal from './components/ProfileModal';
 import RemoveBgWorkspace from './components/RemoveBgWorkspace';
@@ -361,25 +360,26 @@ const AppContent: React.FC = () => {
 
     // --- WORKSPACE VIEW (EXISTING LOGIC) ---
     return (
-        <div className="h-screen flex flex-col bg-gray-50 dark:bg-app-dark text-gray-900 dark:text-white font-sans overflow-hidden transition-colors duration-300">
+        <div className="h-screen flex flex-col text-white font-sans overflow-hidden" style={{ backgroundColor: '#171717' }}>
 
             {/* HEADER & TABS BAR */}
-            <div className="bg-white/80 dark:bg-app-dark backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex flex-col z-50 transition-colors duration-300">
+            <div className="flex flex-col z-50" style={{ backgroundColor: '#1F1F1F', borderBottom: '1px solid #2E2E2E' }}>
 
                 {/* Top Bar */}
                 <div className="flex items-center justify-between px-6 py-3">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => { setCurrentSection(null); setActiveTabId(null); }}
-                            className="w-8 h-8 bg-black/5 dark:bg-black/20 hover:bg-black/10 dark:hover:bg-white/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-accent-dark dark:hover:text-accent-light transition-colors border border-transparent hover:border-black/5 dark:hover:border-white/5"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                            style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                             title="Voltar para Apps"
                         >
                             <i className="fas fa-th"></i>
                         </button>
                         <img src="/logo.webp" alt="Vyze Logo" className="h-8 w-auto" />
-                        <div className="h-6 w-px bg-gray-200 dark:bg-white/10 mx-1"></div>
+                        <div className="h-6 w-px mx-1" style={{ backgroundColor: '#2E2E2E' }}></div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white leading-none">
+                            <span className="font-bold text-lg tracking-tight text-white leading-none">
                                 {currentSection === 'LANDING_PAGES' ? 'Landing Pages' : 'Designs'}
                             </span>
                             <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Workspace</span>
@@ -387,23 +387,23 @@ const AppContent: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="text-xs text-gray-500 flex items-center gap-2 px-3 py-1 bg-black/5 dark:bg-black/20 rounded-full border border-black/5 dark:border-white/5">
-                            <i className="fas fa-server"></i> Processamento: <span className={generatingCount > 0 ? 'text-accent-dark dark:text-accent-light' : 'text-gray-400'}>{generatingCount}/2</span>
+                        <div className="text-xs text-gray-400 flex items-center gap-2 px-3 py-1 rounded-full" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
+                            <i className="fas fa-server"></i> Processamento: <span style={{ color: generatingCount > 0 ? '#00C087' : '#666' }}>{generatingCount}/2</span>
                         </div>
                         <button
                             onClick={() => setIsHistoryOpen(true)}
-                            className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors"
+                            className="text-sm text-gray-300 hover:text-white flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
+                            style={{ backgroundColor: 'transparent' }}
                         >
-                            <i className="fas fa-history text-accent-dark dark:text-accent-light"></i> Historico
+                            <i className="fas fa-history" style={{ color: '#00C087' }}></i> Historico
                         </button>
 
-                        <ThemeToggle />
-
                         {user ? (
-                            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-white/10">
+                            <div className="flex items-center gap-3 pl-3" style={{ borderLeft: '1px solid #2E2E2E' }}>
                                 <button
                                     onClick={() => setShowProfileModal(true)}
-                                    className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-light to-accent-dark flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg shadow-accent/20"
+                                    className="w-8 h-8 rounded-full flex items-center justify-center text-black font-bold text-xs hover:scale-105 transition-transform shadow-lg"
+                                    style={{ backgroundColor: '#00C087' }}
                                     title="Meu Perfil"
                                 >
                                     {user.email?.substring(0, 2).toUpperCase()}
@@ -412,7 +412,8 @@ const AppContent: React.FC = () => {
                         ) : (
                             <button
                                 onClick={() => setShowAuthModal(true)}
-                                className="text-sm bg-gray-900 dark:bg-white/10 hover:bg-gray-800 dark:hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                                className="text-sm text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                                style={{ backgroundColor: '#00C087' }}
                             >
                                 Entrar
                             </button>
@@ -426,13 +427,14 @@ const AppContent: React.FC = () => {
                         <div
                             key={tab.id}
                             onClick={() => setActiveTabId(tab.id)}
-                            className={`
-                        group relative flex items-center gap-2 px-4 py-2 rounded-t-xl text-sm font-medium cursor-pointer transition-all min-w-[150px] max-w-[200px] select-none
-                        ${activeTabId === tab.id
-                                    ? 'bg-white dark:bg-gray-900/60 text-accent-dark dark:text-accent-light border-t border-x border-gray-200 dark:border-white/5 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-10'
-                                    : 'bg-black/5 dark:bg-black/20 text-gray-500 hover:bg-black/10 dark:hover:bg-white/5 hover:text-gray-700 dark:hover:text-gray-300 border-transparent mb-[2px]'
-                                }
-                    `}
+                            className="group relative flex items-center gap-2 px-4 py-2 rounded-t-xl text-sm font-medium cursor-pointer transition-all min-w-[150px] max-w-[200px] select-none"
+                            style={{
+                                backgroundColor: activeTabId === tab.id ? '#171717' : '#1F1F1F',
+                                borderTop: activeTabId === tab.id ? '1px solid #2E2E2E' : 'none',
+                                borderLeft: activeTabId === tab.id ? '1px solid #2E2E2E' : 'none',
+                                borderRight: activeTabId === tab.id ? '1px solid #2E2E2E' : 'none',
+                                color: activeTabId === tab.id ? '#00C087' : '#888'
+                            }}
                         >
                             <i className={`fas ${tab.mode === 'HUMAN' ? 'fa-user' : tab.mode === 'OBJECT' ? 'fa-cube' : tab.mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-magic'} text-xs opacity-70`}></i>
                             <span className="truncate">{tab.title}</span>
