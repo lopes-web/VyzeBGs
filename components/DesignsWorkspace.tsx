@@ -266,7 +266,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-5 gap-2">
                                 {DEVICE_OPTIONS.map(device => (
                                     <button key={device} onClick={() => setDeviceType(device)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${deviceType === device ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {device}
                                     </button>
                                 ))}
@@ -275,14 +275,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Imagem da Tela (Opcional)</label>
                             <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setScreenImage)}
-                                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300" />
+                                className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Angulo</label>
                             <div className="flex gap-2">
                                 {ANGLE_OPTIONS.map(a => (
                                     <button key={a} onClick={() => setAngle(a)}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${angle === a ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {a}
                                     </button>
                                 ))}
@@ -292,7 +292,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cor de Fundo</label>
                             <div className="flex gap-2 items-center">
                                 <input type="color" value={mockupBgColor} onChange={(e) => setMockupBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
-                                <input type="text" value={mockupBgColor} onChange={(e) => setMockupBgColor(e.target.value)} className="flex-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white" />
+                                <input type="text" value={mockupBgColor} onChange={(e) => setMockupBgColor(e.target.value)} className="flex-1 bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white" />
                             </div>
                         </div>
                     </div>
@@ -305,14 +305,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descricao do Icone *</label>
                             <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
                                 placeholder="Ex: foguete, dinheiro, coracao..."
-                                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
+                                className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
                             <div className="grid grid-cols-2 gap-2">
                                 {ICON_STYLES.map(style => (
                                     <button key={style} onClick={() => setIconStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
@@ -327,7 +327,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2 mb-2">
                                 {BG_OPTIONS.map(opt => (
                                     <button key={opt.value} onClick={() => setIconBgType(opt.value)}
-                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {opt.label}
                                     </button>
                                 ))}
@@ -347,7 +347,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="grid grid-cols-3 gap-2">
                                 {PRODUCT_TYPES.map(type => (
                                     <button key={type} onClick={() => setProductType(type)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${productType === type ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {type}
                                     </button>
                                 ))}
@@ -356,18 +356,18 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nome/Marca</label>
                             <input type="text" value={brandName} onChange={(e) => setBrandName(e.target.value)}
-                                placeholder="Ex: VyzeSupplements" className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
+                                placeholder="Ex: VyzeSupplements" className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nicho</label>
                             <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)}
-                                placeholder="Ex: cosmeticos, suplementos..." className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
+                                placeholder="Ex: cosmeticos, suplementos..." className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo (Opcional)</label>
                             {logoImage ? (
                                 <div className="relative group">
-                                    <img src={logoImage} alt="Logo" className="w-full h-24 object-contain bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700" />
+                                    <img src={logoImage} alt="Logo" className="w-full h-24 object-contain bg-gray-100 dark:bg-[#171717] rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
                                     <button onClick={() => setLogoImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                                         <i className="fas fa-times"></i>
                                     </button>
@@ -401,19 +401,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nome da Marca *</label>
                             <input type="text" value={logoName} onChange={(e) => setLogoName(e.target.value)}
-                                placeholder="Ex: VyzeBG" className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
+                                placeholder="Ex: VyzeBG" className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nicho *</label>
                             <input type="text" value={logoNiche} onChange={(e) => setLogoNiche(e.target.value)}
-                                placeholder="Ex: tecnologia, fitness..." className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
+                                placeholder="Ex: tecnologia, fitness..." className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
                             <div className="grid grid-cols-3 gap-2">
                                 {LOGO_STYLES.map(style => (
                                     <button key={style} onClick={() => setLogoStyle(style)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${logoStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
@@ -493,7 +493,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                     { id: SubjectPosition.RIGHT, label: 'Direita', icon: 'fa-arrow-right' },
                                 ].map(pos => (
                                     <button key={pos.id} onClick={() => setCreativePosition(pos.id)}
-                                        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${creativePosition === pos.id ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${creativePosition === pos.id ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         <i className={`fas ${pos.icon}`}></i>{pos.label}
                                     </button>
                                 ))}
@@ -525,7 +525,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descricao Adicional</label>
                             <textarea value={creativePrompt} onChange={(e) => setCreativePrompt(e.target.value)}
                                 placeholder="Descreva o cenario ou contexto adicional..."
-                                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 h-20" />
+                                className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 h-20" />
                         </div>
                     </div>
                 );
