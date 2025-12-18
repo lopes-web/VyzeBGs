@@ -3,6 +3,7 @@ import JSZip from 'jszip';
 
 interface WebPConverterWorkspaceProps {
     isActive: boolean;
+    onBack?: () => void;
 }
 
 interface FileItem {
@@ -15,7 +16,7 @@ interface FileItem {
     error?: string;
 }
 
-const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActive }) => {
+const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActive, onBack }) => {
     const [files, setFiles] = useState<FileItem[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [maxWidth, setMaxWidth] = useState<number | ''>('');
@@ -176,22 +177,34 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
     if (!isActive) return null;
 
     return (
-        <div className="h-full flex flex-col bg-gray-50 dark:bg-app-dark/20 animate-fadeIn overflow-hidden">
+        <div className="h-full flex flex-col animate-fadeIn overflow-hidden" style={{ backgroundColor: '#171717' }}>
             {/* Header */}
-            <div className="bg-white/60 dark:bg-app-dark-lighter/60 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 p-6 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                        <i className="fas fa-images text-accent"></i>
-                        Conversor WebP
-                    </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Otimize suas imagens para web com máxima qualidade.
-                    </p>
+            <div className="p-6 flex items-center justify-between" style={{ backgroundColor: '#1F1F1F', borderBottom: '1px solid #2E2E2E' }}>
+                <div className="flex items-center gap-4">
+                    {onBack && (
+                        <button
+                            onClick={onBack}
+                            className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                            style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
+                            title="Voltar"
+                        >
+                            <i className="fas fa-arrow-left"></i>
+                        </button>
+                    )}
+                    <div>
+                        <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                            <i className="fas fa-images" style={{ color: '#00C087' }}></i>
+                            Conversor WebP
+                        </h1>
+                        <p className="text-sm text-gray-400 mt-1">
+                            Otimize suas imagens para web com máxima qualidade.
+                        </p>
+                    </div>
                 </div>
                 <div className="flex gap-3">
                     <button
                         onClick={() => setFiles([])}
-                        className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-red-500 transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-red-500 transition-colors"
                         disabled={isProcessing}
                     >
                         Limpar Lista
@@ -199,20 +212,20 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                     <button
                         onClick={processFiles}
                         disabled={isProcessing || files.filter(f => f.status === 'PENDING').length === 0}
-                        className={`px-6 py-2 rounded-xl font-bold text-white shadow-lg transition-all ${isProcessing || files.filter(f => f.status === 'PENDING').length === 0
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-accent hover:bg-accent-light hover:scale-105'
-                            }`}
+                        className="px-6 py-2 rounded-xl font-bold text-black shadow-lg transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ backgroundColor: isProcessing || files.filter(f => f.status === 'PENDING').length === 0 ? '#333' : '#00C087' }}
                     >
                         {isProcessing ? <><i className="fas fa-circle-notch fa-spin mr-2"></i> Convertendo...</> : 'Converter Tudo'}
                     </button>
                     <button
                         onClick={downloadAll}
                         disabled={files.filter(f => f.status === 'DONE').length === 0}
-                        className={`px-6 py-2 rounded-xl font-bold text-black shadow-lg transition-all ${files.filter(f => f.status === 'DONE').length === 0
-                            ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                            : 'bg-white hover:bg-gray-100'
-                            }`}
+                        className="px-6 py-2 rounded-xl font-bold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                            backgroundColor: files.filter(f => f.status === 'DONE').length === 0 ? '#333' : '#1F1F1F',
+                            border: '1px solid #2E2E2E',
+                            color: files.filter(f => f.status === 'DONE').length === 0 ? '#666' : '#fff'
+                        }}
                     >
                         <i className="fas fa-download mr-2"></i> Baixar ZIP
                     </button>
@@ -221,13 +234,13 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
 
             <div className="flex-1 flex overflow-hidden">
                 {/* Sidebar: Settings */}
-                <div className="w-80 bg-white/40 dark:bg-app-dark-lighter/40 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 p-6 overflow-y-auto">
-                    <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">Configurações</h3>
+                <div className="w-80 p-6 overflow-y-auto" style={{ backgroundColor: '#1F1F1F', borderRight: '1px solid #2E2E2E' }}>
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">Configurações</h3>
 
                     <div className="space-y-6">
                         {/* Dimensions */}
                         <div className="space-y-4">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Redimensionar (Opcional)</label>
+                            <label className="block text-sm font-medium text-gray-300">Redimensionar (Opcional)</label>
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-xs text-gray-500 mb-1 block">Largura Máx (px)</label>
@@ -236,7 +249,8 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         value={maxWidth}
                                         onChange={(e) => setMaxWidth(e.target.value ? Number(e.target.value) : '')}
                                         placeholder="Auto"
-                                        className="w-full bg-white dark:bg-app-dark/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent outline-none"
+                                        className="w-full rounded-lg px-3 py-2 text-sm text-white focus:ring-2 outline-none"
+                                        style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                                     />
                                 </div>
                                 <div>
@@ -246,7 +260,8 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                         value={maxHeight}
                                         onChange={(e) => setMaxHeight(e.target.value ? Number(e.target.value) : '')}
                                         placeholder="Auto"
-                                        className="w-full bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-accent outline-none"
+                                        className="w-full rounded-lg px-3 py-2 text-sm text-white focus:ring-2 outline-none"
+                                        style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                                     />
                                 </div>
                             </div>
@@ -255,8 +270,8 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         {/* Quality */}
                         <div>
                             <div className="flex justify-between mb-2">
-                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Qualidade</label>
-                                <span className="text-sm font-bold text-accent-dark dark:text-accent-light">{quality}%</span>
+                                <label className="text-sm font-medium text-gray-300">Qualidade</label>
+                                <span className="text-sm font-bold" style={{ color: '#00C087' }}>{quality}%</span>
                             </div>
                             <input
                                 type="range"
@@ -264,7 +279,8 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                                 max="100"
                                 value={quality}
                                 onChange={(e) => setQuality(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-accent"
+                                className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                                style={{ backgroundColor: '#2E2E2E', accentColor: '#00C087' }}
                             />
                             <p className="text-xs text-gray-500 mt-2">
                                 {quality > 80 ? 'Alta qualidade, arquivo maior' : quality < 60 ? 'Baixa qualidade, arquivo menor' : 'Equilíbrio recomendado'}
@@ -274,7 +290,7 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                 </div>
 
                 {/* Main Area: Dropzone & List */}
-                <div className="flex-1 flex flex-col bg-gray-100/50 dark:bg-app-dark/20 p-6 overflow-hidden">
+                <div className="flex-1 flex flex-col p-6 overflow-hidden" style={{ backgroundColor: '#171717' }}>
 
                     {/* Dropzone */}
                     <div
@@ -282,13 +298,11 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`
-                            border-2 border-dashed rounded-2xl p-8 mb-6 text-center cursor-pointer transition-all
-                            ${isDragging
-                                ? 'border-accent bg-accent/10 scale-[1.01]'
-                                : 'border-gray-300 dark:border-gray-700 hover:border-accent hover:bg-white/5'
-                            }
-                        `}
+                        className="border-2 border-dashed rounded-2xl p-8 mb-6 text-center cursor-pointer transition-all"
+                        style={{
+                            borderColor: isDragging ? '#00C087' : '#2E2E2E',
+                            backgroundColor: isDragging ? 'rgba(0, 192, 135, 0.1)' : 'transparent'
+                        }}
                     >
                         <input
                             type="file"
@@ -299,42 +313,42 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
                             className="hidden"
                         />
                         <div className="flex flex-col items-center gap-3">
-                            <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-white/5 flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1F1F1F' }}>
                                 <i className="fas fa-cloud-upload-alt text-2xl text-gray-400"></i>
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Arraste imagens ou clique para selecionar</h3>
+                                <h3 className="text-lg font-bold text-white">Arraste imagens ou clique para selecionar</h3>
                                 <p className="text-sm text-gray-500">Suporta PNG, JPG, JPEG, BMP</p>
                             </div>
                         </div>
                     </div>
 
                     {/* File List */}
-                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
                         {files.length === 0 && (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-50">
+                            <div className="h-full flex flex-col items-center justify-center text-gray-500 opacity-50">
                                 <i className="fas fa-images text-4xl mb-4"></i>
                                 <p>Nenhuma imagem selecionada</p>
                             </div>
                         )}
 
                         {files.map(item => (
-                            <div key={item.id} className="bg-white dark:bg-app-dark-lighter border border-gray-200 dark:border-white/5 rounded-xl p-4 flex items-center gap-4 group hover:shadow-md transition-all">
+                            <div key={item.id} className="rounded-xl p-4 flex items-center gap-4 group hover:shadow-md transition-all" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
                                 {/* Preview */}
-                                <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-app-dark/40 overflow-hidden flex-shrink-0">
+                                <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0" style={{ backgroundColor: '#171717' }}>
                                     <img src={URL.createObjectURL(item.file)} alt="" className="w-full h-full object-cover" />
                                 </div>
 
                                 {/* Info */}
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="font-medium text-gray-900 dark:text-white truncate" title={item.file.name}>{item.file.name}</h4>
+                                    <h4 className="font-medium text-white truncate" title={item.file.name}>{item.file.name}</h4>
                                     <div className="flex items-center gap-3 text-xs text-gray-500">
                                         <span>{formatSize(item.originalSize)}</span>
                                         {item.convertedSize && (
                                             <>
                                                 <i className="fas fa-arrow-right text-gray-300"></i>
-                                                <span className="text-accent-dark dark:text-accent-light font-bold">{formatSize(item.convertedSize)}</span>
-                                                <span className="bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300 px-1.5 rounded text-[10px]">
+                                                <span style={{ color: '#00C087' }} className="font-bold">{formatSize(item.convertedSize)}</span>
+                                                <span className="px-1.5 rounded text-[10px]" style={{ backgroundColor: 'rgba(0, 192, 135, 0.2)', color: '#00C087' }}>
                                                     -{Math.round((1 - item.convertedSize / item.originalSize) * 100)}%
                                                 </span>
                                             </>
@@ -344,12 +358,13 @@ const WebPConverterWorkspace: React.FC<WebPConverterWorkspaceProps> = ({ isActiv
 
                                 {/* Status */}
                                 <div className="flex items-center gap-3">
-                                    {item.status === 'PENDING' && <span className="text-xs font-medium text-gray-400 bg-gray-100 dark:bg-white/5 px-2 py-1 rounded">Pendente</span>}
-                                    {item.status === 'PROCESSING' && <span className="text-xs font-medium text-blue-500 flex items-center gap-1"><i className="fas fa-circle-notch fa-spin"></i> Processando</span>}
+                                    {item.status === 'PENDING' && <span className="text-xs font-medium text-gray-400 px-2 py-1 rounded" style={{ backgroundColor: '#171717' }}>Pendente</span>}
+                                    {item.status === 'PROCESSING' && <span className="text-xs font-medium text-blue-400 flex items-center gap-1"><i className="fas fa-circle-notch fa-spin"></i> Processando</span>}
                                     {item.status === 'DONE' && (
                                         <button
                                             onClick={() => downloadSingle(item)}
-                                            className="text-xs font-bold text-accent-dark hover:text-accent flex items-center gap-1 bg-lime-50 dark:bg-lime-900/20 px-3 py-1.5 rounded-lg transition-colors"
+                                            className="text-xs font-bold flex items-center gap-1 px-3 py-1.5 rounded-lg transition-colors"
+                                            style={{ backgroundColor: 'rgba(0, 192, 135, 0.2)', color: '#00C087' }}
                                         >
                                             <i className="fas fa-check"></i> Baixar
                                         </button>
