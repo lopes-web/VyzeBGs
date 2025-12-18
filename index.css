@@ -1,9 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+    --color-app-dark: #171717;
+    --color-app-dark-lighter: #1F1F1F;
+    --color-accent: #00C087;
+    --color-accent-light: #00D99A;
+    --color-accent-dark: #00A070;
+}
 
 /* ========================================
-   DARK THEME - New Supabase-Style Colors
+   DARK THEME - Supabase-Style Colors
    #171717 (dark) | #1F1F1F (lighter) | #00C087 (accent)
    ======================================== */
 :root {
@@ -136,7 +143,7 @@ html.dark body {
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
-/* Custom accent color utilities (override lime-500 usage) */
+/* Custom accent color utilities */
 .bg-accent {
     background-color: #00C087 !important;
 }
