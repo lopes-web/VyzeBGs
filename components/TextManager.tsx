@@ -22,7 +22,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
     return (
         <div className="space-y-5">
             {/* Toggle Include Text */}
-            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                 <div className="flex items-center gap-3">
                     <i className="fas fa-text-height text-accent"></i>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Incluir Texto no Criativo</span>
@@ -48,7 +48,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                 value={text.headline}
                                 onChange={(e) => updateField('headline', e.target.value)}
                                 placeholder="Ex: TRANSFORME SUA VIDA"
-                                className="flex-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500"
+                                className="flex-1 rounded-lg px-4 py-3 text-white placeholder-gray-500" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                             />
                             <input
                                 type="color"
@@ -71,7 +71,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                 value={text.subheadline}
                                 onChange={(e) => updateField('subheadline', e.target.value)}
                                 placeholder="Ex: Resultados em ate 30 dias"
-                                className="flex-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500"
+                                className="flex-1 rounded-lg px-4 py-3 text-white placeholder-gray-500" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                             />
                             <input
                                 type="color"
@@ -94,7 +94,7 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                 value={text.cta}
                                 onChange={(e) => updateField('cta', e.target.value)}
                                 placeholder="Ex: SAIBA MAIS"
-                                className="flex-1 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500"
+                                className="flex-1 rounded-lg px-4 py-3 text-white placeholder-gray-500" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}
                             />
                             <input
                                 type="color"
@@ -121,8 +121,8 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                     key={align.id}
                                     onClick={() => updateField('alignment', align.id)}
                                     className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all ${text.alignment === align.id
-                                            ? 'bg-accent text-black'
-                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                        ? 'bg-accent text-black'
+                                        : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                 >
                                     <i className={`fas ${align.icon}`}></i>
@@ -143,8 +143,8 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                                     key={style.id}
                                     onClick={() => updateField('style', style.id)}
                                     className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-lg text-xs font-medium transition-all ${text.style === style.id
-                                            ? 'bg-accent text-black'
-                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                        ? 'bg-accent text-black'
+                                        : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                 >
                                     <i className={`fas ${style.icon} text-lg`}></i>

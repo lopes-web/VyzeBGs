@@ -461,13 +461,13 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                             </button>
                                         </div>
                                     ))}
-                                    <label className="flex items-center justify-center h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <label className="flex items-center justify-center h-20 border-2 border-dashed rounded-lg cursor-pointer hover:border-[#3E3E3E]" style={{ borderColor: '#2E2E2E' }}>
                                         <i className="fas fa-plus text-gray-400"></i>
                                         <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setCreativeImages)} className="hidden" />
                                     </label>
                                 </div>
                             ) : (
-                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors hover:border-[#3E3E3E]" style={{ backgroundColor: '#171717', borderColor: '#2E2E2E' }}>
                                     <i className="fas fa-cloud-upload-alt text-gray-400 text-2xl mb-2"></i>
                                     <span className="text-sm text-gray-500">Foto da pessoa ou produto</span>
                                     <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setCreativeImages)} className="hidden" />
@@ -501,12 +501,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
 
                         {/* Text Manager */}
-                        <div className="bg-white dark:bg-app-dark border border-gray-200 dark:border-white/5 rounded-2xl p-4">
+                        <div className="rounded-2xl p-4" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
                             <TextManager text={creativeText} onChange={setCreativeText} />
                         </div>
 
                         {/* Color Control */}
-                        <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                             <div className="flex items-center gap-2">
                                 <i className="fas fa-palette text-accent"></i>
                                 <span className="text-sm text-gray-700 dark:text-gray-300">Cor Dominante</span>
