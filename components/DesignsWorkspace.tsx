@@ -64,11 +64,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
     // Icon inputs
     const [iconDescription, setIconDescription] = useState('');
-    const [iconStyle, setIconStyle] = useState('Glassmorphism');
+    const [iconStyle, setIconStyle] = useState<string | null>(null);
     const [iconColor, setIconColor] = useState('#6366f1');
     const [iconBgType, setIconBgType] = useState('transparent');
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
     const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
+    const [iconStyleReference, setIconStyleReference] = useState<string | null>(null);
 
     // Product inputs
     const [productType, setProductType] = useState('Caixa');
@@ -188,7 +189,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                         break;
                     case 'ICONS':
-                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage };
+                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReference };
                         break;
                     case 'PRODUCTS':
                         inputs = { productType, brandName, niche, logoImage, productColors };
@@ -315,7 +316,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i className="fas fa-upload text-accent mr-2"></i>Upload de Ícone/Logo (Opcional)
                             </label>
-                            <p className="text-xs text-gray-500 mb-2">Envie um ícone ou logo para transformar no estilo selecionado</p>
+                            <p className="text-xs text-gray-500 mb-2">Envie um ícone ou logo para transformar</p>
                             {iconReferenceImage ? (
                                 <div className="relative group">
                                     <img src={iconReferenceImage} alt="Icon Reference" className="w-full h-28 object-contain bg-gray-100 dark:bg-[#171717] rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
@@ -347,9 +348,15 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 placeholder="Ex: foguete, dinheiro, coracao..."
                                 className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />
                         </div>
+
+                        {/* Estilo Predefinido (Opcional) */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-2 gap-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo (Opcional)</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                <button onClick={() => setIconStyle(null)}
+                                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === null ? 'bg-gray-500 text-white' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                    Nenhum
+                                </button>
                                 {ICON_STYLES.map(style => (
                                     <button key={style} onClick={() => setIconStyle(style)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${iconStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
@@ -358,6 +365,31 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 ))}
                             </div>
                         </div>
+
+                        {/* Upload de Referência de Estilo */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <i className="fas fa-palette text-purple-400 mr-2"></i>Referência de Estilo (Opcional)
+                            </label>
+                            <p className="text-xs text-gray-500 mb-2">Envie uma imagem para inspirar o estilo visual</p>
+                            {iconStyleReference ? (
+                                <div className="relative group">
+                                    <img src={iconStyleReference} alt="Style Reference" className="w-full h-24 object-cover bg-gray-100 dark:bg-[#171717] rounded-lg border border-purple-500/50" />
+                                    <button onClick={() => setIconStyleReference(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-purple-400/50 rounded-lg cursor-pointer bg-purple-900/10 hover:bg-purple-900/20 transition-colors">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <i className="fas fa-image text-purple-400 text-lg mb-1"></i>
+                                        <span className="text-xs text-purple-400">Adicionar referência</span>
+                                    </div>
+                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setIconStyleReference)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cor do Icone</label>
                             <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
