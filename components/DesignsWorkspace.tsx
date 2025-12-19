@@ -68,6 +68,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [iconColor, setIconColor] = useState('#6366f1');
     const [iconBgType, setIconBgType] = useState('transparent');
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
+    const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
 
     // Product inputs
     const [productType, setProductType] = useState('Caixa');
@@ -187,7 +188,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                         break;
                     case 'ICONS':
-                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType };
+                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage };
                         break;
                     case 'PRODUCTS':
                         inputs = { productType, brandName, niche, logoImage, productColors };
@@ -309,8 +310,39 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             case 'ICONS':
                 return (
                     <div className="space-y-5">
+                        {/* Upload de Ícone/Logo de Referência */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descricao do Icone *</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <i className="fas fa-upload text-accent mr-2"></i>Upload de Ícone/Logo (Opcional)
+                            </label>
+                            <p className="text-xs text-gray-500 mb-2">Envie um ícone ou logo para transformar no estilo selecionado</p>
+                            {iconReferenceImage ? (
+                                <div className="relative group">
+                                    <img src={iconReferenceImage} alt="Icon Reference" className="w-full h-28 object-contain bg-gray-100 dark:bg-[#171717] rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
+                                    <button onClick={() => setIconReferenceImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <i className="fas fa-cloud-upload-alt text-gray-400 text-xl mb-1"></i>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">Clique para upload</span>
+                                    </div>
+                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setIconReferenceImage)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Divisor OU */}
+                        <div className="flex items-center gap-3">
+                            <div className="flex-1 h-px bg-gray-600"></div>
+                            <span className="text-xs text-gray-500 uppercase">ou descreva</span>
+                            <div className="flex-1 h-px bg-gray-600"></div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descricao do Icone {!iconReferenceImage && '*'}</label>
                             <input type="text" value={iconDescription} onChange={(e) => setIconDescription(e.target.value)}
                                 placeholder="Ex: foguete, dinheiro, coracao..."
                                 className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500" />

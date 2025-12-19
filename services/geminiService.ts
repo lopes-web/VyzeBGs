@@ -655,13 +655,34 @@ Lighting: Soft studio light with subtle shadows. 8K quality, commercial advertis
 
     case 'ICONS':
       const bgDesc = inputs.bgColor === 'transparent' ? 'a completely transparent background (alpha channel)' : `a solid ${inputs.bgColor} background`;
-      prompt = `Create a single, isolated 3D icon of a ${inputs.iconDescription}.
+
+      if (inputs.iconReferenceImage) {
+        // Transform existing icon/logo into the selected style
+        prompt = `ICON TRANSFORMATION TASK:
+The provided image contains an icon or logo that needs to be transformed.
+CRITICAL: Maintain the EXACT shape, form, and recognizable features of the original icon/logo. Do NOT create a new icon.
+
+TRANSFORMATION STYLE: ${inputs.iconStyle}
+${inputs.iconStyle === 'Glassmorphism' ? '- Apply a frosted glass effect with transparency, blur, and subtle reflections. Add glass-like depth and light refraction.' : ''}
+${inputs.iconStyle === 'Neon' ? '- Transform into a glowing neon sign effect with bright edges, inner glow, and light emission. Add subtle light bloom and reflection.' : ''}
+${inputs.iconStyle === 'Clay 3D' ? '- Transform into a soft, clay/plasticine 3D render with rounded edges, matte finish, and soft shadows. Add depth and volumetric feel.' : ''}
+${inputs.iconStyle === 'Gradiente' ? '- Apply a vibrant gradient fill with smooth color transitions. Add depth with gradient shadows and highlights.' : ''}
+
+COLOR SCHEME: Apply ${inputs.iconColor} as the primary/dominant color.
+Background: ${bgDesc}. The background must be completely clean with no other elements.
+Format: Square composition (1024x1024), icon centered and filling about 70% of the frame.
+Quality: 8K ultra-detailed, perfect for app icons or social media.
+CRITICAL: Generate ONLY ONE transformed icon. NO patterns, NO tiles, NO multiple copies.`;
+      } else {
+        // Original text-based icon generation
+        prompt = `Create a single, isolated 3D icon of a ${inputs.iconDescription}.
 CRITICAL: Generate ONLY ONE icon centered in the frame. DO NOT create patterns, tiles, or multiple copies of the icon. The background must be clean and simple - NO reflections, NO repeated elements, NO other objects.
 Style: ${inputs.iconStyle} - glossy, volumetric, soft shadows, high-end advertising aesthetic.
 Primary color: ${inputs.iconColor}.
 Background: ${bgDesc}. The background must be completely clean with no other elements.
 Format: Square composition (1024x1024), icon centered and filling about 70% of the frame.
 Quality: 8K ultra-detailed, perfect for app icons or social media.`;
+      }
       break;
 
     case 'PRODUCTS':
@@ -703,6 +724,16 @@ Generate a single, polished logo design.`;
     });
   }
 
+  // Add icon reference image for transformation
+  if (inputs.iconReferenceImage) {
+    parts.push({
+      inlineData: {
+        data: inputs.iconReferenceImage.replace(/^data:image\/\w+;base64,/, ""),
+        mimeType: 'image/png',
+      },
+    });
+  }
+
   parts.push({ text: prompt });
 
   try {
@@ -712,7 +743,7 @@ Generate a single, polished logo design.`;
       config: {
         responseModalities: ['image', 'text'],
         imageConfig: {
-          aspectRatio: category === 'LOGOS' ? "1:1" : "16:9",
+          aspectRatio: (category === 'LOGOS' || category === 'ICONS') ? "1:1" : "16:9",
           imageSize: "2K"
         }
       },
