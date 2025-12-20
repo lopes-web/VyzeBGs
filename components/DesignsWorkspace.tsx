@@ -28,7 +28,6 @@ const ICON_STYLES = ['Glassmorphism', 'Neon', 'Clay 3D', 'Gradiente'];
 const PRODUCT_TYPES = ['Caixa', 'Frasco', 'Sacola', 'Embalagem', 'Bolsa'];
 const LOGO_STYLES = ['Minimalista', 'Moderno', 'Vintage', 'Tech', 'Elegante'];
 const BG_OPTIONS = [
-    { label: 'Transparente', value: 'transparent' },
     { label: 'Preto', value: '#000000' },
     { label: 'Branco', value: '#ffffff' },
     { label: 'Cinza Escuro', value: '#1a1a2e' },
@@ -67,7 +66,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [iconStyle, setIconStyle] = useState<string | null>(null);
     const [iconColor, setIconColor] = useState('#6366f1');
     const [useIconColor, setUseIconColor] = useState(false);
-    const [iconBgType, setIconBgType] = useState('transparent');
+    const [iconBgType, setIconBgType] = useState('#000000');
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
     const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
     const [iconStyleReference, setIconStyleReference] = useState<string | null>(null);
@@ -407,7 +406,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cor de Fundo</label>
-                            <div className="grid grid-cols-3 gap-2 mb-2">
+                            <div className="grid grid-cols-2 gap-2 mb-2">
                                 {BG_OPTIONS.map(opt => (
                                     <button key={opt.value} onClick={() => setIconBgType(opt.value)}
                                         className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${iconBgType === opt.value ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
