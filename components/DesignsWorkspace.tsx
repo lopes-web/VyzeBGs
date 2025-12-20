@@ -397,10 +397,10 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 <span className="text-sm text-gray-700 dark:text-gray-300">Cor do Ícone</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                {useIconColor && <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />}
+                                {useIconColor && <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0" />}
                                 <button onClick={() => setUseIconColor(!useIconColor)}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useIconColor ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}>
-                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useIconColor ? 'translate-x-6' : 'translate-x-1'}`} />
+                                    className={`relative inline-flex h-5 w-10 flex-shrink-0 items-center rounded-full transition-colors ${useIconColor ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${useIconColor ? 'translate-x-5' : 'translate-x-1'}`} />
                                 </button>
                             </div>
                         </div>
@@ -513,8 +513,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                         <div className="flex items-center gap-3">
                             <button onClick={() => setIncludeIcon(!includeIcon)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${includeIcon ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}>
-                                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${includeIcon ? 'translate-x-6' : 'translate-x-1'}`} />
+                                className={`relative inline-flex h-5 w-10 flex-shrink-0 items-center rounded-full transition-colors ${includeIcon ? 'bg-accent' : 'bg-gray-600'}`}>
+                                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${includeIcon ? 'translate-x-5' : 'translate-x-1'}`} />
                             </button>
                             <span className="text-sm text-gray-700 dark:text-gray-300">Incluir Icone</span>
                         </div>
@@ -594,10 +594,10 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 <span className="text-sm text-gray-700 dark:text-gray-300">Cor Dominante</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                {useMainColor && <input type="color" value={mainColor} onChange={(e) => setMainColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />}
+                                {useMainColor && <input type="color" value={mainColor} onChange={(e) => setMainColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0" />}
                                 <button onClick={() => setUseMainColor(!useMainColor)}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useMainColor ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}>
-                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useMainColor ? 'translate-x-6' : 'translate-x-1'}`} />
+                                    className={`relative inline-flex h-5 w-10 flex-shrink-0 items-center rounded-full transition-colors ${useMainColor ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${useMainColor ? 'translate-x-5' : 'translate-x-1'}`} />
                                 </button>
                             </div>
                         </div>
