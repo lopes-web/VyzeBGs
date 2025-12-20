@@ -590,11 +590,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 </label>
                                 <button
                                     onClick={() => setProjectContext(prev => ({ ...prev, floatingElements3D: !prev.floatingElements3D }))}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.floatingElements3D ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                    className={`relative h-5 w-9 rounded-full transition-colors focus:outline-none ${projectContext.floatingElements3D ? 'bg-accent' : 'bg-gray-600'}`}
                                 >
-                                    <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.floatingElements3D ? 'translate-x-6' : 'translate-x-1'}`}
-                                    />
+                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${projectContext.floatingElements3D ? 'left-[18px]' : 'left-0.5'}`} />
                                 </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -624,11 +622,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                 </label>
                                 <button
                                     onClick={() => setProjectContext(prev => ({ ...prev, backgroundEffects: !prev.backgroundEffects }))}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${projectContext.backgroundEffects ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                    className={`relative h-5 w-9 rounded-full transition-colors focus:outline-none ${projectContext.backgroundEffects ? 'bg-accent' : 'bg-gray-600'}`}
                                 >
-                                    <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${projectContext.backgroundEffects ? 'translate-x-6' : 'translate-x-1'}`}
-                                    />
+                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${projectContext.backgroundEffects ? 'left-[18px]' : 'left-0.5'}`} />
                                 </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -717,9 +713,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                         ...prev,
                                                         activeColors: { ...prev.activeColors!, ambient: !prev.activeColors?.ambient }
                                                     }))}
-                                                    className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.ambient ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                    className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${projectContext.activeColors?.ambient ? 'bg-accent' : 'bg-gray-600'}`}
                                                 >
-                                                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.ambient ? 'translate-x-6' : 'translate-x-0'}`} />
+                                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${projectContext.activeColors?.ambient ? 'left-[18px]' : 'left-0.5'}`} />
                                                 </button>
                                             </div>
                                         </div>
@@ -784,9 +780,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     ...prev,
                                                     activeColors: { ...prev.activeColors!, rim: !prev.activeColors?.rim }
                                                 }))}
-                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.rim ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${projectContext.activeColors?.rim ? 'bg-accent' : 'bg-gray-600'}`}
                                             >
-                                                <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.rim ? 'translate-x-6' : 'translate-x-0'}`} />
+                                                <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${projectContext.activeColors?.rim ? 'left-[18px]' : 'left-0.5'}`} />
                                             </button>
                                         </div>
                                     </div>
@@ -832,9 +828,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                                     ...prev,
                                                     activeColors: { ...prev.activeColors!, complementary: !prev.activeColors?.complementary }
                                                 }))}
-                                                className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${projectContext.activeColors?.complementary ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-700'}`}
+                                                className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${projectContext.activeColors?.complementary ? 'bg-accent' : 'bg-gray-600'}`}
                                             >
-                                                <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${projectContext.activeColors?.complementary ? 'translate-x-6' : 'translate-x-0'}`} />
+                                                <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${projectContext.activeColors?.complementary ? 'left-[18px]' : 'left-0.5'}`} />
                                             </button>
                                         </div>
                                     </div>

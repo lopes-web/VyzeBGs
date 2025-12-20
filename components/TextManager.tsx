@@ -29,9 +29,9 @@ const TextManager: React.FC<TextManagerProps> = ({ text, onChange }) => {
                 </div>
                 <button
                     onClick={() => updateField('includeText', !text.includeText)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${text.includeText ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}
+                    className={`relative h-5 w-9 rounded-full transition-colors ${text.includeText ? 'bg-accent' : 'bg-gray-600'}`}
                 >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${text.includeText ? 'translate-x-6' : 'translate-x-1'}`} />
+                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${text.includeText ? 'left-[18px]' : 'left-0.5'}`} />
                 </button>
             </div>
 
