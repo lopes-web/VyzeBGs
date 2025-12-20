@@ -399,8 +399,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="flex items-center gap-2">
                                 {useIconColor && <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0" />}
                                 <button onClick={() => setUseIconColor(!useIconColor)}
-                                    className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors ${useIconColor ? 'bg-accent' : 'bg-gray-600'}`}>
-                                    <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow-sm transition-transform ${useIconColor ? 'translate-x-[21px]' : 'translate-x-[3px]'}`} />
+                                    className={`relative h-5 w-9 rounded-full transition-colors ${useIconColor ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${useIconColor ? 'left-[18px]' : 'left-0.5'}`} />
                                 </button>
                             </div>
                         </div>
@@ -513,8 +513,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                         <div className="flex items-center gap-3">
                             <button onClick={() => setIncludeIcon(!includeIcon)}
-                                className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors ${includeIcon ? 'bg-accent' : 'bg-gray-600'}`}>
-                                <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow-sm transition-transform ${includeIcon ? 'translate-x-[21px]' : 'translate-x-[3px]'}`} />
+                                className={`relative h-5 w-9 rounded-full transition-colors ${includeIcon ? 'bg-accent' : 'bg-gray-600'}`}>
+                                <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${includeIcon ? 'left-[18px]' : 'left-0.5'}`} />
                             </button>
                             <span className="text-sm text-gray-700 dark:text-gray-300">Incluir Icone</span>
                         </div>
@@ -596,8 +596,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <div className="flex items-center gap-2">
                                 {useMainColor && <input type="color" value={mainColor} onChange={(e) => setMainColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0" />}
                                 <button onClick={() => setUseMainColor(!useMainColor)}
-                                    className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors ${useMainColor ? 'bg-accent' : 'bg-gray-600'}`}>
-                                    <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow-sm transition-transform ${useMainColor ? 'translate-x-[21px]' : 'translate-x-[3px]'}`} />
+                                    className={`relative h-5 w-9 rounded-full transition-colors ${useMainColor ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${useMainColor ? 'left-[18px]' : 'left-0.5'}`} />
                                 </button>
                             </div>
                         </div>
