@@ -66,6 +66,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [iconDescription, setIconDescription] = useState('');
     const [iconStyle, setIconStyle] = useState<string | null>(null);
     const [iconColor, setIconColor] = useState('#6366f1');
+    const [useIconColor, setUseIconColor] = useState(false);
     const [iconBgType, setIconBgType] = useState('transparent');
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
     const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
@@ -189,7 +190,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                         break;
                     case 'ICONS':
-                        inputs = { iconDescription, iconStyle, iconColor, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReference };
+                        inputs = { iconDescription, iconStyle, iconColor: useIconColor ? iconColor : null, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReference };
                         break;
                     case 'PRODUCTS':
                         inputs = { productType, brandName, niche, logoImage, productColors };
@@ -390,9 +391,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             )}
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cor do Icone</label>
-                            <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
+                        {/* Cor do Ícone (Opcional) */}
+                        <div className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
+                            <div className="flex items-center gap-2">
+                                <i className="fas fa-tint text-accent"></i>
+                                <span className="text-sm text-gray-700 dark:text-gray-300">Cor do Ícone</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {useIconColor && <input type="color" value={iconColor} onChange={(e) => setIconColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer" />}
+                                <button onClick={() => setUseIconColor(!useIconColor)}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${useIconColor ? 'bg-accent' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${useIconColor ? 'translate-x-6' : 'translate-x-1'}`} />
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cor de Fundo</label>

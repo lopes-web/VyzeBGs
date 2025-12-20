@@ -671,6 +671,11 @@ ${inputs.iconStyle === 'Gradiente' ? '- Apply a vibrant gradient fill with smoot
         styleInstructions = `STYLE: High-end 3D icon style - glossy, volumetric, soft shadows, premium advertising aesthetic.`;
       }
 
+      // Build color instructions
+      const colorInstructions = inputs.iconColor
+        ? `COLOR SCHEME: Apply ${inputs.iconColor} as the primary/dominant color.`
+        : `COLOR SCHEME: Use contextually appropriate colors. If a reference image is provided, extract and use its color palette. Otherwise, use vibrant, professional colors suitable for the icon concept.`;
+
       if (inputs.iconReferenceImage) {
         // Transform existing icon/logo
         prompt = `ICON TRANSFORMATION TASK:
@@ -679,7 +684,7 @@ CRITICAL: Maintain the EXACT shape, form, and recognizable features of the origi
 
 ${styleInstructions}
 
-COLOR SCHEME: Apply ${inputs.iconColor} as the primary/dominant color.
+${colorInstructions}
 Background: ${bgDesc}. The background must be completely clean with no other elements.
 Format: Square composition (1024x1024), icon centered and filling about 70% of the frame.
 Quality: 8K ultra-detailed, perfect for app icons or social media.
@@ -691,7 +696,7 @@ CRITICAL: Generate ONLY ONE icon centered in the frame. DO NOT create patterns, 
 
 ${styleInstructions}
 
-Primary color: ${inputs.iconColor}.
+${colorInstructions}
 Background: ${bgDesc}. The background must be completely clean with no other elements.
 Format: Square composition (1024x1024), icon centered and filling about 70% of the frame.
 Quality: 8K ultra-detailed, perfect for app icons or social media.`;
