@@ -172,7 +172,7 @@ export const generateBackground = async (
   position: SubjectPosition,
   attributes: GenerationAttributes,
   targetHeight: number = 1080,
-  palette?: ColorPalette, // Optional palette for Infoproducts
+  palette?: ColorPalette,
   projectContext?: ProjectContext
 ): Promise<{ image: string, finalPrompt: string }> => {
 
@@ -182,44 +182,6 @@ export const generateBackground = async (
   const targetWidth = 1920;
 
   const parts: any[] = [];
-
-  // Master Prompt Generation for InfoProduct and Human Mode
-  let infoproductMasterPrompt = "";
-  if ((mode === 'INFOPRODUCT' || mode === 'HUMAN') && projectContext) {
-    try {
-      // Use defaults if projectContext is missing new fields (backward compatibility)
-      const colors: LightingColors = projectContext.colors || { ambient: '#0f172a', rim: '#a3e635', complementary: '#6366f1' };
-      const activeColors: ActiveColors = projectContext.activeColors || { ambient: false, rim: false, complementary: false };
-      const framing: FramingType = projectContext.framing || 'MEDIUM';
-      const ambientOpacity = projectContext.ambientOpacity || 50;
-      const environment = projectContext.environment || "";
-      const subjectDescription = projectContext.subjectDescription || "";
-      const useFloatingElements = projectContext.floatingElements3D || false;
-      const floatingElementsPrompt = projectContext.floatingElementsDescription || "";
-      const environmentImagesCount = projectContext.environmentImages?.length || 0;
-
-      const defaultNiche = mode === 'INFOPRODUCT' ? "Expert" : "Portrait Subject";
-
-      infoproductMasterPrompt = await generateEnhancedPrompt(
-        projectContext.niche || defaultNiche,
-        environment,
-        environmentImagesCount,
-        subjectDescription,
-        colors,
-        activeColors,
-        ambientOpacity,
-        framing,
-        useFloatingElements,
-        floatingElementsPrompt,
-        userImagesBase64.length,
-        referenceItems.length,
-        attributes
-      );
-      console.log("MASTER PROMPT GENERATED:", infoproductMasterPrompt);
-    } catch (e) {
-      console.error("Failed to generate master prompt", e);
-    }
-  }
 
   // 1. User Images (Subjects, Objects, or Base Canvas)
   userImagesBase64.forEach((img) => {
@@ -241,7 +203,8 @@ export const generateBackground = async (
           mimeType: 'image/png',
         },
       });
-      refPromptAccumulator += `[Ref ${index + 1}: ${item.description}] `;
+      const desc = item.description ? `(User Requirement: "${item.description}")` : "(User Requirement: Extract general style)";
+      refPromptAccumulator += `Reference Image ${index + 1} Context: ${desc}.\n`;
     });
   }
 
@@ -256,12 +219,13 @@ export const generateBackground = async (
       });
     });
   }
-  // Construct the text prompt
-  const aspectRatio = getClosestAspectRatio(targetWidth, targetHeight);
-  let finalPrompt = `Task: Generate a high-resolution image.\n`;
-  finalPrompt += `Application Context: ${section === 'LANDING_PAGES' ? 'Web Landing Page Background' : 'Graphic Design / Marketing Asset'}.\n`;
-  finalPrompt += `Target Resolution: ${targetWidth}x${targetHeight} pixels (Aspect Ratio: ${aspectRatio}).\n\n`;
 
+  // Construct the text prompt - SIMPLIFIED DIRECT APPROACH
+  const aspectRatio = getClosestAspectRatio(targetWidth, targetHeight);
+  let finalPrompt = `Task: Generate a high-resolution horizontal image.\n`;
+  finalPrompt += `Target Resolution: ${targetWidth}x${targetHeight} pixels.\n\n`;
+
+  // Subject Handling
   if (userImagesBase64.length > 0) {
     if (mode === 'HUMAN') {
       finalPrompt += `Subject: Use the person(s) in the first ${userImagesBase64.length} images provided as the main subject. Maintain their facial features, physiognomy, and identity with 100% fidelity.\n`;
@@ -276,38 +240,59 @@ export const generateBackground = async (
 
   // Logic for References
   if (referenceItems.length > 0) {
-    finalPrompt += `STYLE SYNTHESIS TASK: You have been provided with ${referenceItems.length} style reference images. \n`;
+    finalPrompt += `STYLE SYNTHESIS TASK: You have been provided with ${referenceItems.length} style reference images.\n`;
     finalPrompt += `${refPromptAccumulator}\n`;
     finalPrompt += `INSTRUCTION: Synthesize the best elements of these references according to the user requirements above (the 80/20 rule). Merge them into a cohesive, single composition. IMPORTANT: DO NOT reproduce any text, letters, or specific logos found in the reference images.\n\n`;
   } else if (!userPrompt.trim()) {
-    finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a ${section === 'LANDING_PAGES' ? 'Landing Page' : 'Design Composition'}.\n`;
+    finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a landing page.\n`;
   }
 
-  if ((mode === 'INFOPRODUCT' || mode === 'HUMAN') && infoproductMasterPrompt) {
-    finalPrompt += `SCENE DESCRIPTION: ${infoproductMasterPrompt}\n`;
-  } else if (userPrompt.trim()) {
+  // User prompt
+  if (userPrompt.trim()) {
     finalPrompt += `User Scenario/Context Instructions: ${userPrompt}\n`;
   }
 
-  // Color Palette Injection for InfoProducts (Fallback if no master prompt)
-  if (mode === 'INFOPRODUCT' && palette && !infoproductMasterPrompt) {
-    finalPrompt += `COLOR PALETTE & LIGHTING RULES:\n`;
-    finalPrompt += `1. Dominant Background Color: ${palette.primary || 'Dark High-End Neutral'}.\n`;
-    finalPrompt += `2. Secondary Lighting Color (Rim Light/Depth): ${palette.secondary || 'Warm Gold/Cold Blue'}.\n`;
-    finalPrompt += `3. Accent/Detail Color (Elements/Overlays): ${palette.accent || 'Complementary to Primary'}.\n`;
-    finalPrompt += `Ensure the entire image is color graded to match this palette harmoniously.\n\n`;
-  }
-
+  // Asset Integration
   if (assetImagesBase64.length > 0) {
-    finalPrompt += `Asset Integration: Incorporate the logos or secondary elements from the asset images provided naturally into the composition. For InfoProducts, float them subtly in the background.\n`;
+    finalPrompt += `Asset Integration: Incorporate the logos or secondary elements from the asset images provided naturally into the composition.\n`;
   }
 
-  // Positioning
+  // Positioning - ALWAYS apply for non-ENHANCE modes
   if (mode !== 'ENHANCE') {
     finalPrompt += `Positioning Guidelines: ${POSITION_PROMPTS[position]}\n\n`;
   } else {
     finalPrompt += `Positioning: Respect the original composition of the base image primarily. If the user prompt requests a shift, only then apply changes.\n\n`;
   }
+
+  // LIGHTING SETUP - New logic: toggle OFF = let AI decide (but still have great lighting)
+  finalPrompt += `LIGHTING SETUP:\n`;
+
+  const colors = projectContext?.colors || { ambient: '#0f172a', rim: '#a3e635', complementary: '#6366f1' };
+  const activeColors = projectContext?.activeColors || { ambient: false, rim: false, complementary: false };
+
+  // Ambient/Background color
+  if (activeColors.ambient) {
+    const opacity = projectContext?.ambientOpacity || 50;
+    finalPrompt += `- Background Ambient: Tint the background with ${colors.ambient} at ${opacity}% intensity.\n`;
+  } else {
+    finalPrompt += `- Background Ambient: Use professional, cinematic background colors that complement the subject and create depth.\n`;
+  }
+
+  // Rim Light
+  if (activeColors.rim) {
+    finalPrompt += `- Rim Light: Apply a ${colors.rim} rim light on the subject's hair and shoulders to separate them from the background.\n`;
+  } else {
+    finalPrompt += `- Rim Light: Apply professional rim lighting to elegantly separate the subject from the background. Choose a color that creates dramatic contrast.\n`;
+  }
+
+  // Complementary Light
+  if (activeColors.complementary) {
+    finalPrompt += `- Fill Light: Add a subtle ${colors.complementary} fill light for color complexity and depth.\n`;
+  } else {
+    finalPrompt += `- Fill Light: Add subtle secondary lighting to create color complexity and professional depth.\n`;
+  }
+
+  finalPrompt += `- Volumetric Lighting: Add volumetric rays, god rays, or atmospheric haze where appropriate for cinematic depth.\n\n`;
 
   // Attributes (Gradient / Blur)
   if (attributes.useGradient) {
@@ -320,27 +305,29 @@ export const generateBackground = async (
     finalPrompt += `CLARITY ATTRIBUTE: Keep the background relatively detailed and sharp across the frame, using only natural optical depth of field.\n`;
   }
 
-  // Project Context - 3D Elements
+  // 3D Elements - toggle ON = add, toggle OFF = AI decides
   if (projectContext?.floatingElements3D) {
     const elementDesc = projectContext.floatingElementsDescription || "abstract 3D floating elements (spheres, cubes, or shapes related to the context)";
     finalPrompt += `3D DEPTH ENHANCEMENT: Add ${elementDesc} in the background. They should have depth of field (bokeh) to create a sense of immersion and high-end 3D design.\n`;
   }
+  // If OFF, don't mention it - let AI decide naturally
 
-  // Project Context - Background Effects (Neon, Particles, etc.)
+  // Background Effects - toggle ON = add, toggle OFF = AI decides
   if (projectContext?.backgroundEffects) {
-    const effectsDesc = projectContext.backgroundEffectsDescription || "dynamic visual background effects such as: energy trails and lightning bolts, glowing light particles and sparkles, neon geometric lines and light beams, abstract brush strokes, or mystical fire and glow effects";
-    finalPrompt += `CREATIVE BACKGROUND EFFECTS: Add ${effectsDesc}. These effects should complement the subject and harmonize with the dominant lighting colors. Use high-end advertising aesthetic. Do NOT add random 3D geometric shapes (spheres, cubes) unless explicitly requested.\n`;
+    const effectsDesc = projectContext.backgroundEffectsDescription || "dynamic visual background effects such as: energy trails and lightning bolts, glowing light particles and sparkles, neon geometric lines and light beams";
+    finalPrompt += `CREATIVE BACKGROUND EFFECTS: Add ${effectsDesc}. These effects should complement the subject and harmonize with the dominant lighting colors.\n`;
   }
+  // If OFF, don't mention it - let AI decide naturally
 
-  // Specific Mode Guidelines
+  // Specific Mode Quality Guidelines
   if (mode === 'HUMAN') {
-    finalPrompt += `Quality Guidelines: ${DEFAULT_TREATMENT_PROMPT}\n\n`;
+    finalPrompt += `\nQuality Guidelines: ${DEFAULT_TREATMENT_PROMPT}\n`;
   } else if (mode === 'OBJECT') {
-    finalPrompt += `Quality Guidelines: ${OBJECT_TREATMENT_PROMPT}\n\n`;
+    finalPrompt += `\nQuality Guidelines: ${OBJECT_TREATMENT_PROMPT}\n`;
   } else if (mode === 'ENHANCE') {
-    finalPrompt += `Quality Guidelines: ${ENHANCE_TREATMENT_PROMPT}\n\n`;
+    finalPrompt += `\nQuality Guidelines: ${ENHANCE_TREATMENT_PROMPT}\n`;
   } else if (mode === 'INFOPRODUCT') {
-    finalPrompt += `Quality Guidelines: ${INFOPRODUCT_TREATMENT_PROMPT}\n\n`;
+    finalPrompt += `\nQuality Guidelines: ${INFOPRODUCT_TREATMENT_PROMPT}\n`;
   }
 
   parts.push({ text: finalPrompt });

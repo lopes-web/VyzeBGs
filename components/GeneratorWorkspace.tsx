@@ -664,6 +664,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             </div>
                         </div>
 
+                        {/* Posição do Sujeito */}
+                        <PositionSelector value={posicaon} onChange={secaosition} />
+
                         {/* Iluminação & Atmosfera (Redesigned) */}
                         <div className="mb-8 space-y-4">
                             <div className="flex items-center gap-2 mb-4">
