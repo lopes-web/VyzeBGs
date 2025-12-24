@@ -97,6 +97,45 @@ const ensureBase64 = async (imageData: string): Promise<string> => {
   return imageData;
 };
 
+// Helper to parse image tags (@img1, @ref1, @asset1) and replace with descriptive instructions
+const parseImageTags = (
+  prompt: string,
+  subjectImageCount: number,
+  referenceCount: number,
+  assetCount: number
+): string => {
+  let result = prompt;
+
+  // Replace @img1, @img2, etc. with descriptive text
+  for (let i = 1; i <= subjectImageCount; i++) {
+    const tag = `@img${i}`;
+    const replacement = subjectImageCount === 1
+      ? 'the subject image provided'
+      : `subject image #${i}`;
+    result = result.replace(new RegExp(tag, 'gi'), replacement);
+  }
+
+  // Replace @ref1, @ref2, etc.
+  for (let i = 1; i <= referenceCount; i++) {
+    const tag = `@ref${i}`;
+    const replacement = referenceCount === 1
+      ? 'the style reference image'
+      : `style reference image #${i}`;
+    result = result.replace(new RegExp(tag, 'gi'), replacement);
+  }
+
+  // Replace @asset1, @asset2, etc.
+  for (let i = 1; i <= assetCount; i++) {
+    const tag = `@asset${i}`;
+    const replacement = assetCount === 1
+      ? 'the asset/logo image'
+      : `asset image #${i}`;
+    result = result.replace(new RegExp(tag, 'gi'), replacement);
+  }
+
+  return result;
+};
+
 // 1. STEP ONE: TEXT PROMPT ENGINEERING
 export const generateEnhancedPrompt = async (
   niche: string,
@@ -247,9 +286,15 @@ export const generateBackground = async (
     finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a landing page.\n`;
   }
 
-  // User prompt
+  // User prompt - parse image tags (@img1, @ref1, @asset1)
   if (userPrompt.trim()) {
-    finalPrompt += `User Scenario/Context Instructions: ${userPrompt}\n`;
+    const parsedPrompt = parseImageTags(
+      userPrompt,
+      userImagesBase64.length,
+      referenceItems.length,
+      assetImagesBase64.length
+    );
+    finalPrompt += `User Scenario/Context Instructions: ${parsedPrompt}\n`;
   }
 
   // Asset Integration

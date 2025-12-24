@@ -119,8 +119,8 @@ const ReferenceManager: React.FC<ReferenceManagerProps> = ({ items, onChange, la
 
               <div className="w-20 h-20 flex-shrink-0 bg-gray-200 dark:bg-gray-900 rounded overflow-hidden relative border border-gray-300 dark:border-gray-700">
                 <img src={`data:image/png;base64,${item.image}`} alt="Ref" className="w-full h-full object-cover" />
-                <div className="absolute top-1 left-1 bg-white/80 dark:bg-black/60 text-gray-900 dark:text-white text-[10px] px-1.5 rounded">
-                  {idx + 1}
+                <div className="absolute top-1 left-1 bg-accent text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">
+                  @ref{idx + 1}
                 </div>
               </div>
               <div className="flex-grow">
