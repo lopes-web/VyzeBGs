@@ -560,6 +560,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             onChange={setAssetImages}
                             multiple={true}
                             description="Objetos extras para compor o cenário"
+                            tagPrefix="asset"
                         />
                     </div>
 

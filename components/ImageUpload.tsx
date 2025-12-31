@@ -8,9 +8,10 @@ interface ImageUploadProps {
   description?: string;
   multiple?: boolean;
   compact?: boolean;
+  tagPrefix?: string; // @img, @asset, etc.
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, description, multiple = false, compact = false }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, description, multiple = false, compact = false, tagPrefix = 'img' }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -91,7 +92,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ label, value, onChange, descr
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               {/* Tag Badge */}
               <div className="absolute top-2 left-2 bg-accent text-black text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
-                @img{idx + 1}
+                @{tagPrefix}{idx + 1}
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); removeImage(idx); }}
