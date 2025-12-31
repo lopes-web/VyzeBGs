@@ -5,6 +5,7 @@ import ImageUpload from './ImageUpload';
 import ReferenceManager from './ReferenceManager';
 import MagicEraserCanvas from './MagicEraserCanvas';
 import PositionSelector from './PositionSelector';
+import TagAutocompleteTextarea from './TagAutocompleteTextarea';
 import {
     generateBackground,
     refineImage,
@@ -893,18 +894,26 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 {currentMode === 'ENHANCE' ? 'Instruções de Melhoria' : 'Prompt do Cenário'}
+                                <span className="text-xs text-gray-400 font-normal ml-2">
+                                    (use @img, @ref, @asset para referenciar imagens)
+                                </span>
                             </label>
-                            <textarea
+                            <TagAutocompleteTextarea
                                 value={userPrompt}
-                                onChange={(e) => setUserPrompt(e.target.value)}
+                                onChange={setUserPrompt}
                                 placeholder={
                                     currentMode === 'ENHANCE'
-                                        ? "Descreva o que melhorar..."
+                                        ? "Descreva o que melhorar... (ex: melhore a iluminação de @img1)"
                                         : currentMode === 'INFOPRODUCT'
-                                            ? "Descreva o nicho (ex: Mentor financeiro, Curso de inglês) e a atmosfera desejada..."
-                                            : "Descreva o cenário..."
+                                            ? "Descreva o nicho e atmosfera... (ex: use @img1 como expert, aplique estilo de @ref1)"
+                                            : "Descreva o cenário... (ex: coloque @img1 em um ambiente de escritório)"
                                 }
                                 className="w-full bg-white dark:bg-app-dark-lighter border border-gray-300 dark:border-gray-700 rounded-xl p-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all min-h-[100px]"
+                                availableTags={[
+                                    { tag: 'img', label: 'Imagem do Sujeito', count: userImages.length },
+                                    { tag: 'ref', label: 'Referência de Estilo', count: referenceItems.length },
+                                    { tag: 'asset', label: 'Elemento Secundário', count: assetImages.length }
+                                ]}
                             />
                         </div>
 
