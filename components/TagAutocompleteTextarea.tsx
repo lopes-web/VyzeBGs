@@ -20,6 +20,22 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
     const [filteredTags, setFilteredTags] = useState<{ tag: string; label: string }[]>([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const highlightRef = useRef<HTMLDivElement>(null);
+
+    // Sync scroll between textarea and highlight layer
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        const highlight = highlightRef.current;
+        if (!textarea || !highlight) return;
+
+        const syncScroll = () => {
+            highlight.scrollTop = textarea.scrollTop;
+            highlight.scrollLeft = textarea.scrollLeft;
+        };
+
+        textarea.addEventListener('scroll', syncScroll);
+        return () => textarea.removeEventListener('scroll', syncScroll);
+    }, []);
 
     // Generate all available tag options
     const getAllTags = () => {
@@ -127,61 +143,38 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    // Render highlighted text with colored tags
-    const renderHighlightedText = () => {
-        if (!value) return null;
+    // Render highlighted text - replaces tags with colored spans
+    const getHighlightedHtml = () => {
+        if (!value) return '';
 
-        const tagRegex = /@(img|ref|asset)\d+/gi;
-        let lastIndex = 0;
-        const result: React.ReactNode[] = [];
-        let match;
+        // Escape HTML and replace tags with colored spans
+        const escaped = value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
 
-        const regex = new RegExp(tagRegex);
+        // Replace tags with colored versions
+        const highlighted = escaped.replace(
+            /@(img|ref|asset)\d+/gi,
+            '<span class="text-accent font-semibold">$&</span>'
+        );
 
-        while ((match = regex.exec(value)) !== null) {
-            // Text before tag
-            if (match.index > lastIndex) {
-                result.push(
-                    <span key={`text-${lastIndex}`} className="text-white">
-                        {value.substring(lastIndex, match.index)}
-                    </span>
-                );
-            }
-
-            // Highlighted tag
-            result.push(
-                <span key={`tag-${match.index}`} className="text-accent font-semibold">
-                    {match[0]}
-                </span>
-            );
-
-            lastIndex = regex.lastIndex;
-        }
-
-        // Remaining text
-        if (lastIndex < value.length) {
-            result.push(
-                <span key={`text-${lastIndex}`} className="text-white">
-                    {value.substring(lastIndex)}
-                </span>
-            );
-        }
-
-        return result;
+        // Replace newlines with <br> to match textarea behavior
+        return highlighted.replace(/\n/g, '<br>') + '<br>';
     };
 
     return (
         <div className="relative">
-            {/* Visual highlight layer - shows colored tags */}
+            {/* Highlight layer - shows colored text */}
             <div
-                className="absolute inset-0 p-3 text-sm pointer-events-none whitespace-pre-wrap break-words overflow-hidden"
+                ref={highlightRef}
+                className="absolute inset-0 p-3 text-sm pointer-events-none whitespace-pre-wrap break-words overflow-hidden text-white"
                 style={{ lineHeight: '1.5', fontFamily: 'inherit' }}
                 aria-hidden="true"
-            >
-                {renderHighlightedText()}
-            </div>
+                dangerouslySetInnerHTML={{ __html: getHighlightedHtml() }}
+            />
 
-            {/* Actual textarea - invisible text */}
+            {/* Actual textarea - transparent text */}
             <textarea
                 ref={textareaRef}
                 value={value}
@@ -189,7 +182,13 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
                 className={`${className} relative z-10`}
-                style={{ color: 'transparent', caretColor: '#03BC89', background: 'transparent' }}
+                style={{
+                    color: 'transparent',
+                    caretColor: '#03BC89',
+                    background: 'transparent',
+                    WebkitTextFillColor: 'transparent'
+                }}
+                spellCheck={false}
                 onClick={(e) => e.stopPropagation()}
             />
 
