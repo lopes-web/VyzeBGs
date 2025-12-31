@@ -18,7 +18,6 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
     const [filteredTags, setFilteredTags] = useState<{ tag: string; label: string }[]>([]);
-    const [currentTagSearch, setCurrentTagSearch] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -50,7 +49,6 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
 
         if (atMatch) {
             const search = atMatch[1].toLowerCase();
-            setCurrentTagSearch(search);
 
             const allTags = getAllTags();
             const filtered = allTags.filter(t =>
@@ -62,7 +60,6 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
             setSelectedIndex(0);
 
             if (filtered.length > 0) {
-                // Calculate dropdown position
                 const textarea = textareaRef.current;
                 if (textarea) {
                     const lineHeight = 20;
@@ -91,14 +88,12 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
         const textBeforeCursor = value.substring(0, cursorPosition);
         const textAfterCursor = value.substring(cursorPosition);
 
-        // Find the @ position
         const atMatch = textBeforeCursor.match(/@(\w*)$/);
         if (atMatch) {
             const startIndex = textBeforeCursor.lastIndexOf('@');
             const newValue = textBeforeCursor.substring(0, startIndex) + tag + ' ' + textAfterCursor;
             onChange(newValue);
 
-            // Set cursor after the inserted tag
             setTimeout(() => {
                 const newPosition = startIndex + tag.length + 1;
                 textarea.setSelectionRange(newPosition, newPosition);
@@ -126,55 +121,75 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
         }
     };
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = () => setShowDropdown(false);
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    // Render tag highlights in a visual layer
+    // Render highlighted text with colored tags
     const renderHighlightedText = () => {
-        const tagRegex = /@(img|ref|asset)\d+/gi;
-        const parts = value.split(tagRegex);
-        const matches = value.match(tagRegex) || [];
+        if (!value) return null;
 
-        let result: React.ReactNode[] = [];
-        parts.forEach((part, i) => {
-            result.push(<span key={`text-${i}`}>{part}</span>);
-            if (matches[i]) {
+        const tagRegex = /@(img|ref|asset)\d+/gi;
+        let lastIndex = 0;
+        const result: React.ReactNode[] = [];
+        let match;
+
+        const regex = new RegExp(tagRegex);
+
+        while ((match = regex.exec(value)) !== null) {
+            // Text before tag
+            if (match.index > lastIndex) {
                 result.push(
-                    <span
-                        key={`tag-${i}`}
-                        className="bg-accent/30 text-accent-dark dark:text-accent-light rounded px-0.5 font-bold"
-                    >
-                        {matches[i]}
+                    <span key={`text-${lastIndex}`} className="text-white">
+                        {value.substring(lastIndex, match.index)}
                     </span>
                 );
             }
-        });
+
+            // Highlighted tag
+            result.push(
+                <span key={`tag-${match.index}`} className="text-accent font-semibold">
+                    {match[0]}
+                </span>
+            );
+
+            lastIndex = regex.lastIndex;
+        }
+
+        // Remaining text
+        if (lastIndex < value.length) {
+            result.push(
+                <span key={`text-${lastIndex}`} className="text-white">
+                    {value.substring(lastIndex)}
+                </span>
+            );
+        }
 
         return result;
     };
 
     return (
         <div className="relative">
-            {/* Hidden visual highlight layer */}
+            {/* Visual highlight layer - shows colored tags */}
             <div
-                className="absolute inset-0 p-3 text-sm pointer-events-none whitespace-pre-wrap break-words overflow-hidden text-transparent"
-                style={{ lineHeight: '1.5' }}
+                className="absolute inset-0 p-3 text-sm pointer-events-none whitespace-pre-wrap break-words overflow-hidden"
+                style={{ lineHeight: '1.5', fontFamily: 'inherit' }}
+                aria-hidden="true"
             >
                 {renderHighlightedText()}
             </div>
 
-            {/* Actual textarea */}
+            {/* Actual textarea - invisible text */}
             <textarea
                 ref={textareaRef}
                 value={value}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className={`${className} bg-transparent relative z-10`}
+                className={`${className} relative z-10`}
+                style={{ color: 'transparent', caretColor: '#03BC89', background: 'transparent' }}
                 onClick={(e) => e.stopPropagation()}
             />
 
