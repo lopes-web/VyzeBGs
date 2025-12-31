@@ -20,22 +20,6 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
     const [filteredTags, setFilteredTags] = useState<{ tag: string; label: string }[]>([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const highlightRef = useRef<HTMLDivElement>(null);
-
-    // Sync scroll between textarea and highlight layer
-    useEffect(() => {
-        const textarea = textareaRef.current;
-        const highlight = highlightRef.current;
-        if (!textarea || !highlight) return;
-
-        const syncScroll = () => {
-            highlight.scrollTop = textarea.scrollTop;
-            highlight.scrollLeft = textarea.scrollLeft;
-        };
-
-        textarea.addEventListener('scroll', syncScroll);
-        return () => textarea.removeEventListener('scroll', syncScroll);
-    }, []);
 
     // Generate all available tag options
     const getAllTags = () => {
@@ -143,54 +127,36 @@ const TagAutocompleteTextarea: React.FC<TagAutocompleteTextareaProps> = ({
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    // Render highlighted text - replaces tags with colored spans
-    const getHighlightedHtml = () => {
-        if (!value) return '';
-
-        // Escape HTML and replace tags with colored spans
-        const escaped = value
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-
-        // Replace tags with colored versions
-        const highlighted = escaped.replace(
-            /@(img|ref|asset)\d+/gi,
-            '<span class="text-accent font-semibold">$&</span>'
-        );
-
-        // Replace newlines with <br> to match textarea behavior
-        return highlighted.replace(/\n/g, '<br>') + '<br>';
-    };
+    // Extract tags from value for preview
+    const extractedTags = value.match(/@(img|ref|asset)\d+/gi) || [];
 
     return (
         <div className="relative">
-            {/* Highlight layer - shows colored text */}
-            <div
-                ref={highlightRef}
-                className="absolute inset-0 p-3 text-sm pointer-events-none whitespace-pre-wrap break-words overflow-hidden text-white"
-                style={{ lineHeight: '1.5', fontFamily: 'inherit' }}
-                aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: getHighlightedHtml() }}
-            />
-
-            {/* Actual textarea - transparent text */}
+            {/* Normal textarea with visible text */}
             <textarea
                 ref={textareaRef}
                 value={value}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className={`${className} relative z-10`}
-                style={{
-                    color: 'transparent',
-                    caretColor: '#03BC89',
-                    background: 'transparent',
-                    WebkitTextFillColor: 'transparent'
-                }}
+                className={className}
                 spellCheck={false}
                 onClick={(e) => e.stopPropagation()}
             />
+
+            {/* Tags preview below textarea */}
+            {extractedTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                    {extractedTags.map((tag, idx) => (
+                        <span
+                            key={`${tag}-${idx}`}
+                            className="bg-accent/20 text-accent text-xs font-semibold px-2 py-0.5 rounded-full border border-accent/30"
+                        >
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+            )}
 
             {/* Autocomplete Dropdown */}
             {showDropdown && filteredTags.length > 0 && (
