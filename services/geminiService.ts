@@ -667,7 +667,7 @@ export const inpaintImage = async (
 
 // Design Asset Generation
 export const generateDesignAsset = async (
-  category: 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS',
+  category: 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS' | 'PROFILE',
   inputs: any
 ): Promise<{ image: string, finalPrompt: string }> => {
   const apiKey = getApiKey();
@@ -751,6 +751,33 @@ Style: Clean, professional, memorable, vector-style appearance.
 Background: Pure white. The logo should be centered and clearly visible.
 Generate a single, polished logo design.`;
       break;
+
+    case 'PROFILE':
+      const bgInstruction = inputs.bgType === 'gradient'
+        ? `a professional gradient background based on ${inputs.bgColor}`
+        : `a solid ${inputs.bgColor} background`;
+      const postureInstruction = inputs.fixPosture ? 'Subtly correct the posture to be more professional and confident.' : '';
+
+      prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
+Format: Square 1:1 (1024x1024 pixels).
+CRITICAL: Use the provided photo as reference. Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
+
+Style: ${inputs.style}
+${inputs.style === 'Profissional' ? '- Clean, corporate look. Neutral background, soft professional lighting.' : ''}
+${inputs.style === 'LinkedIn' ? '- Formal corporate headshot. Blue/gray tones, trustworthy appearance.' : ''}
+${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects.' : ''}
+${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background.' : ''}
+${inputs.style === 'Neon' ? '- Neon rim lighting, dark background, cyberpunk aesthetic.' : ''}
+${inputs.style === 'IA Futurista' ? '- Futuristic tech aesthetic. Holographic elements, particles, digital effects.' : ''}
+
+Background: ${bgInstruction}
+Framing: ${inputs.framing} shot - ${inputs.framing === 'Close-up' ? 'face fills most of the frame' : inputs.framing === 'Meio-busto' ? 'from chest up' : 'head and shoulders visible'}
+Lighting: ${inputs.lighting} lighting
+${postureInstruction}
+${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
+
+Quality: Sharp, high-resolution, professional headshot quality. Suitable for LinkedIn, social media profiles, or professional websites.`;
+      break;
   }
 
   const parts: any[] = [];
@@ -794,6 +821,16 @@ Generate a single, polished logo design.`;
     });
   }
 
+  // Add profile image
+  if (inputs.profileImage) {
+    parts.push({
+      inlineData: {
+        data: inputs.profileImage.replace(/^data:image\/\w+;base64,/, ""),
+        mimeType: 'image/png',
+      },
+    });
+  }
+
   parts.push({ text: prompt });
 
   try {
@@ -803,7 +840,7 @@ Generate a single, polished logo design.`;
       config: {
         responseModalities: ['image', 'text'],
         imageConfig: {
-          aspectRatio: (category === 'LOGOS' || category === 'ICONS') ? "1:1" : "16:9",
+          aspectRatio: (category === 'LOGOS' || category === 'ICONS' || category === 'PROFILE') ? "1:1" : "16:9",
           imageSize: "2K"
         }
       },

@@ -20,6 +20,7 @@ const CATEGORIES: { id: DesignCategory; label: string; icon: string; description
     { id: 'PRODUCTS', label: 'Produtos', icon: 'fa-box', description: 'Embalagens' },
     { id: 'LOGOS', label: 'Logos', icon: 'fa-palette', description: 'Logos' },
     { id: 'CRIATIVOS', label: 'Criativos', icon: 'fa-paint-brush', description: 'Anuncios' },
+    { id: 'PROFILE', label: 'Foto de Perfil', icon: 'fa-user-circle', description: 'Perfil 1:1' },
 ];
 
 const DEVICE_OPTIONS = ['iPhone', 'MacBook', 'iPad', 'Android', 'Monitor'];
@@ -33,6 +34,11 @@ const BG_OPTIONS = [
     { label: 'Cinza Escuro', value: '#1a1a2e' },
     { label: 'Custom', value: 'custom' },
 ];
+
+// Profile Options
+const PROFILE_STYLES = ['Profissional', 'LinkedIn', 'Criativo', 'Minimalista', 'Neon', 'IA Futurista'];
+const PROFILE_FRAMINGS = ['Close-up', 'Meio-busto', 'Ombros'];
+const PROFILE_LIGHTINGS = ['Natural', 'Estúdio', 'Dramática'];
 
 const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistory, projectId, initialCategory }) => {
     const { user } = useAuth();
@@ -107,6 +113,16 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [useMainColor, setUseMainColor] = useState(false);
     const [mainColor, setMainColor] = useState('#000000');
     const [useGradient, setUseGradient] = useState(true);
+
+    // PROFILE inputs
+    const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [profileStyle, setProfileStyle] = useState('Profissional');
+    const [profileBgType, setProfileBgType] = useState<'solid' | 'gradient'>('solid');
+    const [profileBgColor, setProfileBgColor] = useState('#1a1a2e');
+    const [profileFraming, setProfileFraming] = useState('Close-up');
+    const [profileLighting, setProfileLighting] = useState('Estúdio');
+    const [profileFixPosture, setProfileFixPosture] = useState(false);
+    const [profilePrompt, setProfilePrompt] = useState('');
 
     // Refinement
     const [refinePrompt, setRefinePrompt] = useState('');
@@ -196,6 +212,23 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         break;
                     case 'LOGOS':
                         inputs = { logoName, logoNiche, logoStyle, logoColors, includeIcon };
+                        break;
+                    case 'PROFILE':
+                        if (!profileImage) {
+                            setError('Envie sua foto para gerar o perfil.');
+                            setIsGenerating(false);
+                            return;
+                        }
+                        inputs = {
+                            profileImage,
+                            style: profileStyle,
+                            bgType: profileBgType,
+                            bgColor: profileBgColor,
+                            framing: profileFraming,
+                            lighting: profileLighting,
+                            fixPosture: profileFixPosture,
+                            additionalPrompt: profilePrompt
+                        };
                         break;
                 }
                 result = await generateDesignAsset(selectedCategory, inputs);
@@ -611,6 +644,107 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
                     </div>
                 );
+
+            case 'PROFILE':
+                return (
+                    <div className="space-y-5">
+                        {/* Upload de Foto */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <i className="fas fa-camera text-accent mr-2"></i>Sua Foto *
+                            </label>
+                            {profileImage ? (
+                                <div className="relative group">
+                                    <img src={profileImage} alt="Profile" className="w-full h-48 object-cover rounded-xl border border-gray-200 dark:border-[#2E2E2E]" />
+                                    <button onClick={() => setProfileImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <i className="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                    <span className="text-sm text-gray-500">Clique para upload</span>
+                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setProfileImage)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Estilo */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {PROFILE_STYLES.map(style => (
+                                    <button key={style} onClick={() => setProfileStyle(style)}
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${profileStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        {style}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Fundo */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fundo</label>
+                            <div className="flex gap-3 mb-3">
+                                <button onClick={() => setProfileBgType('solid')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileBgType === 'solid' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                    Sólido
+                                </button>
+                                <button onClick={() => setProfileBgType('gradient')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileBgType === 'gradient' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                    Gradiente
+                                </button>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <input type="color" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
+                                <input type="text" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="flex-1 bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white" />
+                            </div>
+                        </div>
+
+                        {/* Enquadramento */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Enquadramento</label>
+                            <div className="flex gap-2">
+                                {PROFILE_FRAMINGS.map(f => (
+                                    <button key={f} onClick={() => setProfileFraming(f)}
+                                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileFraming === f ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                        {f}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Iluminação */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Iluminação</label>
+                            <div className="flex gap-2">
+                                {PROFILE_LIGHTINGS.map(l => (
+                                    <button key={l} onClick={() => setProfileLighting(l)}
+                                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileLighting === l ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                        {l}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Corrigir Postura */}
+                        <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-[#171717] rounded-lg">
+                            <span className="text-sm text-gray-700 dark:text-gray-300">Corrigir Postura</span>
+                            <button onClick={() => setProfileFixPosture(!profileFixPosture)}
+                                className={`relative h-5 w-9 rounded-full transition-colors ${profileFixPosture ? 'bg-accent' : 'bg-gray-600'}`}>
+                                <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${profileFixPosture ? 'left-[18px]' : 'left-0.5'}`} />
+                            </button>
+                        </div>
+
+                        {/* Prompt Adicional */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Instruções Adicionais (Opcional)</label>
+                            <textarea value={profilePrompt} onChange={(e) => setProfilePrompt(e.target.value)}
+                                placeholder="Ex: sorrindo, olhando para a câmera..."
+                                className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 h-20" />
+                        </div>
+                    </div>
+                );
         }
     };
 
@@ -629,7 +763,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <i className="fas fa-layer-group text-accent-dark dark:text-accent-light"></i>
                             Tipo de Asset
                         </h2>
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className="grid grid-cols-6 gap-2">
                             {CATEGORIES.map(cat => (
                                 <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
                                     className={`flex flex-col items-center p-3 rounded-xl border transition-all ${selectedCategory === cat.id

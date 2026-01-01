@@ -6,7 +6,7 @@ export enum SubjectPosition {
 }
 
 
-export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS' | 'CRIATIVOS';
+export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS' | 'CRIATIVOS' | 'PROFILE';
 
 export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
 
