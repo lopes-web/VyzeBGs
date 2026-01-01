@@ -763,12 +763,10 @@ Format: Square 1:1 (1024x1024 pixels).
 CRITICAL: Use the provided photo as reference. Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
 
 Style: ${inputs.style}
-${inputs.style === 'Profissional' ? '- Clean, corporate look. Neutral background, soft professional lighting.' : ''}
-${inputs.style === 'LinkedIn' ? '- Formal corporate headshot. Blue/gray tones, trustworthy appearance.' : ''}
-${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects.' : ''}
-${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background.' : ''}
-${inputs.style === 'Neon' ? '- Neon rim lighting, dark background, cyberpunk aesthetic.' : ''}
-${inputs.style === 'IA Futurista' ? '- Futuristic tech aesthetic. Holographic elements, particles, digital effects.' : ''}
+${inputs.style === 'Corporativo' ? '- Clean, professional corporate look. Neutral background, soft studio lighting, trustworthy appearance suitable for LinkedIn.' : ''}
+${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects, modern aesthetic.' : ''}
+${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background, focus on face.' : ''}
+${inputs.style === 'Elegante' ? '- Sophisticated, refined look. Cinematic lighting, subtle shadows, premium feel.' : ''}
 
 Background: ${bgInstruction}
 Framing: ${inputs.framing} shot - ${inputs.framing === 'Close-up' ? 'face fills most of the frame' : inputs.framing === 'Meio-busto' ? 'from chest up' : 'head and shoulders visible'}

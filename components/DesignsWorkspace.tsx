@@ -36,7 +36,7 @@ const BG_OPTIONS = [
 ];
 
 // Profile Options
-const PROFILE_STYLES = ['Profissional', 'LinkedIn', 'Criativo', 'Minimalista', 'Neon', 'IA Futurista'];
+const PROFILE_STYLES = ['Corporativo', 'Criativo', 'Minimalista', 'Elegante'];
 const PROFILE_FRAMINGS = ['Close-up', 'Meio-busto', 'Ombros'];
 const PROFILE_LIGHTINGS = ['Natural', 'Estúdio', 'Dramática'];
 
@@ -116,7 +116,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
     // PROFILE inputs
     const [profileImage, setProfileImage] = useState<string | null>(null);
-    const [profileStyle, setProfileStyle] = useState('Profissional');
+    const [profileStyle, setProfileStyle] = useState('Corporativo');
     const [profileBgType, setProfileBgType] = useState<'solid' | 'gradient'>('solid');
     const [profileBgColor, setProfileBgColor] = useState('#1a1a2e');
     const [profileFraming, setProfileFraming] = useState('Close-up');
