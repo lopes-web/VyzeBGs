@@ -630,7 +630,7 @@ const AppContent: React.FC = () => {
                                             <div className="flex-1">
                                                 <h3 className="text-base font-semibold text-white mb-1 group-hover:text-blue-400 transition-colors">Foto de Perfil</h3>
                                                 <p className="text-sm text-gray-500 leading-relaxed">
-                                                    Gere <span className="text-gray-300">fotos profissionais 1:1</span> para LinkedIn e redes sociais.
+                                                    Gere <span className="text-gray-300">fotos profissionais 1:1</span> para Instagram e WhatsApp.
                                                 </p>
                                             </div>
                                         </div>
