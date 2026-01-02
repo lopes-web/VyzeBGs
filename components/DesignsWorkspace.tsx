@@ -117,8 +117,9 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     // PROFILE inputs
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const [profileStyle, setProfileStyle] = useState('Corporativo');
-    const [profileBgType, setProfileBgType] = useState<'solid' | 'gradient'>('solid');
+    const [profileBgType, setProfileBgType] = useState<'auto' | 'solid' | 'gradient'>('auto');
     const [profileBgColor, setProfileBgColor] = useState('#1a1a2e');
+    const [profileBgPrompt, setProfileBgPrompt] = useState('');
     const [profileFraming, setProfileFraming] = useState('Close-up');
     const [profileLighting, setProfileLighting] = useState('Estúdio');
     const [profileFixPosture, setProfileFixPosture] = useState(false);
@@ -224,6 +225,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             style: profileStyle,
                             bgType: profileBgType,
                             bgColor: profileBgColor,
+                            bgPrompt: profileBgPrompt,
                             framing: profileFraming,
                             lighting: profileLighting,
                             fixPosture: profileFixPosture,
@@ -685,20 +687,33 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Fundo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fundo</label>
-                            <div className="flex gap-3 mb-3">
+                            <div className="flex gap-2 mb-3">
+                                <button onClick={() => setProfileBgType('auto')}
+                                    className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${profileBgType === 'auto' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                    IA Decide
+                                </button>
                                 <button onClick={() => setProfileBgType('solid')}
-                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileBgType === 'solid' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                    className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${profileBgType === 'solid' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
                                     Sólido
                                 </button>
                                 <button onClick={() => setProfileBgType('gradient')}
-                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${profileBgType === 'gradient' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                    className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${profileBgType === 'gradient' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
                                     Gradiente
                                 </button>
                             </div>
-                            <div className="flex gap-2 items-center">
-                                <input type="color" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
-                                <input type="text" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="flex-1 bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white" />
-                            </div>
+                            {profileBgType !== 'auto' && (
+                                <div className="flex gap-2 items-center mb-3">
+                                    <input type="color" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer" />
+                                    <input type="text" value={profileBgColor} onChange={(e) => setProfileBgColor(e.target.value)} className="flex-1 bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white" />
+                                </div>
+                            )}
+                            <input
+                                type="text"
+                                value={profileBgPrompt}
+                                onChange={(e) => setProfileBgPrompt(e.target.value)}
+                                placeholder="Descreva o fundo (ex: escritório moderno, estúdio, natureza...)"
+                                className="w-full bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-500"
+                            />
                         </div>
 
                         {/* Enquadramento */}

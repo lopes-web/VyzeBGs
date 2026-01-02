@@ -753,9 +753,16 @@ Generate a single, polished logo design.`;
       break;
 
     case 'PROFILE':
-      const bgInstruction = inputs.bgType === 'gradient'
-        ? `a professional gradient background based on ${inputs.bgColor}`
-        : `a solid ${inputs.bgColor} background`;
+      let bgInstruction = '';
+      if (inputs.bgPrompt) {
+        bgInstruction = inputs.bgPrompt;
+      } else if (inputs.bgType === 'auto') {
+        bgInstruction = 'a professional background that complements the subject (IA decides the best option)';
+      } else if (inputs.bgType === 'gradient') {
+        bgInstruction = `a professional gradient background based on ${inputs.bgColor}`;
+      } else {
+        bgInstruction = `a solid ${inputs.bgColor} background`;
+      }
       const postureInstruction = inputs.fixPosture ? 'Subtly correct the posture to be more professional and confident.' : '';
 
       prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
