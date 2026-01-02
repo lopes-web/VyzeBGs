@@ -819,21 +819,6 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </button>
                         </div>
 
-                        {/* Quantidade */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                            <div className="flex gap-1">
-                                {[1, 2, 3, 4].map(n => (
-                                    <button key={n} onClick={() => setProfileQuantity(n)}
-                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${profileQuantity === n
-                                            ? 'bg-accent text-black'
-                                            : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
-                                        {n}x
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
                         {/* Prompt Adicional */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Instruções Adicionais (Opcional)</label>
@@ -886,7 +871,22 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 </div>
 
                 {/* Fixed Footer: Generate Button */}
-                <div className="p-4" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
+                <div className="p-4 space-y-3" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
+                    {selectedCategory === 'PROFILE' && (
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
+                            <div className="flex gap-1">
+                                {[1, 2, 3, 4].map(n => (
+                                    <button key={n} onClick={() => setProfileQuantity(n)}
+                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${profileQuantity === n
+                                            ? 'bg-accent text-black'
+                                            : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
+                                        {n}x
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     <button onClick={handleGenerate} disabled={isGenerating}
                         className="w-full text-black font-bold py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
                         style={{ backgroundColor: '#00C087' }}>
