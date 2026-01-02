@@ -820,13 +820,15 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         </div>
 
                         {/* Quantidade */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quantidade</label>
-                            <div className="flex gap-2">
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
+                            <div className="flex gap-1">
                                 {[1, 2, 3, 4].map(n => (
                                     <button key={n} onClick={() => setProfileQuantity(n)}
-                                        className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${profileQuantity === n ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
-                                        {n}
+                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${profileQuantity === n
+                                            ? 'bg-accent text-black'
+                                            : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
+                                        {n}x
                                     </button>
                                 ))}
                             </div>
