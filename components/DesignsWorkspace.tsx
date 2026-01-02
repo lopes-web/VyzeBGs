@@ -45,6 +45,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [selectedCategory, setSelectedCategory] = useState<DesignCategory>((initialCategory as DesignCategory) || 'MOCKUPS');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+    const [generatedImages, setGeneratedImages] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     // Local History
@@ -125,6 +126,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [profileLighting, setProfileLighting] = useState('Estúdio');
     const [profileFixPosture, setProfileFixPosture] = useState(false);
     const [profilePrompt, setProfilePrompt] = useState('');
+    const [profileQuantity, setProfileQuantity] = useState(1);
 
     // Refinement
     const [refinePrompt, setRefinePrompt] = useState('');
@@ -233,6 +235,41 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             fixPosture: profileFixPosture,
                             additionalPrompt: profilePrompt
                         };
+
+                        // Generate multiple images in parallel
+                        if (profileQuantity > 1) {
+                            setGeneratedImages([]);
+                            const promises = Array(profileQuantity).fill(null).map(() =>
+                                generateDesignAsset('PROFILE', inputs)
+                            );
+                            const results = await Promise.all(promises);
+                            const images = results.map(r => r.image);
+                            setGeneratedImages(images);
+                            setGeneratedImage(images[0]);
+
+                            // Save all to Supabase
+                            if (user) {
+                                for (const img of images) {
+                                    const publicUrl = await uploadImageToStorage(img, user.id);
+                                    if (publicUrl) {
+                                        await saveGeneration(user.id, publicUrl, results[0].finalPrompt, 'OBJECT', 'DESIGNS', projectId);
+                                        const historyItem = {
+                                            id: Date.now().toString() + Math.random(),
+                                            url: publicUrl,
+                                            prompt: results[0].finalPrompt,
+                                            timestamp: Date.now(),
+                                            mode: 'OBJECT' as const,
+                                            section: 'DESIGNS' as const,
+                                            projectId: projectId
+                                        };
+                                        setLocalHistory(prev => [historyItem, ...prev]);
+                                        onAddToGlobalHistory(historyItem);
+                                    }
+                                }
+                            }
+                            setIsGenerating(false);
+                            return;
+                        }
                         break;
                 }
                 result = await generateDesignAsset(selectedCategory, inputs);
@@ -782,6 +819,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </button>
                         </div>
 
+                        {/* Quantidade */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quantidade</label>
+                            <div className="flex gap-2">
+                                {[1, 2, 3, 4].map(n => (
+                                    <button key={n} onClick={() => setProfileQuantity(n)}
+                                        className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${profileQuantity === n ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
+                                        {n}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* Prompt Adicional */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Instruções Adicionais (Opcional)</label>
@@ -865,7 +915,19 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <p>Gerando...</p>
                         </div>
                     )}
-                    {generatedImage && (
+                    {generatedImages.length > 1 ? (
+                        <div className="grid grid-cols-2 gap-4 max-w-2xl">
+                            {generatedImages.map((img, idx) => (
+                                <div key={idx} className="relative group">
+                                    <img src={img} alt={`Generated ${idx + 1}`} className="w-full rounded-xl shadow-2xl" />
+                                    <a href={img} download={`profile-${idx + 1}.png`}
+                                        className="absolute top-2 right-2 bg-accent hover:bg-accent-light text-black font-bold px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i className="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    ) : generatedImage && (
                         <div className="relative group">
                             <img src={generatedImage} alt="Generated" className="max-h-[55vh] max-w-full rounded-xl shadow-2xl" />
                             <button onClick={handleDownload}
