@@ -764,13 +764,16 @@ Generate a single, polished logo design.`;
         bgInstruction = `a solid ${inputs.bgColor} background`;
       }
       const postureInstruction = inputs.fixPosture ? 'Subtly correct the posture to be more professional and confident.' : '';
+      const imageCount = inputs.profileImages?.length || 1;
+      const hasReference = inputs.profileReference ? 'A style reference image has been provided - apply its visual style and aesthetic to the result.' : '';
 
       prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
 Format: Square 1:1 (1024x1024 pixels).
-CRITICAL: Use the provided photo as reference. Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
+CRITICAL: ${imageCount > 1 ? `${imageCount} reference photos have been provided.` : 'A reference photo has been provided.'} Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
+${hasReference}
 
 Style: ${inputs.style}
-${inputs.style === 'Corporativo' ? '- Clean, professional corporate look. Neutral background, soft studio lighting, trustworthy appearance suitable for LinkedIn.' : ''}
+${inputs.style === 'Corporativo' ? '- Clean, professional corporate look. Neutral background, soft studio lighting, trustworthy appearance.' : ''}
 ${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects, modern aesthetic.' : ''}
 ${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background, focus on face.' : ''}
 ${inputs.style === 'Elegante' ? '- Sophisticated, refined look. Cinematic lighting, subtle shadows, premium feel.' : ''}
@@ -781,7 +784,7 @@ Lighting: ${inputs.lighting} lighting
 ${postureInstruction}
 ${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
 
-Quality: Sharp, high-resolution, professional headshot quality. Suitable for LinkedIn, social media profiles, or professional websites.`;
+Quality: Sharp, high-resolution, professional headshot quality. Suitable for Instagram, WhatsApp, and social media profiles.`;
       break;
   }
 
@@ -826,11 +829,23 @@ Quality: Sharp, high-resolution, professional headshot quality. Suitable for Lin
     });
   }
 
-  // Add profile image
-  if (inputs.profileImage) {
+  // Add profile images (multiple)
+  if (inputs.profileImages && inputs.profileImages.length > 0) {
+    for (const img of inputs.profileImages) {
+      parts.push({
+        inlineData: {
+          data: img.replace(/^data:image\/\w+;base64,/, ""),
+          mimeType: 'image/png',
+        },
+      });
+    }
+  }
+
+  // Add profile reference image
+  if (inputs.profileReference) {
     parts.push({
       inlineData: {
-        data: inputs.profileImage.replace(/^data:image\/\w+;base64,/, ""),
+        data: inputs.profileReference.replace(/^data:image\/\w+;base64,/, ""),
         mimeType: 'image/png',
       },
     });

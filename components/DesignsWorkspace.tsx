@@ -115,7 +115,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [useGradient, setUseGradient] = useState(true);
 
     // PROFILE inputs
-    const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [profileImages, setProfileImages] = useState<string[]>([]);
+    const [profileReference, setProfileReference] = useState<string | null>(null);
     const [profileStyle, setProfileStyle] = useState('Corporativo');
     const [profileBgType, setProfileBgType] = useState<'auto' | 'solid' | 'gradient'>('auto');
     const [profileBgColor, setProfileBgColor] = useState('#1a1a2e');
@@ -215,13 +216,14 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         inputs = { logoName, logoNiche, logoStyle, logoColors, includeIcon };
                         break;
                     case 'PROFILE':
-                        if (!profileImage) {
-                            setError('Envie sua foto para gerar o perfil.');
+                        if (profileImages.length === 0) {
+                            setError('Envie pelo menos uma foto para gerar o perfil.');
                             setIsGenerating(false);
                             return;
                         }
                         inputs = {
-                            profileImage,
+                            profileImages,
+                            profileReference,
                             style: profileStyle,
                             bgType: profileBgType,
                             bgColor: profileBgColor,
@@ -650,23 +652,52 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
             case 'PROFILE':
                 return (
                     <div className="space-y-5">
-                        {/* Upload de Foto */}
+                        {/* Upload de Fotos */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i className="fas fa-camera text-accent mr-2"></i>Sua Foto *
+                                <i className="fas fa-camera text-accent mr-2"></i>Suas Fotos *
                             </label>
-                            {profileImage ? (
+                            {profileImages.length > 0 ? (
+                                <div className="grid grid-cols-3 gap-2 mb-2">
+                                    {profileImages.map((img, idx) => (
+                                        <div key={idx} className="relative group aspect-square">
+                                            <img src={img} alt={`Profile ${idx}`} className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
+                                            <button onClick={() => setProfileImages(prev => prev.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i className="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <i className="fas fa-plus text-gray-400 text-lg"></i>
+                                        <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setProfileImages)} className="hidden" />
+                                    </label>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <i className="fas fa-cloud-upload-alt text-gray-400 text-2xl mb-2"></i>
+                                    <span className="text-sm text-gray-500">Clique para upload (múltiplas)</span>
+                                    <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setProfileImages)} className="hidden" />
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Referência de Estilo */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <i className="fas fa-palette text-accent mr-2"></i>Referência de Estilo (Opcional)
+                            </label>
+                            {profileReference ? (
                                 <div className="relative group">
-                                    <img src={profileImage} alt="Profile" className="w-full h-48 object-cover rounded-xl border border-gray-200 dark:border-[#2E2E2E]" />
-                                    <button onClick={() => setProfileImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <img src={profileReference} alt="Reference" className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
+                                    <button onClick={() => setProfileReference(null)} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                                         <i className="fas fa-times"></i>
                                     </button>
                                 </div>
                             ) : (
-                                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                    <i className="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
-                                    <span className="text-sm text-gray-500">Clique para upload</span>
-                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setProfileImage)} className="hidden" />
+                                <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <i className="fas fa-image text-gray-400 text-lg mb-1"></i>
+                                    <span className="text-xs text-gray-500">Estilo de referência</span>
+                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setProfileReference)} className="hidden" />
                                 </label>
                             )}
                         </div>
@@ -674,7 +705,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Estilo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-3 gap-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 {PROFILE_STYLES.map(style => (
                                     <button key={style} onClick={() => setProfileStyle(style)}
                                         className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${profileStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
