@@ -76,7 +76,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [iconBgType, setIconBgType] = useState('#000000');
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
     const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
-    const [iconStyleReference, setIconStyleReference] = useState<string | null>(null);
+    const [iconStyleReferences, setIconStyleReferences] = useState<string[]>([]);
 
     // Product inputs
     const [productType, setProductType] = useState('Caixa');
@@ -209,7 +209,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         inputs = { deviceType, screenImage, angle, bgColor: mockupBgColor };
                         break;
                     case 'ICONS':
-                        inputs = { iconDescription, iconStyle, iconColor: useIconColor ? iconColor : null, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReference };
+                        inputs = { iconDescription, iconStyle, iconColor: useIconColor ? iconColor : null, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReferences };
                         break;
                     case 'PRODUCTS':
                         inputs = { productType, brandName, niche, logoImage, productColors };
@@ -393,16 +393,30 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <p className="text-xs text-gray-500 mb-2">Envie um ícone ou logo para transformar</p>
                             {iconReferenceImage ? (
                                 <div className="relative group">
-                                    <img src={iconReferenceImage} alt="Icon Reference" className="w-full h-28 object-contain bg-gray-100 dark:bg-[#171717] rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
+                                    <img src={iconReferenceImage} alt="Icon Reference" className="w-full h-28 object-contain rounded-lg" style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }} />
                                     <button onClick={() => setIconReferenceImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                                         <i className="fas fa-times"></i>
                                     </button>
                                 </div>
                             ) : (
-                                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <label
+                                    className="flex flex-col items-center justify-center w-full h-24 rounded-lg cursor-pointer transition-colors"
+                                    style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        const file = e.dataTransfer.files[0];
+                                        if (file && file.type.startsWith('image/')) {
+                                            const reader = new FileReader();
+                                            reader.onload = (ev) => setIconReferenceImage(ev.target?.result as string);
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                >
                                     <div className="flex flex-col items-center justify-center">
-                                        <i className="fas fa-cloud-upload-alt text-gray-400 text-xl mb-1"></i>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">Clique para upload</span>
+                                        <i className="fas fa-cloud-upload-alt text-accent text-xl mb-1"></i>
+                                        <span className="text-xs text-accent">Clique para upload</span>
                                     </div>
                                     <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setIconReferenceImage)} className="hidden" />
                                 </label>
@@ -443,23 +457,59 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Upload de Referência de Estilo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i className="fas fa-palette text-purple-400 mr-2"></i>Referência de Estilo (Opcional)
+                                <i className="fas fa-palette text-accent mr-2"></i>Referência de Estilo (Opcional)
                             </label>
-                            <p className="text-xs text-gray-500 mb-2">Envie uma imagem para inspirar o estilo visual</p>
-                            {iconStyleReference ? (
-                                <div className="relative group">
-                                    <img src={iconStyleReference} alt="Style Reference" className="w-full h-24 object-cover bg-gray-100 dark:bg-[#171717] rounded-lg border border-purple-500/50" />
-                                    <button onClick={() => setIconStyleReference(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i className="fas fa-times"></i>
-                                    </button>
+                            <p className="text-xs text-gray-500 mb-2">Envie imagens para inspirar o estilo visual</p>
+                            {iconStyleReferences.length > 0 ? (
+                                <div className="grid grid-cols-3 gap-2 mb-2">
+                                    {iconStyleReferences.map((ref, idx) => (
+                                        <div key={idx} className="relative group aspect-square">
+                                            <img src={ref} alt={`Style Ref ${idx}`} className="w-full h-full object-cover rounded-lg" style={{ border: '2px dashed #00C087' }} />
+                                            <button onClick={() => setIconStyleReferences(prev => prev.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i className="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <label
+                                        className="aspect-square flex flex-col items-center justify-center rounded-lg cursor-pointer transition-colors"
+                                        style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
+                                        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            const files = Array.from(e.dataTransfer.files).filter((f: File) => f.type.startsWith('image/'));
+                                            files.forEach((file: File) => {
+                                                const reader = new FileReader();
+                                                reader.onload = (ev) => setIconStyleReferences(prev => [...prev, ev.target?.result as string]);
+                                                reader.readAsDataURL(file);
+                                            });
+                                        }}
+                                    >
+                                        <i className="fas fa-plus text-accent text-lg"></i>
+                                        <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setIconStyleReferences)} className="hidden" />
+                                    </label>
                                 </div>
                             ) : (
-                                <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-purple-400/50 rounded-lg cursor-pointer bg-purple-900/10 hover:bg-purple-900/20 transition-colors">
+                                <label
+                                    className="flex flex-col items-center justify-center w-full h-20 rounded-lg cursor-pointer transition-colors"
+                                    style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        const files = Array.from(e.dataTransfer.files).filter((f: File) => f.type.startsWith('image/'));
+                                        files.forEach((file: File) => {
+                                            const reader = new FileReader();
+                                            reader.onload = (ev) => setIconStyleReferences(prev => [...prev, ev.target?.result as string]);
+                                            reader.readAsDataURL(file);
+                                        });
+                                    }}
+                                >
                                     <div className="flex flex-col items-center justify-center">
-                                        <i className="fas fa-image text-purple-400 text-lg mb-1"></i>
-                                        <span className="text-xs text-purple-400">Adicionar referência</span>
+                                        <i className="fas fa-images text-accent text-lg mb-1"></i>
+                                        <span className="text-xs text-accent">Adicionar referências</span>
                                     </div>
-                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setIconStyleReference)} className="hidden" />
+                                    <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setIconStyleReferences)} className="hidden" />
                                 </label>
                             )}
                         </div>

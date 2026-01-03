@@ -819,14 +819,16 @@ Quality: Sharp, high-resolution, professional headshot quality. Suitable for Ins
     });
   }
 
-  // Add icon style reference image
-  if (inputs.iconStyleReference) {
-    parts.push({
-      inlineData: {
-        data: inputs.iconStyleReference.replace(/^data:image\/\w+;base64,/, ""),
-        mimeType: 'image/png',
-      },
-    });
+  // Add icon style reference images (multiple)
+  if (inputs.iconStyleReferences && inputs.iconStyleReferences.length > 0) {
+    for (const ref of inputs.iconStyleReferences) {
+      parts.push({
+        inlineData: {
+          data: ref.replace(/^data:image\/\w+;base64,/, ""),
+          mimeType: 'image/png',
+        },
+      });
+    }
   }
 
   // Add profile images (multiple)
