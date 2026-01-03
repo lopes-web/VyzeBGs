@@ -7,6 +7,7 @@ import { saveGeneration, getProjectHistory } from '../services/databaseService';
 import TextManager from './TextManager';
 import DimensionSelector from './DimensionSelector';
 import ReferenceManager from './ReferenceManager';
+import ImageUpload from './ImageUpload';
 
 interface DesignsWorkspaceProps {
     onAddToGlobalHistory: (item: any) => void;
@@ -77,6 +78,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [iconBgCustom, setIconBgCustom] = useState('#1a1a2e');
     const [iconReferenceImage, setIconReferenceImage] = useState<string | null>(null);
     const [iconStyleReferences, setIconStyleReferences] = useState<string[]>([]);
+    const [iconQuantity, setIconQuantity] = useState(1);
 
     // Product inputs
     const [productType, setProductType] = useState('Caixa');
@@ -210,6 +212,41 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         break;
                     case 'ICONS':
                         inputs = { iconDescription, iconStyle, iconColor: useIconColor ? iconColor : null, bgColor: iconBgType === 'custom' ? iconBgCustom : iconBgType, iconReferenceImage, iconStyleReferences };
+
+                        // Generate multiple icons in parallel
+                        if (iconQuantity > 1) {
+                            setGeneratedImages([]);
+                            const promises = Array(iconQuantity).fill(null).map(() =>
+                                generateDesignAsset('ICONS', inputs)
+                            );
+                            const results = await Promise.all(promises);
+                            const images = results.map(r => r.image);
+                            setGeneratedImages(images);
+                            setGeneratedImage(images[0]);
+
+                            // Save all to Supabase
+                            if (user) {
+                                for (const img of images) {
+                                    const publicUrl = await uploadImageToStorage(img, user.id);
+                                    if (publicUrl) {
+                                        await saveGeneration(user.id, publicUrl, results[0].finalPrompt, 'OBJECT', 'DESIGNS', projectId);
+                                        const historyItem = {
+                                            id: Date.now().toString() + Math.random(),
+                                            url: publicUrl,
+                                            prompt: results[0].finalPrompt,
+                                            timestamp: Date.now(),
+                                            mode: 'OBJECT' as const,
+                                            section: 'DESIGNS' as const,
+                                            projectId: projectId
+                                        };
+                                        setLocalHistory(prev => [historyItem, ...prev]);
+                                        onAddToGlobalHistory(historyItem);
+                                    }
+                                }
+                            }
+                            setIsGenerating(false);
+                            return;
+                        }
                         break;
                     case 'PRODUCTS':
                         inputs = { productType, brandName, niche, logoImage, productColors };
@@ -386,42 +423,12 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 return (
                     <div className="space-y-5">
                         {/* Upload de Ícone/Logo de Referência */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i className="fas fa-upload text-accent mr-2"></i>Upload de Ícone/Logo (Opcional)
-                            </label>
-                            <p className="text-xs text-gray-500 mb-2">Envie um ícone ou logo para transformar</p>
-                            {iconReferenceImage ? (
-                                <div className="relative group">
-                                    <img src={iconReferenceImage} alt="Icon Reference" className="w-full h-28 object-contain rounded-lg" style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }} />
-                                    <button onClick={() => setIconReferenceImage(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i className="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            ) : (
-                                <label
-                                    className="flex flex-col items-center justify-center w-full h-24 rounded-lg cursor-pointer transition-colors"
-                                    style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
-                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        const file = e.dataTransfer.files[0];
-                                        if (file && file.type.startsWith('image/')) {
-                                            const reader = new FileReader();
-                                            reader.onload = (ev) => setIconReferenceImage(ev.target?.result as string);
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                >
-                                    <div className="flex flex-col items-center justify-center">
-                                        <i className="fas fa-cloud-upload-alt text-accent text-xl mb-1"></i>
-                                        <span className="text-xs text-accent">Clique para upload</span>
-                                    </div>
-                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setIconReferenceImage)} className="hidden" />
-                                </label>
-                            )}
-                        </div>
+                        <ImageUpload
+                            label="Upload de Ícone/Logo (Opcional)"
+                            value={iconReferenceImage}
+                            onChange={setIconReferenceImage}
+                            description="Envie um ícone ou logo para transformar"
+                        />
 
                         {/* Divisor OU */}
                         <div className="flex items-center gap-3">
@@ -454,65 +461,17 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </div>
                         </div>
 
-                        {/* Upload de Referência de Estilo */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                <i className="fas fa-palette text-accent mr-2"></i>Referência de Estilo (Opcional)
-                            </label>
-                            <p className="text-xs text-gray-500 mb-2">Envie imagens para inspirar o estilo visual</p>
-                            {iconStyleReferences.length > 0 ? (
-                                <div className="grid grid-cols-3 gap-2 mb-2">
-                                    {iconStyleReferences.map((ref, idx) => (
-                                        <div key={idx} className="relative group aspect-square">
-                                            <img src={ref} alt={`Style Ref ${idx}`} className="w-full h-full object-cover rounded-lg" style={{ border: '2px dashed #00C087' }} />
-                                            <button onClick={() => setIconStyleReferences(prev => prev.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <i className="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    ))}
-                                    <label
-                                        className="aspect-square flex flex-col items-center justify-center rounded-lg cursor-pointer transition-colors"
-                                        style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
-                                        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                        onDrop={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            const files = Array.from(e.dataTransfer.files).filter((f: File) => f.type.startsWith('image/'));
-                                            files.forEach((file: File) => {
-                                                const reader = new FileReader();
-                                                reader.onload = (ev) => setIconStyleReferences(prev => [...prev, ev.target?.result as string]);
-                                                reader.readAsDataURL(file);
-                                            });
-                                        }}
-                                    >
-                                        <i className="fas fa-plus text-accent text-lg"></i>
-                                        <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setIconStyleReferences)} className="hidden" />
-                                    </label>
-                                </div>
-                            ) : (
-                                <label
-                                    className="flex flex-col items-center justify-center w-full h-20 rounded-lg cursor-pointer transition-colors"
-                                    style={{ backgroundColor: '#0a1f1a', border: '2px dashed #00C087' }}
-                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        const files = Array.from(e.dataTransfer.files).filter((f: File) => f.type.startsWith('image/'));
-                                        files.forEach((file: File) => {
-                                            const reader = new FileReader();
-                                            reader.onload = (ev) => setIconStyleReferences(prev => [...prev, ev.target?.result as string]);
-                                            reader.readAsDataURL(file);
-                                        });
-                                    }}
-                                >
-                                    <div className="flex flex-col items-center justify-center">
-                                        <i className="fas fa-images text-accent text-lg mb-1"></i>
-                                        <span className="text-xs text-accent">Adicionar referências</span>
-                                    </div>
-                                    <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setIconStyleReferences)} className="hidden" />
-                                </label>
-                            )}
-                        </div>
+                        {/* Upload de Referência de Estilo - usando ReferenceManager */}
+                        <ReferenceManager
+                            references={iconStyleReferences.map((ref, idx) => ({ id: `ref-${idx}`, base64: ref, priority: idx + 1 }))}
+                            onAdd={(base64) => setIconStyleReferences(prev => [...prev, base64])}
+                            onRemove={(id) => {
+                                const idx = parseInt(id.replace('ref-', ''));
+                                setIconStyleReferences(prev => prev.filter((_, i) => i !== idx));
+                            }}
+                            onReorder={(refs) => setIconStyleReferences(refs.map(r => r.base64))}
+                            maxReferences={5}
+                        />
 
                         {/* Cor do Ícone (Opcional) */}
                         <div className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
@@ -922,13 +881,13 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                 {/* Fixed Footer: Generate Button */}
                 <div className="p-4 space-y-3" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
-                    {selectedCategory === 'PROFILE' && (
+                    {(selectedCategory === 'PROFILE' || selectedCategory === 'ICONS') && (
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4].map(n => (
-                                    <button key={n} onClick={() => setProfileQuantity(n)}
-                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${profileQuantity === n
+                                    <button key={n} onClick={() => selectedCategory === 'PROFILE' ? setProfileQuantity(n) : setIconQuantity(n)}
+                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${(selectedCategory === 'PROFILE' ? profileQuantity : iconQuantity) === n
                                             ? 'bg-accent text-black'
                                             : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
                                         {n}x
