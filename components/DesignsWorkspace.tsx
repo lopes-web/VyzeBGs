@@ -463,14 +463,10 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                         {/* Upload de Referência de Estilo - usando ReferenceManager */}
                         <ReferenceManager
-                            references={iconStyleReferences.map((ref, idx) => ({ id: `ref-${idx}`, base64: ref, priority: idx + 1 }))}
-                            onAdd={(base64) => setIconStyleReferences(prev => [...prev, base64])}
-                            onRemove={(id) => {
-                                const idx = parseInt(id.replace('ref-', ''));
-                                setIconStyleReferences(prev => prev.filter((_, i) => i !== idx));
-                            }}
-                            onReorder={(refs) => setIconStyleReferences(refs.map(r => r.base64))}
-                            maxReferences={5}
+                            items={iconStyleReferences.map((ref, idx) => ({ id: `ref-${idx}`, image: ref, description: '' }))}
+                            onChange={(newItems) => setIconStyleReferences(newItems.map(item => item.image))}
+                            label="Referências de Estilo"
+                            description="Envie múltiplas referências. Arraste para adicionar ou use as setas para reordenar a prioridade."
                         />
 
                         {/* Cor do Ícone (Opcional) */}
