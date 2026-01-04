@@ -116,6 +116,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [useMainColor, setUseMainColor] = useState(false);
     const [mainColor, setMainColor] = useState('#000000');
     const [useGradient, setUseGradient] = useState(true);
+    const [creativeQuantity, setCreativeQuantity] = useState(1);
 
     // PROFILE inputs
     const [profileImages, setProfileImages] = useState<string[]>([]);
@@ -193,6 +194,52 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                     setIsGenerating(false);
                     return;
                 }
+
+                // Generate multiple creatives in parallel
+                if (creativeQuantity > 1) {
+                    setGeneratedImages([]);
+                    const promises = Array(creativeQuantity).fill(null).map(() =>
+                        generateCreative(
+                            creativeImages,
+                            visualReferences,
+                            textReferences,
+                            assetImages,
+                            creativeText,
+                            creativePrompt,
+                            creativePosition,
+                            { useGradient, useBlur: false, useMainColor, mainColor },
+                            aspectRatio
+                        )
+                    );
+                    const results = await Promise.all(promises);
+                    const images = results.map(r => r.image);
+                    setGeneratedImages(images);
+                    setGeneratedImage(images[0]);
+
+                    // Save all to Supabase
+                    if (user) {
+                        for (const img of images) {
+                            const publicUrl = await uploadImageToStorage(img, user.id);
+                            if (publicUrl) {
+                                await saveGeneration(user.id, publicUrl, results[0].finalPrompt, 'HUMAN', 'DESIGNS', projectId);
+                                const historyItem = {
+                                    id: Date.now().toString() + Math.random(),
+                                    url: publicUrl,
+                                    prompt: results[0].finalPrompt,
+                                    timestamp: Date.now(),
+                                    mode: 'HUMAN' as const,
+                                    section: 'DESIGNS' as const,
+                                    projectId: projectId
+                                };
+                                setLocalHistory(prev => [historyItem, ...prev]);
+                                onAddToGlobalHistory(historyItem);
+                            }
+                        }
+                    }
+                    setIsGenerating(false);
+                    return;
+                }
+
                 result = await generateCreative(
                     creativeImages,
                     visualReferences,
@@ -877,13 +924,17 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
                 {/* Fixed Footer: Generate Button */}
                 <div className="p-4 space-y-3" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
-                    {(selectedCategory === 'PROFILE' || selectedCategory === 'ICONS') && (
+                    {(selectedCategory === 'PROFILE' || selectedCategory === 'ICONS' || selectedCategory === 'CRIATIVOS') && (
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4].map(n => (
-                                    <button key={n} onClick={() => selectedCategory === 'PROFILE' ? setProfileQuantity(n) : setIconQuantity(n)}
-                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${(selectedCategory === 'PROFILE' ? profileQuantity : iconQuantity) === n
+                                    <button key={n} onClick={() => {
+                                        if (selectedCategory === 'PROFILE') setProfileQuantity(n);
+                                        else if (selectedCategory === 'ICONS') setIconQuantity(n);
+                                        else setCreativeQuantity(n);
+                                    }}
+                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${(selectedCategory === 'PROFILE' ? profileQuantity : selectedCategory === 'ICONS' ? iconQuantity : creativeQuantity) === n
                                             ? 'bg-accent text-black'
                                             : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
                                         {n}x
