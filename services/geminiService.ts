@@ -948,9 +948,11 @@ export const generateCreative = async (
 
   // B. VISUAL STYLE
   if (visualReferences.length > 0) {
-    finalPrompt += `VISUAL STYLE SYNTHESIS: You have been provided with ${visualReferences.length} visual reference images. \n`;
+    finalPrompt += `VISUAL STYLE SYNTHESIS (CRITICAL): You have been provided with ${visualReferences.length} visual reference images. \n`;
     finalPrompt += `${visualRefPrompt}\n`;
-    finalPrompt += `INSTRUCTION: Synthesize the best elements (lighting, environment, color palette) of these visual references. Merge them into a cohesive background composition.\n`;
+    finalPrompt += `MANDATORY INSTRUCTION: DO NOT focus on just one reference. You MUST synthesize and MERGE visual elements from ALL ${visualReferences.length} references into one cohesive output. \n`;
+    finalPrompt += `Extract and combine: lighting style, color palette, textures, environment/atmosphere, and mood from EACH reference image provided. \n`;
+    finalPrompt += `The final result should feel like a harmonious fusion of all references, not a copy of any single one.\n`;
   }
 
   // Optional Color Injection
