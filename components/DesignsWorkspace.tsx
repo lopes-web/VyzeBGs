@@ -128,6 +128,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
     const [profileFraming, setProfileFraming] = useState('Close-up');
     const [profileLighting, setProfileLighting] = useState('Estúdio');
     const [profileFixPosture, setProfileFixPosture] = useState(false);
+    const [profileUltraMode, setProfileUltraMode] = useState(false);
     const [profilePrompt, setProfilePrompt] = useState('');
     const [profileQuantity, setProfileQuantity] = useState(1);
 
@@ -317,6 +318,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             framing: profileFraming,
                             lighting: profileLighting,
                             fixPosture: profileFixPosture,
+                            ultraMode: profileUltraMode,
                             additionalPrompt: profilePrompt
                         };
 
@@ -808,6 +810,7 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             </div>
 
                             {/* Corrigir Postura */}
+                            {/* Corrigir Postura */}
                             <div className="flex items-center justify-between p-3 rounded-xl bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E]">
                                 <div className="flex items-center gap-2">
                                     <i className="fas fa-child text-accent"></i>
@@ -818,7 +821,22 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                                 </div>
                                 <button onClick={() => setProfileFixPosture(!profileFixPosture)}
                                     className={`relative h-5 w-9 rounded-full transition-colors ${profileFixPosture ? 'bg-accent' : 'bg-gray-600'}`}>
-                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${profileFixPosture ? 'left-[18px]' : 'left-0.5'}`} />
+                                    <span className={`block h-3 w-3 rounded-full bg-white transform transition-transform ${profileFixPosture ? 'translate-x-5' : 'translate-x-1'}`} />
+                                </button>
+                            </div>
+
+                            {/* Ultra Mode */}
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E] mt-2">
+                                <div className="flex items-center gap-2">
+                                    <i className="fas fa-bolt text-accent"></i>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium text-gray-900 dark:text-white">Ultra Mode</span>
+                                        <span className="text-xs text-gray-500">Análise fenotípica avançada</span>
+                                    </div>
+                                </div>
+                                <button onClick={() => setProfileUltraMode(!profileUltraMode)}
+                                    className={`relative h-5 w-9 rounded-full transition-colors ${profileUltraMode ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`block h-3 w-3 rounded-full bg-white transform transition-transform ${profileUltraMode ? 'translate-x-5' : 'translate-x-1'}`} />
                                 </button>
                             </div>
                         </div>

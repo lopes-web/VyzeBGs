@@ -800,7 +800,28 @@ Generate a single, polished logo design.`;
       const imageCount = inputs.profileImages?.length || 1;
       const hasReference = inputs.profileReference ? 'A style reference image has been provided - apply its visual style and aesthetic to the result.' : '';
 
-      prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
+      if (inputs.ultraMode) {
+        prompt = `PROFESSIONAL PROFILE PHOTO GENERATION - ULTRA MODE (PHENOTYPIC ANALYSIS):
+Format: Square 1:1 (1024x1024 pixels).
+
+${ULTRA_TREATMENT_PROMPT}
+
+SUBJECT ANALYSIS:
+${imageCount} subject photos provided. EXTRACT ALL PHENOTYPIC DATA. The output face MUST be biologically identical to the subject.
+
+${inputs.profileReference ? `REFERENCE STYLE (STRICT):
+Use the provided reference image as a STRICT structural and stylistic template. Match lighting, colors, and composition.` : ''}
+
+Style: ${inputs.style || 'Professional Studio'}
+Background: ${bgInstruction}
+Framing: ${inputs.framing}
+Lighting: ${inputs.lighting}
+${postureInstruction}
+${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
+
+Quality: 8K, Ultra-Realistic, Phenotypically Accurate.`;
+      } else {
+        prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
 Format: Square 1:1 (1024x1024 pixels).
 CRITICAL: ${imageCount > 1 ? `${imageCount} reference photos have been provided.` : 'A reference photo has been provided.'} Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
 ${hasReference}
@@ -818,6 +839,7 @@ ${postureInstruction}
 ${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
 
 Quality: Sharp, high-resolution, professional headshot quality. Suitable for Instagram, WhatsApp, and social media profiles.`;
+      }
       break;
   }
 
