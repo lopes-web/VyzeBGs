@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 interface MagicEraserCanvasProps {
     imageUrl: string;
@@ -15,15 +15,17 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
     width,
     height,
     onMaskChange,
-    brushSize = 20,
+    brushSize = 30,
     isDrawingEnabled = true,
     onDrawingStateChange
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [hasDrawn, setHasDrawn] = useState(false);
+    const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+    const [currentBrushSize, setCurrentBrushSize] = useState(brushSize);
 
-    // Initialize canvas with image
+    // Initialize canvas
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -31,41 +33,14 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Clear canvas
         ctx.clearRect(0, 0, width, height);
-
-        // We don't draw the image on the canvas itself, we just use the canvas for the mask
-        // The image will be displayed behind the canvas via CSS/Layout
-        // But we need to ensure the canvas is transparent initially
         ctx.fillStyle = 'rgba(0,0,0,0)';
         ctx.fillRect(0, 0, width, height);
-
     }, [width, height]);
 
-    const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-        if (!isDrawingEnabled) return;
-        setIsDrawing(true);
-        if (onDrawingStateChange) onDrawingStateChange(true);
-        draw(e);
-    };
-
-    const stopDrawing = () => {
-        if (isDrawing) {
-            setIsDrawing(false);
-            if (onDrawingStateChange) onDrawingStateChange(false);
-            if (canvasRef.current) {
-                onMaskChange(canvasRef.current.toDataURL('image/png'));
-                setHasDrawn(true);
-            }
-        }
-    };
-
-    const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-        if (!isDrawing || !canvasRef.current || !isDrawingEnabled) return;
-
+    const getCanvasPoint = useCallback((e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        if (!canvas) return null;
 
         const rect = canvas.getBoundingClientRect();
         let clientX, clientY;
@@ -78,28 +53,132 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
             clientY = (e as React.MouseEvent).clientY;
         }
 
-        const x = (clientX - rect.left) * (canvas.width / rect.width);
-        const y = (clientY - rect.top) * (canvas.height / rect.height);
+        return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+    }, []);
+
+    const drawLine = useCallback((from: { x: number; y: number }, to: { x: number; y: number }) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
         ctx.globalCompositeOperation = 'source-over';
-        ctx.beginPath();
-        ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 50, 50, 0.3)'; // Softer red with lower opacity
-        ctx.fill();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = currentBrushSize;
+        ctx.strokeStyle = 'rgba(255, 50, 50, 0.4)';
 
-        // For the actual mask, we might want a solid color, but for UI feedback red is good.
-        // We can process the mask later or draw on a hidden canvas if needed.
-        // For now, let's assume the backend can handle the red overlay or we process it before sending.
-    };
+        ctx.beginPath();
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        ctx.stroke();
+
+        // Also draw circle at endpoints for smoother edges
+        ctx.beginPath();
+        ctx.arc(to.x, to.y, currentBrushSize / 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 50, 50, 0.4)';
+        ctx.fill();
+    }, [currentBrushSize]);
+
+    const startDrawing = useCallback((e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+        if (!isDrawingEnabled) return;
+
+        const point = getCanvasPoint(e);
+        if (!point) return;
+
+        setIsDrawing(true);
+        lastPointRef.current = point;
+
+        if (onDrawingStateChange) onDrawingStateChange(true);
+
+        // Draw initial point
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, currentBrushSize / 2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 50, 50, 0.4)';
+                ctx.fill();
+            }
+        }
+    }, [isDrawingEnabled, getCanvasPoint, onDrawingStateChange, currentBrushSize]);
+
+    const stopDrawing = useCallback(() => {
+        if (isDrawing) {
+            setIsDrawing(false);
+            lastPointRef.current = null;
+            if (onDrawingStateChange) onDrawingStateChange(false);
+            if (canvasRef.current) {
+                onMaskChange(canvasRef.current.toDataURL('image/png'));
+                setHasDrawn(true);
+            }
+        }
+    }, [isDrawing, onDrawingStateChange, onMaskChange]);
+
+    const draw = useCallback((e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+        if (!isDrawing || !isDrawingEnabled) return;
+
+        const point = getCanvasPoint(e);
+        if (!point) return;
+
+        if (lastPointRef.current) {
+            drawLine(lastPointRef.current, point);
+        }
+
+        lastPointRef.current = point;
+    }, [isDrawing, isDrawingEnabled, getCanvasPoint, drawLine]);
+
+    // Handle brush size with keyboard
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === '[' || e.key === '-') {
+                setCurrentBrushSize(prev => Math.max(5, prev - 5));
+            } else if (e.key === ']' || e.key === '+' || e.key === '=') {
+                setCurrentBrushSize(prev => Math.min(100, prev + 5));
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     return (
         <div className="absolute inset-0 w-full h-full">
+            {/* Brush Size Indicator */}
+            <div className="absolute top-4 right-4 z-50 bg-black/70 backdrop-blur-sm px-3 py-2 rounded-lg flex items-center gap-3">
+                <button
+                    onClick={() => setCurrentBrushSize(prev => Math.max(5, prev - 10))}
+                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                    <i className="fas fa-minus text-xs"></i>
+                </button>
+                <div className="flex items-center gap-2">
+                    <div
+                        className="rounded-full bg-red-500/50 border-2 border-red-400"
+                        style={{ width: Math.min(currentBrushSize, 40), height: Math.min(currentBrushSize, 40) }}
+                    />
+                    <span className="text-white text-sm font-mono">{currentBrushSize}px</span>
+                </div>
+                <button
+                    onClick={() => setCurrentBrushSize(prev => Math.min(100, prev + 10))}
+                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                    <i className="fas fa-plus text-xs"></i>
+                </button>
+            </div>
+
             {/* Drawing Canvas */}
             <canvas
                 ref={canvasRef}
                 width={width}
                 height={height}
-                className={`w-full h-full touch-none cursor-crosshair ${isDrawingEnabled ? '' : 'pointer-events-none'}`}
+                className={`w-full h-full touch-none ${isDrawingEnabled ? '' : 'pointer-events-none'}`}
+                style={{ cursor: 'crosshair' }}
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
@@ -113,4 +192,3 @@ const MagicEraserCanvas: React.FC<MagicEraserCanvasProps> = ({
 };
 
 export default MagicEraserCanvas;
-
