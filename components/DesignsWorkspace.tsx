@@ -120,8 +120,8 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
 
     // PROFILE inputs
     const [profileImages, setProfileImages] = useState<string[]>([]);
-    const [profileReference, setProfileReference] = useState<string | null>(null);
-    const [profileStyle, setProfileStyle] = useState('Corporativo');
+    const [profileReference, setProfileReference] = useState<string[]>([]);
+    const [profileStyle, setProfileStyle] = useState<string | null>('Corporativo');
     const [profileBgType, setProfileBgType] = useState<'auto' | 'solid' | 'gradient'>('auto');
     const [profileBgColor, setProfileBgColor] = useState('#1a1a2e');
     const [profileBgPrompt, setProfileBgPrompt] = useState('');
@@ -777,18 +777,26 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i className="fas fa-palette text-accent mr-2"></i>Referência de Estilo (Opcional)
                             </label>
-                            {profileReference ? (
-                                <div className="relative group">
-                                    <img src={profileReference} alt="Reference" className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
-                                    <button onClick={() => setProfileReference(null)} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i className="fas fa-times"></i>
-                                    </button>
+                            {profileReference.length > 0 ? (
+                                <div className="grid grid-cols-3 gap-2 mb-2">
+                                    {profileReference.map((img, idx) => (
+                                        <div key={idx} className="relative group aspect-square">
+                                            <img src={img} alt={`Reference ${idx}`} className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-[#2E2E2E]" />
+                                            <button onClick={() => setProfileReference(prev => prev.filter((_, i) => i !== idx))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i className="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <i className="fas fa-plus text-gray-400 text-lg"></i>
+                                        <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setProfileReference)} className="hidden" />
+                                    </label>
                                 </div>
                             ) : (
                                 <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-[#171717] hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                     <i className="fas fa-image text-gray-400 text-lg mb-1"></i>
-                                    <span className="text-xs text-gray-500">Estilo de referência</span>
-                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, setProfileReference)} className="hidden" />
+                                    <span className="text-xs text-gray-500">Adicionar referências de estilo</span>
+                                    <input type="file" accept="image/*" multiple onChange={(e) => handleMultiFileUpload(e, setProfileReference)} className="hidden" />
                                 </label>
                             )}
                         </div>

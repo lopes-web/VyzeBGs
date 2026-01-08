@@ -798,7 +798,23 @@ Generate a single, polished logo design.`;
       }
       const postureInstruction = inputs.fixPosture ? POSTURE_CORRECTION_PROMPT : '';
       const imageCount = inputs.profileImages?.length || 1;
-      const hasReference = inputs.profileReference ? 'A style reference image has been provided - apply its visual style and aesthetic to the result.' : '';
+
+      const referenceCount = inputs.profileReference?.length || 0;
+      const hasReference = referenceCount > 0 ? `${referenceCount} style reference images have been provided - apply their visual style and aesthetic to the result.` : '';
+
+      // Style Logic
+      let styleSection = '';
+      if (inputs.style) {
+        styleSection = `Style: ${inputs.style}
+${inputs.style === 'Corporativo' ? '- Clean, professional corporate look. Neutral background, soft studio lighting, trustworthy appearance.' : ''}
+${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects, modern aesthetic.' : ''}
+${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background, focus on face.' : ''}
+${inputs.style === 'Elegante' ? '- Sophisticated, refined look. Cinematic lighting, subtle shadows, premium feel.' : ''}`;
+      } else if (referenceCount > 0) {
+        styleSection = `Style: REFERENCE ONLY. Do not apply any preset style. Strictly follow the aesthetic, lighting, and mood of the provided reference images.`;
+      } else {
+        styleSection = `Style: Professional Studio`;
+      }
 
       if (inputs.ultraMode) {
         prompt = `PROFESSIONAL PROFILE PHOTO GENERATION - ULTRA MODE (PHENOTYPIC ANALYSIS):
@@ -809,10 +825,10 @@ ${ULTRA_TREATMENT_PROMPT}
 SUBJECT ANALYSIS:
 ${imageCount} subject photos provided. EXTRACT ALL PHENOTYPIC DATA. The output face MUST be biologically identical to the subject.
 
-${inputs.profileReference ? `REFERENCE STYLE (STRICT):
-Use the provided reference image as a STRICT structural and stylistic template. Match lighting, colors, and composition.` : ''}
+${referenceCount > 0 ? `REFERENCE STYLE (STRICT):
+Use the provided ${referenceCount} reference images as STRICT structural and stylistic templates. Match lighting, colors, and composition.` : ''}
 
-Style: ${inputs.style || 'Professional Studio'}
+${styleSection}
 Background: ${bgInstruction}
 Framing: ${inputs.framing}
 Lighting: ${inputs.lighting}
@@ -826,11 +842,7 @@ Format: Square 1:1 (1024x1024 pixels).
 CRITICAL: ${imageCount > 1 ? `${imageCount} reference photos have been provided.` : 'A reference photo has been provided.'} Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
 ${hasReference}
 
-Style: ${inputs.style}
-${inputs.style === 'Corporativo' ? '- Clean, professional corporate look. Neutral background, soft studio lighting, trustworthy appearance.' : ''}
-${inputs.style === 'Criativo' ? '- Vibrant, artistic. Bold colors, creative lighting effects, modern aesthetic.' : ''}
-${inputs.style === 'Minimalista' ? '- Ultra clean, minimal distractions. Simple solid background, focus on face.' : ''}
-${inputs.style === 'Elegante' ? '- Sophisticated, refined look. Cinematic lighting, subtle shadows, premium feel.' : ''}
+${styleSection}
 
 Background: ${bgInstruction}
 Framing: ${inputs.framing} shot - ${inputs.framing === 'Close-up' ? 'face fills most of the frame' : inputs.framing === 'Meio-busto' ? 'from chest up' : 'head and shoulders visible'}
@@ -898,14 +910,16 @@ Quality: Sharp, high-resolution, professional headshot quality. Suitable for Ins
     }
   }
 
-  // Add profile reference image
-  if (inputs.profileReference) {
-    parts.push({
-      inlineData: {
-        data: inputs.profileReference.replace(/^data:image\/\w+;base64,/, ""),
-        mimeType: 'image/png',
-      },
-    });
+  // Add profile reference images (multiple)
+  if (inputs.profileReference && inputs.profileReference.length > 0) {
+    for (const ref of inputs.profileReference) {
+      parts.push({
+        inlineData: {
+          data: ref.replace(/^data:image\/\w+;base64,/, ""),
+          mimeType: 'image/png',
+        },
+      });
+    }
   }
 
   parts.push({ text: prompt });
