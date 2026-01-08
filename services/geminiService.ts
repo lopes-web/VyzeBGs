@@ -9,6 +9,7 @@ import {
   ENHANCE_TREATMENT_PROMPT,
   INFOPRODUCT_TREATMENT_PROMPT,
   ULTRA_TREATMENT_PROMPT,
+  POSTURE_CORRECTION_PROMPT,
   BLUR_PROMPT,
   GRADIENT_PROMPT,
   PROMPT_ENGINEER_SYSTEM_INSTRUCTION,
@@ -795,7 +796,7 @@ Generate a single, polished logo design.`;
       } else {
         bgInstruction = `a solid ${inputs.bgColor} background`;
       }
-      const postureInstruction = inputs.fixPosture ? 'Subtly correct the posture to be more professional and confident.' : '';
+      const postureInstruction = inputs.fixPosture ? POSTURE_CORRECTION_PROMPT : '';
       const imageCount = inputs.profileImages?.length || 1;
       const hasReference = inputs.profileReference ? 'A style reference image has been provided - apply its visual style and aesthetic to the result.' : '';
 

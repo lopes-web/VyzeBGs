@@ -18,6 +18,15 @@ export const INFOPRODUCT_TREATMENT_PROMPT = `
 ---
 `;
 
+export const POSTURE_CORRECTION_PROMPT = `
+POSTURE CORRECTION PROTOCOL:
+1. ANALYZE the subject's current posture in the reference image.
+2. IF slouching, leaning, or casual: RECONSTRUCT the body with a confident, upright, professional posture suitable for a business profile.
+3. CRITICAL: PRESERVE the subject's facial identity and head structure EXACTLY.
+4. ADJUST clothing folds and fit to match the new upright pose naturally.
+5. MAINTAIN the original camera angle and lighting direction.
+`;
+
 export const ULTRA_TREATMENT_PROMPT = `
 ULTRA MODE - PHENOTYPIC ANALYSIS PROTOCOL
 

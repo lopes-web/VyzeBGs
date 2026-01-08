@@ -794,13 +794,32 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Estilo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-2 mb-4">
+                                <button onClick={() => setProfileStyle(null)}
+                                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${!profileStyle ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                    Nenhum
+                                </button>
                                 {PROFILE_STYLES.map(style => (
-                                    <button key={style} onClick={() => setProfileStyle(style)}
+                                    <button key={style} onClick={() => setProfileStyle(profileStyle === style ? null : style)}
                                         className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${profileStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                         {style}
                                     </button>
                                 ))}
+                            </div>
+
+                            {/* Corrigir Postura */}
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-[#2E2E2E]">
+                                <div className="flex items-center gap-2">
+                                    <i className="fas fa-child text-accent"></i>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium text-gray-900 dark:text-white">Corrigir Postura</span>
+                                        <span className="text-xs text-gray-500">Ajustar postura para profissional</span>
+                                    </div>
+                                </div>
+                                <button onClick={() => setProfileFixPosture(!profileFixPosture)}
+                                    className={`relative h-5 w-9 rounded-full transition-colors ${profileFixPosture ? 'bg-accent' : 'bg-gray-600'}`}>
+                                    <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${profileFixPosture ? 'left-[18px]' : 'left-0.5'}`} />
+                                </button>
                             </div>
                         </div>
 
