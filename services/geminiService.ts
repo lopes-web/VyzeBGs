@@ -441,10 +441,13 @@ export const refineImage = async (
   if (!apiKey) throw new Error("API Key not found");
   const ai = new GoogleGenAI({ apiKey });
 
+  // Ensure image is base64 (convert from URL if needed)
+  const imageBase64 = await ensureBase64(originalImageBase64);
+
   const parts: any[] = [
     {
       inlineData: {
-        data: cleanBase64(originalImageBase64),
+        data: cleanBase64(imageBase64),
         mimeType: 'image/png',
       },
     },
@@ -504,10 +507,13 @@ export const reframeImageForTextLayout = async (
   const ai = new GoogleGenAI({ apiKey });
   const targetWidth = 1080;
 
+  // Ensure image is base64 (convert from URL if needed)
+  const imageBase64 = await ensureBase64(currentImageBase64);
+
   const parts = [
     {
       inlineData: {
-        data: cleanBase64(currentImageBase64),
+        data: cleanBase64(imageBase64),
         mimeType: 'image/png',
       },
     },
