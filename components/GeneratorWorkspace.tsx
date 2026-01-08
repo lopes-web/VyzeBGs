@@ -165,6 +165,9 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [quickEditPrompt, setQuickEditPrompt] = useState('');
     const [isQuickEditing, setIsQuickEditing] = useState(false);
 
+    // Conversão 9:16
+    const [isConverting916, setIsConverting916] = useState(false);
+
     // Magic Eraser State
     const [isEraserActive, setIsEraserActive] = useState(false);
     const [isEraserDrawing, setIsEraserDrawing] = useState(false);
@@ -543,6 +546,25 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             setError(err.message || "Falha ao editar imagem");
         } finally {
             setIsQuickEditing(false);
+        }
+    };
+
+    // Conversão 9:16 - Outpaint vertical
+    const handleConvert916 = async () => {
+        if (!generatedImage) return;
+
+        setIsConverting916(true);
+        setError(null);
+
+        try {
+            const result = await reframeImageForTextLayout(generatedImage, 1920, '');
+            setGeneratedImage(result);
+            addToHistory(result, 'Convertido para 9:16');
+        } catch (err: any) {
+            console.error("Convert 9:16 Error:", err);
+            setError(err.message || "Falha ao converter para 9:16");
+        } finally {
+            setIsConverting916(false);
         }
     };
 
@@ -1034,6 +1056,18 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         title="Magic Eraser"
                                     >
                                         <i className="fas fa-eraser"></i>
+                                    </button>
+                                    <button
+                                        onClick={handleConvert916}
+                                        disabled={isConverting916}
+                                        className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg backdrop-blur-sm transition-all disabled:opacity-50"
+                                        title="Converter para 9:16 (Vertical)"
+                                    >
+                                        {isConverting916 ? (
+                                            <i className="fas fa-circle-notch fa-spin"></i>
+                                        ) : (
+                                            <i className="fas fa-arrows-alt-v"></i>
+                                        )}
                                     </button>
                                 </div>
 
