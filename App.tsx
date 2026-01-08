@@ -136,11 +136,12 @@ const AppContent: React.FC = () => {
         const titleMap: Record<string, string> = {
             'HUMAN': 'Pessoa',
             'OBJECT': 'Produto',
-            'ENHANCE': 'Edit',
-            'INFOPRODUCT': 'Expert'
+            'ENHANCE': 'Enhance',
+            'INFOPRODUCT': 'Infoprodutos',
+            'ULTRA': 'Ultra Mode'
         };
 
-        const title = `Projeto ${tabs.filter(t => t.section === currentSection).length + 1} (${titleMap[mode] || 'Novo'})`;
+        const title = `${titleMap[mode] || 'Projeto'} ${tabs.filter(t => t.section === currentSection && t.mode === mode).length + 1}`;
 
         // Optimistic UI update
         const tempId = crypto.randomUUID();
