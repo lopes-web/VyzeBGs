@@ -694,6 +694,28 @@ const AppContent: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* ULTRA MODE CARD - EXPERIMENTAL */}
+                                    <div
+                                        onClick={() => createTab('ULTRA')}
+                                        className="group text-left p-6 rounded-xl transition-all duration-300 cursor-pointer hover:border-[#3E3E3E] relative overflow-hidden"
+                                        style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}
+                                    >
+                                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(239, 68, 68, 0.2)', color: '#ef4444' }}>
+                                            Beta
+                                        </div>
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
+                                                <i className="fas fa-bolt text-lg text-red-500"></i>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-base font-semibold text-white mb-1 group-hover:text-red-400 transition-colors">Ultra Mode</h3>
+                                                <p className="text-sm text-gray-500 leading-relaxed">
+                                                    <span className="text-gray-300">Análise fenotípica avançada</span> para máxima fidelidade facial.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </div>

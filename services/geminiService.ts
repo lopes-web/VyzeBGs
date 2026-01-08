@@ -8,6 +8,7 @@ import {
   OBJECT_TREATMENT_PROMPT,
   ENHANCE_TREATMENT_PROMPT,
   INFOPRODUCT_TREATMENT_PROMPT,
+  ULTRA_TREATMENT_PROMPT,
   BLUR_PROMPT,
   GRADIENT_PROMPT,
   PROMPT_ENGINEER_SYSTEM_INSTRUCTION,
@@ -274,6 +275,10 @@ export const generateBackground = async (
       finalPrompt += `Subject: Use the object/product in the first ${userImagesBase64.length} images provided as the main focal point. Maintain its geometry, brand details, labels, and material properties with 100% fidelity. Do not distort the product.\n`;
     } else if (mode === 'ENHANCE') {
       finalPrompt += `BASE IMAGE: The first ${userImagesBase64.length} images provided are the BASE CANVAS. Do not create a new composition from scratch. You must keep the layout of this image.\n`;
+    } else if (mode === 'ULTRA') {
+      // ULTRA MODE - Full UMP Protocol
+      finalPrompt += `${ULTRA_TREATMENT_PROMPT}\n\n`;
+      finalPrompt += `SUBJECT IMAGES: The first ${userImagesBase64.length} images are the SUBJECT source. Extract ALL phenotypic data from these images. The output face MUST be biologically identical to the subject. Zero deviation allowed.\n`;
     }
   }
 

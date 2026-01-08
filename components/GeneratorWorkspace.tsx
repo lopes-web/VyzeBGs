@@ -243,6 +243,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             case 'OBJECT': return 'Objeto/Produto';
             case 'ENHANCE': return 'Imagem Original';
             case 'INFOPRODUCT': return 'Expert (Infoproduto)';
+            case 'ULTRA': return 'Ultra Mode (Experimental)';
             default: return 'Sujeito';
         }
     };
@@ -253,6 +254,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             case 'OBJECT': return 'Fotos do Objeto';
             case 'ENHANCE': return 'Imagem Base para Melhorar';
             case 'INFOPRODUCT': return 'Foto do Expert';
+            case 'ULTRA': return 'Foto do Sujeito (Alta Fidelidade)';
             default: return 'Imagens';
         }
     };
@@ -263,6 +265,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
             case 'OBJECT': return "Envie fotos do produto em alta resolução.";
             case 'ENHANCE': return "A imagem original será mantida, mas enriquecida.";
             case 'INFOPRODUCT': return "O sistema melhorará posecaoupa se necessário, mantendo o rosto.";
+            case 'ULTRA': return "Análise fenotípica avançada para máxima fidelidade.";
             default: return "";
         }
     };

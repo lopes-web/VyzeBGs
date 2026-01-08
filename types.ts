@@ -8,7 +8,7 @@ export enum SubjectPosition {
 
 export type DesignCategory = 'MOCKUPS' | 'ICONS' | 'PRODUCTS' | 'LOGOS' | 'CRIATIVOS' | 'PROFILE';
 
-export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG';
+export type GeneratorMode = 'HUMAN' | 'OBJECT' | 'ENHANCE' | 'INFOPRODUCT' | 'REMOVE_BG' | 'ULTRA';
 
 export type AppSection = 'LANDING_PAGES' | 'DESIGNS' | 'REMOVE_BG' | 'WEBP_CONVERTER';
 

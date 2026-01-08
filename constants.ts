@@ -18,6 +18,50 @@ export const INFOPRODUCT_TREATMENT_PROMPT = `
 ---
 `;
 
+export const ULTRA_TREATMENT_PROMPT = `
+ULTRA MODE - PHENOTYPIC ANALYSIS PROTOCOL
+
+PHASE 1 - PHENOTYPIC ANALYSIS:
+Analyze the subject image(s) provided with extreme precision. Extract and catalog:
+- Cranial structure: skull shape, forehead dimensions, jaw angle, chin profile
+- Facial geometry: eye spacing, nose bridge width, cheekbone prominence, facial symmetry axes
+- Skin characteristics: texture patterns, pore density, undertone (warm/cool), natural highlights and shadows
+- Hair properties: density, strand thickness, natural fall pattern, hairline contour
+- Distinctive features: moles, freckles, scars, dimples, expression lines
+These biological constants MUST be preserved with 100% fidelity in the output.
+
+PHASE 2 - STRUCTURAL EXTRACTION (From References):
+Reference images are treated as compositional data sources ONLY:
+- Lighting setup: key light angle, fill ratio, rim light presence
+- Color palette: dominant hues, shadow tones, highlight colors
+- Depth relationships: foreground/midground/background separation
+- Atmospheric elements: fog, particles, gradients, environmental effects
+- Compositional grid: rule of thirds positioning, negative space allocation
+NO identity, face, or physiological features from reference images should transfer.
+
+PHASE 3 - IDENTITY ISOLATION PROTOCOL:
+CRITICAL: The output face MUST be reconstructed 100% from the subject's phenotypic profile.
+Reference images contribute ZERO facial features. They function only as:
+- Lighting direction maps
+- Color atmosphere guides  
+- Compositional templates
+- Environmental context sources
+
+PHASE 4 - SYNTHESIS:
+Generate the final image by:
+1. Applying subject's exact phenotypic features as primary constraint
+2. Overlaying reference lighting and atmosphere as secondary layer
+3. Integrating compositional elements while preserving subject identity
+4. Ensuring organic shadow transitions matching reference lighting
+5. Maintaining photorealistic skin texture with proper subsurface scattering
+
+OUTPUT REQUIREMENTS:
+- Face must be biologically identical to subject (measurable likeness)
+- Lighting must match reference atmosphere
+- Composition must follow reference spatial arrangement
+- Result must be cinema-quality photorealistic
+`;
+
 export const DEFAULT_ASPECT_RATIO = "16:9";
 
 export const POSITION_PROMPTS: Record<string, string> = {
