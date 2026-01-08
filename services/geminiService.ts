@@ -284,9 +284,25 @@ export const generateBackground = async (
 
   // Logic for References
   if (referenceItems.length > 0) {
-    finalPrompt += `STYLE SYNTHESIS TASK: You have been provided with ${referenceItems.length} style reference images.\n`;
-    finalPrompt += `${refPromptAccumulator}\n`;
-    finalPrompt += `INSTRUCTION: Synthesize the best elements of these references according to the user requirements above (the 80/20 rule). Merge them into a cohesive, single composition. IMPORTANT: DO NOT reproduce any text, letters, or specific logos found in the reference images.\n\n`;
+    if (mode === 'ULTRA') {
+      // ULTRA MODE - Referencias são tratadas como templates estruturais estritosq
+      finalPrompt += `\n=== REFERENCE IMAGES - STRICT STRUCTURAL TEMPLATE ===\n`;
+      finalPrompt += `You have been provided with ${referenceItems.length} reference images. These are NOT optional suggestions - they are MANDATORY STRUCTURAL TEMPLATES.\n\n`;
+      finalPrompt += `${refPromptAccumulator}\n`;
+      finalPrompt += `CRITICAL INSTRUCTION FOR ULTRA MODE:\n`;
+      finalPrompt += `1. COMPOSITION: Replicate the EXACT composition, framing, and spatial arrangement from the reference images.\n`;
+      finalPrompt += `2. LIGHTING: Match the EXACT lighting setup - key light angle, fill ratio, rim light direction, shadow depth.\n`;
+      finalPrompt += `3. COLOR PALETTE: Use the SAME color palette - background colors, ambient tones, color temperature.\n`;
+      finalPrompt += `4. ATMOSPHERE: Replicate fog, particles, gradients, bokeh effects exactly as shown.\n`;
+      finalPrompt += `5. DEPTH: Maintain the same foreground/midground/background separation.\n`;
+      finalPrompt += `6. POSE (if applicable): Use the SAME body position, camera angle, and framing.\n\n`;
+      finalPrompt += `WHAT TO CHANGE: ONLY the face/identity. Take the subject's phenotypic features and transplant them onto the reference's body/pose/lighting setup.\n`;
+      finalPrompt += `WHAT TO KEEP IDENTICAL: Everything else - composition, lighting, colors, atmosphere, pose, camera angle.\n\n`;
+    } else {
+      finalPrompt += `STYLE SYNTHESIS TASK: You have been provided with ${referenceItems.length} style reference images.\n`;
+      finalPrompt += `${refPromptAccumulator}\n`;
+      finalPrompt += `INSTRUCTION: Synthesize the best elements of these references according to the user requirements above (the 80/20 rule). Merge them into a cohesive, single composition. IMPORTANT: DO NOT reproduce any text, letters, or specific logos found in the reference images.\n\n`;
+    }
   } else if (!userPrompt.trim()) {
     finalPrompt += `Scenario: Create a professional, high-end studio background suitable for a landing page.\n`;
   }
