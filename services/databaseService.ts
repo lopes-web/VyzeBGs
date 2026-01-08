@@ -126,3 +126,16 @@ export const deleteProject = async (projectId: string) => {
     }
     return true;
 };
+
+export const updateProject = async (projectId: string, updates: { title?: string }) => {
+    const { error } = await supabase
+        .from('projects')
+        .update(updates)
+        .eq('id', projectId);
+
+    if (error) {
+        console.error('Error updating project:', error);
+        return false;
+    }
+    return true;
+};

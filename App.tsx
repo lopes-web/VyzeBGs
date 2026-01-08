@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { checkApiKey, promptApiKeySelection } from './services/geminiService';
 import { isSupabaseConfigured } from './services/supabaseClient';
-import { createProject, getProjects, deleteProject, getUserHistory } from './services/databaseService';
+import { createProject, getProjects, deleteProject, updateProject, getUserHistory } from './services/databaseService';
 import GeneratorWorkspace from './components/GeneratorWorkspace';
 import ChatWidget from './components/ChatWidget';
 import AuthModal from './components/AuthModal';
@@ -30,6 +30,8 @@ const AppContent: React.FC = () => {
 
     const [tabs, setTabs] = useState<ProjectTab[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
+    const [editingTabId, setEditingTabId] = useState<string | null>(null);
+    const [editingTabName, setEditingTabName] = useState('');
 
     // Global State
     const [globalHistory, setGlobalHistory] = useState<HistoryItem[]>([]);
@@ -196,6 +198,33 @@ const AppContent: React.FC = () => {
             });
             // Optional: Show error toast here
         }
+    };
+
+    // Rename tab with double-click
+    const startEditingTab = (tab: ProjectTab) => {
+        setEditingTabId(tab.id);
+        setEditingTabName(tab.title);
+    };
+
+    const saveTabName = async () => {
+        if (!editingTabId || !editingTabName.trim()) {
+            setEditingTabId(null);
+            return;
+        }
+
+        // Update locally
+        setTabs(prev => prev.map(t =>
+            t.id === editingTabId ? { ...t, title: editingTabName.trim() } : t
+        ));
+
+        // Update in DB
+        try {
+            await updateProject(editingTabId, { title: editingTabName.trim() });
+        } catch (err) {
+            console.error('Failed to update project name:', err);
+        }
+
+        setEditingTabId(null);
     };
 
     const checkConcurrencyLimit = () => {
@@ -471,7 +500,33 @@ const AppContent: React.FC = () => {
                             }}
                         >
                             <i className={`fas ${tab.mode === 'HUMAN' ? 'fa-user' : tab.mode === 'OBJECT' ? 'fa-cube' : tab.mode === 'INFOPRODUCT' ? 'fa-chalkboard-teacher' : 'fa-magic'} text-xs opacity-70`}></i>
-                            <span className="truncate">{tab.title}</span>
+
+                            {editingTabId === tab.id ? (
+                                <input
+                                    type="text"
+                                    value={editingTabName}
+                                    onChange={(e) => setEditingTabName(e.target.value)}
+                                    onBlur={saveTabName}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') saveTabName();
+                                        if (e.key === 'Escape') setEditingTabId(null);
+                                    }}
+                                    autoFocus
+                                    className="bg-transparent border-none outline-none text-white w-full min-w-[50px]"
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            ) : (
+                                <span
+                                    className="truncate"
+                                    onDoubleClick={(e) => {
+                                        e.stopPropagation();
+                                        startEditingTab(tab);
+                                    }}
+                                    title="Clique duplo para renomear"
+                                >
+                                    {tab.title}
+                                </span>
+                            )}
                             <button
                                 onClick={(e) => closeTab(e, tab.id)}
                                 className="ml-auto text-gray-400 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
