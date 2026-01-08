@@ -518,15 +518,20 @@ export const reframeImageForTextLayout = async (
       },
     },
     {
-      text: `Recreate this image as a ${targetWidth}x${targetHeight} (Vertical) background. 
+      text: `Recreate this image as a ${targetWidth}x${targetHeight} (Vertical/Mobile) background. 
                
                LAYOUT RULES:
-               1. Align the subject's EYE-LINE (or top focal point) to the VERTICAL CENTER of the canvas.
-               2. The subject should occupy the upper portion of the image.
-               3. Extend the bottom part of the image naturally using textures from the environment (clothing, background elements) but keep it low contrast for text overlay.
+               1. Position the subject in the UPPER 60-70% of the canvas only.
+               2. Keep the BOTTOM 30-40% as clean, low-contrast negative space (for text/CTA overlay).
+               3. The bottom area should be a natural extension of the background - blurred, gradient, or subtle texture.
+               
+               CRITICAL FOR MOBILE LAYOUTS:
+               - The subject's face should be in the upper third.
+               - Leave the lower portion EMPTY and clean - just background continuation.
+               - No important visual elements in the bottom 30% of the image.
                
                TRANSITION FIX:
-               If the original image was a crop, DO NOT leave a hard cut at the bottom. Add a subtle gradient overlay, fog, or blend the torso/clothing downwards to mask the transition seamlessly into the background texture.
+               If the original image was a crop, blend the torso/clothing downwards with fog, gradient, or soft blur to create a seamless transition into the empty bottom zone.
 
                USER CUSTOM INSTRUCTIONS FOR VERTICAL VERSION:
                ${verticalPrompt ? verticalPrompt : "None. Follow standard vertical formatting."}

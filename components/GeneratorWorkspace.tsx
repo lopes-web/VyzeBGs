@@ -1066,7 +1066,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                                         {isConverting916 ? (
                                             <i className="fas fa-circle-notch fa-spin"></i>
                                         ) : (
-                                            <i className="fas fa-arrows-alt-v"></i>
+                                            <i className="fas fa-mobile-alt"></i>
                                         )}
                                     </button>
                                 </div>
