@@ -88,6 +88,39 @@ const AppContent: React.FC = () => {
         }
     }, [user]);
 
+    // Auto-cleanup: Delete tabs without history after 2 hours
+    useEffect(() => {
+        const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 hours in ms
+
+        const cleanupEmptyTabs = async () => {
+            const now = Date.now();
+
+            // Find tabs older than 2 hours without any history
+            const tabsToDelete = tabs.filter(tab => {
+                const age = now - tab.createdAt;
+                const hasHistory = globalHistory.some(h => h.projectId === tab.id);
+                return age > TWO_HOURS && !hasHistory && !tab.isOptimistic;
+            });
+
+            // Delete each empty old tab
+            for (const tab of tabsToDelete) {
+                console.log(`[Auto-cleanup] Deleting empty tab "${tab.title}" (${tab.id})`);
+                setTabs(prev => prev.filter(t => t.id !== tab.id));
+                await deleteProject(tab.id);
+            }
+
+            if (tabsToDelete.length > 0) {
+                console.log(`[Auto-cleanup] Deleted ${tabsToDelete.length} empty tabs`);
+            }
+        };
+
+        // Run cleanup on mount and every 30 minutes
+        cleanupEmptyTabs();
+        const interval = setInterval(cleanupEmptyTabs, 30 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    }, [tabs, globalHistory]);
+
     const handleConnect = async () => {
         try {
             await promptApiKeySelection();
