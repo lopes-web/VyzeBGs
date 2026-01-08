@@ -161,6 +161,10 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     const [refinePrompt, setRefinePrompt] = useState('');
     const [refineAssets, setRefineAssets] = useState<string[]>([]);
 
+    // Quick Edit (sem desenhar)
+    const [quickEditPrompt, setQuickEditPrompt] = useState('');
+    const [isQuickEditing, setIsQuickEditing] = useState(false);
+
     // Magic Eraser State
     const [isEraserActive, setIsEraserActive] = useState(false);
     const [isEraserDrawing, setIsEraserDrawing] = useState(false);
@@ -520,6 +524,26 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
 
     const handleDownload = async (url: string) => {
         setShowExportModal(true);
+    };
+
+    // Quick Edit - Edição por prompt sem desenhar máscara
+    const handleQuickEdit = async () => {
+        if (!generatedImage || !quickEditPrompt.trim()) return;
+
+        setIsQuickEditing(true);
+        setError(null);
+
+        try {
+            const result = await refineImage(generatedImage, quickEditPrompt);
+            setGeneratedImage(result);
+            addToHistory(result, `Quick Edit: ${quickEditPrompt}`);
+            setQuickEditPrompt('');
+        } catch (err: any) {
+            console.error("Quick Edit Error:", err);
+            setError(err.message || "Falha ao editar imagem");
+        } finally {
+            setIsQuickEditing(false);
+        }
     };
 
     // Helper to check concurrency (mocked for now, should be from context or prop)
@@ -1067,6 +1091,38 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                             </div>
                         )}
                 </div >
+
+                {/* Quick Edit Bar - Edição por Prompt (sem desenhar) */}
+                {generatedImage && !isEraserActive && (
+                    <div className="mb-4 p-3 rounded-xl flex gap-3 items-center" style={{ backgroundColor: '#1F1F1F', border: '1px solid #2E2E2E' }}>
+                        <div className="flex items-center gap-2 text-accent">
+                            <i className="fas fa-magic text-sm"></i>
+                        </div>
+                        <input
+                            type="text"
+                            value={quickEditPrompt}
+                            onChange={(e) => setQuickEditPrompt(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleQuickEdit()}
+                            placeholder="Altere a imagem: 'remova o fundo', 'mude para azul', 'adicione mais luz'..."
+                            className="flex-1 bg-transparent border-none text-white text-sm placeholder-gray-500 focus:outline-none"
+                            disabled={isQuickEditing}
+                        />
+                        <button
+                            onClick={handleQuickEdit}
+                            disabled={isQuickEditing || !quickEditPrompt.trim()}
+                            className="px-4 py-2 rounded-lg font-bold text-sm transition-all"
+                            style={isQuickEditing || !quickEditPrompt.trim()
+                                ? { backgroundColor: '#2E2E2E', color: '#666', cursor: 'not-allowed' }
+                                : { backgroundColor: '#00C087', color: '#000' }}
+                        >
+                            {isQuickEditing ? (
+                                <><i className="fas fa-circle-notch fa-spin mr-1"></i> Editando...</>
+                            ) : (
+                                <><i className="fas fa-check mr-1"></i> Aplicar</>
+                            )}
+                        </button>
+                    </div>
+                )}
 
                 {/* History Strip */}
                 < div className="h-32 bg-white/60 dark:bg-app-dark backdrop-blur-xl border border-gray-200 dark:border-white/5 rounded-2xl p-4 overflow-x-auto flex gap-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700" >
