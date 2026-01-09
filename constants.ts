@@ -74,11 +74,11 @@ OUTPUT REQUIREMENTS:
 export const DEFAULT_ASPECT_RATIO = "16:9";
 
 export const POSITION_PROMPTS: Record<string, string> = {
-  LEFT: "COMPOSITION RULE: Position the subject centered specifically between the left edge and the vertical center line (approx. at the 25% horizontal mark). The subject should NOT be touching the edge. \n\nNEGATIVE SPACE RULE: The entire RIGHT side (from center to right edge) must be kept open for text.",
+  LEFT: "COMPOSITION - RULE OF THIRDS: Position the subject with their vertical center aligned to the LEFT THIRD LINE (at the 33% horizontal mark from the left). The subject should occupy the space between the 1st and 2nd vertical thirds. Do NOT place the subject touching the edge. \n\nNEGATIVE SPACE: Keep the RIGHT two-thirds (from 33% to 100%) relatively open for text placement.",
 
   CENTER: "COMPOSITION RULE: Position the subject strictly in the geometric center of the image. Balance the negative space equally on both sides.",
 
-  RIGHT: "COMPOSITION RULE: Position the subject centered specifically between the vertical center line and the right edge (approx. at the 75% horizontal mark). The subject should NOT be touching the edge. \n\nNEGATIVE SPACE RULE: The entire LEFT side (from left edge to center) must be kept open for text."
+  RIGHT: "COMPOSITION - RULE OF THIRDS: Position the subject with their vertical center aligned to the RIGHT THIRD LINE (at the 66% horizontal mark from the left). The subject should occupy the space between the 2nd and 3rd vertical thirds. Do NOT place the subject touching or too close to the right edge. \n\nNEGATIVE SPACE: Keep the LEFT two-thirds (from 0% to 66%) relatively open for text placement."
 };
 
 export const GRADIENT_PROMPT =
