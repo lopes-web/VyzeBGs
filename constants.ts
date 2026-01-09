@@ -74,11 +74,24 @@ OUTPUT REQUIREMENTS:
 export const DEFAULT_ASPECT_RATIO = "16:9";
 
 export const POSITION_PROMPTS: Record<string, string> = {
-  LEFT: "COMPOSITION - RULE OF THIRDS: Position the subject with their vertical center aligned to the LEFT THIRD LINE (at the 33% horizontal mark from the left). The subject should occupy the space between the 1st and 2nd vertical thirds. Do NOT place the subject touching the edge. \n\nNEGATIVE SPACE: Keep the RIGHT two-thirds (from 33% to 100%) relatively open for text placement.",
+  LEFT: `CRITICAL COMPOSITION INSTRUCTION - RULE OF THIRDS:
+The subject MUST be positioned on the LEFT THIRD vertical line of the image.
+- Place the subject's body center at approximately 33% from the left edge (NOT 25%, NOT at the edge).
+- The subject occupies the LEFT portion (0% to ~45%), leaving the RIGHT portion (55% to 100%) empty for text.
+- DO NOT place the subject in the center. DO NOT place the subject touching the left edge.
+- Think of dividing the image into 3 equal vertical columns - the subject goes in COLUMN 1 with their center on the line between column 1 and 2.
+REPEAT: Subject at 33% mark, NOT at the edge, NOT centered.`,
 
-  CENTER: "COMPOSITION RULE: Position the subject strictly in the geometric center of the image. Balance the negative space equally on both sides.",
+  CENTER: "COMPOSITION RULE: Position the subject strictly in the geometric center of the image (50% horizontal mark). Balance the negative space equally on both sides.",
 
-  RIGHT: "COMPOSITION - RULE OF THIRDS: Position the subject with their vertical center aligned to the RIGHT THIRD LINE (at the 66% horizontal mark from the left). The subject should occupy the space between the 2nd and 3rd vertical thirds. Do NOT place the subject touching or too close to the right edge. \n\nNEGATIVE SPACE: Keep the LEFT two-thirds (from 0% to 66%) relatively open for text placement."
+  RIGHT: `CRITICAL COMPOSITION INSTRUCTION - RULE OF THIRDS:
+The subject MUST be positioned on the RIGHT THIRD vertical line of the image.
+- Place the subject's body center at approximately 66% from the left edge (NOT 75%, NOT at the edge, NOT too far right).
+- The subject occupies the RIGHT portion (55% to 100%), leaving the LEFT portion (0% to 45%) empty for text.
+- DO NOT place the subject touching or near the right edge. Keep at least 15% margin from the right edge.
+- Think of dividing the image into 3 equal vertical columns - the subject goes in COLUMN 3 with their center on the line between column 2 and 3.
+REPEAT: Subject at 66% mark (two-thirds from left), NOT at the edge, NOT centered.
+IMPORTANT: The subject should NOT be cut off or cropped by the right edge. Leave breathing room.`
 };
 
 export const GRADIENT_PROMPT =
