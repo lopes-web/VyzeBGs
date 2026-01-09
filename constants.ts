@@ -75,24 +75,22 @@ export const DEFAULT_ASPECT_RATIO = "16:9";
 
 export const POSITION_PROMPTS: Record<string, string> = {
   LEFT: `CRITICAL COMPOSITION - FACE POSITIONING:
-=== THE SUBJECT'S FACE must be positioned at the 33% horizontal mark ===
-- The FACE (not body) must be at approximately 1/3 from the left edge.
-- Imagine the image divided into 3 equal columns. The FACE goes on the LINE between column 1 and 2.
-- The body can extend beyond, but the FACE CENTER must be at 33%.
-- Leave the right 2/3 of the image (66% to 100%) empty for text.
+=== THE SUBJECT'S FACE must be positioned at the 40% horizontal mark ===
+- The FACE (not body) must be at approximately 40% from the left edge.
+- The body can extend beyond, but the FACE CENTER must be at 40%.
+- Leave the right portion of the image (60% to 100%) empty for text.
 - DO NOT put the face in the center. DO NOT put the face at the edge.`,
 
   CENTER: "COMPOSITION: Position the subject's FACE strictly in the geometric center of the image (50% horizontal mark). Balance the negative space equally on both sides.",
 
   RIGHT: `CRITICAL COMPOSITION - FACE POSITIONING:
-=== THE SUBJECT'S FACE must be positioned at the 66% horizontal mark ===
-- The FACE (not body) must be at approximately 2/3 from the left edge.
-- Imagine the image divided into 3 equal columns. The FACE goes on the LINE between column 2 and 3.
-- This means the face is NOT at 75%, NOT at 80%, NOT near the right edge.
-- The face should be clearly away from the right edge - at EXACTLY 66% from left (or 33% from right).
-- The body can extend to the right, but the FACE CENTER must stay at the 66% vertical line.
-- Leave the left 2/3 of the image (0% to 66%) for text placement.
-- WRONG: Face near right edge. CORRECT: Face at two-thirds mark with breathing room on right.`
+=== THE SUBJECT'S FACE must be positioned at the 60% horizontal mark ===
+- The FACE (not body) must be at approximately 60% from the left edge (40% from right edge).
+- This is slightly right of center but NOT near the right edge.
+- The face should be clearly away from the right edge - at EXACTLY 60% from left.
+- The body can extend to the right, but the FACE CENTER must stay at the 60% vertical line.
+- Leave the left portion of the image (0% to 60%) for text placement.
+- WRONG: Face at 70%, 75%, 80% or near right edge. CORRECT: Face at 60% mark.`
 };
 
 export const GRADIENT_PROMPT =
