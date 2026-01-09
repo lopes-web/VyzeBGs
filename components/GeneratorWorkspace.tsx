@@ -177,6 +177,7 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     // Local History & Merge
     const [localHistory, secaocalHistory] = useState<HistoryItem[]>([]);
     const [selectedHistoryIds, setSelectedHistoryIds] = useState<string[]>([]);
+    const [historyPreview, setHistoryPreview] = useState<string | null>(null);
 
     // Auto-generate effect
     // Load history from Supabase on mount
@@ -220,6 +221,11 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
     };
 
     const restoreFromHistory = (item: HistoryItem) => {
+        // Se está gerando, apenas abre preview em overlay
+        if (isGenerating) {
+            setHistoryPreview(item.url);
+            return;
+        }
         setGeneratedImage(item.url);
         setGeneratedImages([item.url]);
         setSelectedImageIndex(0);
@@ -1276,6 +1282,27 @@ const GeneratorWorkspace: React.FC<GeneratorWorkspaceProps> = ({
                     </div>
                 )
             }
+
+            {/* History Preview Modal - Visible during generation */}
+            {historyPreview && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-8"
+                    onClick={() => setHistoryPreview(null)}
+                >
+                    <button
+                        onClick={() => setHistoryPreview(null)}
+                        className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+                    >
+                        <i className="fas fa-times text-xl"></i>
+                    </button>
+                    <img
+                        src={historyPreview}
+                        alt="Preview"
+                        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
 
         </div >
     );
