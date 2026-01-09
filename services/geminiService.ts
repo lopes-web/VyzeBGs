@@ -815,9 +815,8 @@ ${inputs.style === 'Elegante' ? '- Sophisticated, refined look. Cinematic lighti
       } else {
         styleSection = `Style: Professional Studio`;
       }
-
-      if (inputs.ultraMode) {
-        prompt = `PROFESSIONAL PROFILE PHOTO GENERATION - ULTRA MODE (PHENOTYPIC ANALYSIS):
+      // Always use phenotypic analysis (Ultra Mode as default)
+      prompt = `PROFESSIONAL PROFILE PHOTO GENERATION - PHENOTYPIC ANALYSIS:
 Format: Square 1:1 (1024x1024 pixels).
 
 ${ULTRA_TREATMENT_PROMPT}
@@ -832,26 +831,9 @@ ${styleSection}
 Background: ${bgInstruction}
 Framing: ${inputs.framing}
 Lighting: ${inputs.lighting}
-${postureInstruction}
 ${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
 
 Quality: 8K, Ultra-Realistic, Phenotypically Accurate.`;
-      } else {
-        prompt = `PROFESSIONAL PROFILE PHOTO GENERATION:
-Format: Square 1:1 (1024x1024 pixels).
-CRITICAL: ${imageCount > 1 ? `${imageCount} reference photos have been provided.` : 'A reference photo has been provided.'} Keep the face 100% identical - same facial features, skin tone, and recognizable characteristics.
-${hasReference}
-
-${styleSection}
-
-Background: ${bgInstruction}
-Framing: ${inputs.framing} shot - ${inputs.framing === 'Close-up' ? 'face fills most of the frame' : inputs.framing === 'Meio-busto' ? 'from chest up' : 'head and shoulders visible'}
-Lighting: ${inputs.lighting} lighting
-${postureInstruction}
-${inputs.additionalPrompt ? `Additional instructions: ${inputs.additionalPrompt}` : ''}
-
-Quality: Sharp, high-resolution, professional headshot quality. Suitable for Instagram, WhatsApp, and social media profiles.`;
-      }
       break;
   }
 
