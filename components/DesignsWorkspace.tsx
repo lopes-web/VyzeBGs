@@ -927,17 +927,17 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                 <div className="p-4 space-y-3" style={{ borderTop: '1px solid #2E2E2E', backgroundColor: '#1F1F1F' }}>
                     {(selectedCategory === 'PROFILE' || selectedCategory === 'ICONS' || selectedCategory === 'CRIATIVOS') && (
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Quantidade:</span>
-                            <div className="flex gap-1">
+                            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantidade:</span>
+                            <div className="flex gap-3 p-1.5 rounded-xl" style={{ backgroundColor: '#171717', border: '1px solid #2E2E2E' }}>
                                 {[1, 2, 3, 4].map(n => (
                                     <button key={n} onClick={() => {
                                         if (selectedCategory === 'PROFILE') setProfileQuantity(n);
                                         else if (selectedCategory === 'ICONS') setIconQuantity(n);
                                         else setCreativeQuantity(n);
                                     }}
-                                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${(selectedCategory === 'PROFILE' ? profileQuantity : selectedCategory === 'ICONS' ? iconQuantity : creativeQuantity) === n
-                                            ? 'bg-accent text-black'
-                                            : 'bg-[#171717] text-gray-400 border border-[#2E2E2E] hover:border-accent/50'}`}>
+                                        className={`w-10 h-10 rounded-lg text-base font-bold transition-all ${(selectedCategory === 'PROFILE' ? profileQuantity : selectedCategory === 'ICONS' ? iconQuantity : creativeQuantity) === n
+                                            ? 'bg-accent text-black shadow-lg scale-105'
+                                            : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10'}`}>
                                         {n}x
                                     </button>
                                 ))}
