@@ -800,11 +800,24 @@ const DesignsWorkspace: React.FC<DesignsWorkspaceProps> = ({ onAddToGlobalHistor
                         {/* Estilo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estilo</label>
-                            <div className="grid grid-cols-2 gap-2 mb-4">
+                            <div className="grid grid-cols-3 gap-2">
                                 <button onClick={() => setProfileStyle(null)}
                                     className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${!profileStyle ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
                                     Nenhum
                                 </button>
+                                {PROFILE_STYLES.map(style => (
+                                    <button key={style} onClick={() => setProfileStyle(profileStyle === style ? null : style)}
+                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${profileStyle === style ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                                        {style}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Fundo */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fundo</label>
+                            <div className="flex gap-2 mb-3">
                                 <button onClick={() => setProfileBgType('auto')}
                                     className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${profileBgType === 'auto' ? 'bg-accent text-black' : 'bg-gray-100 dark:bg-[#171717] text-gray-700 dark:text-gray-300'}`}>
                                     IA Decide
